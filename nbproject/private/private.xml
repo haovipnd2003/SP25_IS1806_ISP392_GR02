@@ -3,9 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/dung.nvan/Documents/VietAnhDang/SP25_IS1806_ISP392_GR02/src/java/control/SignUpControl.java</file>
-            <file>file:/C:/Users/dung.nvan/Documents/VietAnhDang/SP25_IS1806_ISP392_GR02/src/java/control/VerifyCode.java</file>
-            <file>file:/C:/Users/dung.nvan/Documents/VietAnhDang/SP25_IS1806_ISP392_GR02/web/verifySignUp.jsp</file>
+            <file>file:/H:/SP25_IS1806_ISP392_GR02/src/java/control/VerifyCode.java</file>
+            <file>file:/H:/SP25_IS1806_ISP392_GR02/src/java/helper/BusinessHelper.java</file>
+            <file>file:/H:/SP25_IS1806_ISP392_GR02/src/java/control/SignUpControl.java</file>
         </group>
     </open-files>
 </project-private>

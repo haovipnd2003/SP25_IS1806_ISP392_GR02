@@ -23,10 +23,10 @@ public class UserDAO extends DBContext {
             PreparedStatement stm = connection.prepareStatement(query);
             stm.setString(1, user.getName());
             stm.setString(2, user.getPassword());
-            stm.setString(2, user.getEmail());
+            stm.setString(3, user.getEmail());
             
-            stm.execute(query);
-            success = true;
+            int res = stm.executeUpdate();
+            if (res != 0) success = true;
         } catch (Exception e) {
             e.printStackTrace();
         }

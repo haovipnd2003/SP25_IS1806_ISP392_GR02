@@ -65,6 +65,7 @@ public class SignUpControl extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String repassword = request.getParameter("repass");
+        
         if (!BusinessHelper.isValidFieldSignUp(username, email, password, repassword)) {
             this.HandleBusinessError(request, response, "Please fill out the form.");
         }
