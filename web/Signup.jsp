@@ -62,10 +62,10 @@
     </head>
     <body>
         <div id="logreg-forms">
-            <form action="signup" method="post" class="form-signup" id="submitForm">
+            <form action="sign-up" method="post" class="form-signup" id="submitForm">
                 <h1 class="h3 mb-3 font-weight-normal text-center">Sign up</h1>
-                <p class="text-danger text-center">${err}</p>
-                <p style="color: blue">${success}</p>
+                <p class="text-danger text-center">${errorMessage}</p>
+                <p style="color: blue">${successMessage}</p>
                 <div class="form-group">
                     <input name="email" type="email" id="user-email" class="form-control" placeholder="Email (someone@example.com)" value="${email}">
                 </div>
