@@ -1,7 +1,7 @@
 <%-- 
     Document   : verifySignUp.jsp
     Created on : Feb 10, 2025, 4:40:58 PM
-    Author     : dung.nvan
+    Author     : vanh
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

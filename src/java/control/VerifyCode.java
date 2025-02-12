@@ -8,7 +8,6 @@ import dao.UserDAO;
 import entity.User;
 import entity.hashpassword;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author dung.nvan
+ * @author vanh
  */
 @WebServlet(name = "VerifyCode", urlPatterns = {"/VerifyCode"})
 public class VerifyCode extends HttpServlet {
@@ -43,6 +42,7 @@ public class VerifyCode extends HttpServlet {
         if (!authCode.equals(paramAuthCode)) {
             request.setAttribute("errorMessage", "Incorrect auth code.");
             request.getRequestDispatcher("verifySignUp.jsp").forward(request, response);
+            return;
         }
 
         UserDAO userDAO = new UserDAO();
@@ -51,6 +51,7 @@ public class VerifyCode extends HttpServlet {
         if (!success) {
             request.setAttribute("errorMessage", "An error has occurred.");
             request.getRequestDispatcher("verifySignUp.jsp").forward(request, response);
+            return;
         }
         
         request.getRequestDispatcher("Login.jsp").forward(request, response);

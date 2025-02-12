@@ -17,7 +17,7 @@ import javax.mail.internet.MimeMessage;
 
 /**
  *
- * @author dung.nvan
+ * @author vanh
  */
 public class BusinessHelper {
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 

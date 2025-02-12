@@ -19,7 +19,7 @@ import java.util.Random;
 
 /**
  *
- * @author dung.nvan
+ * @author vanh
  */
 @WebServlet(name = "SignUpControl", urlPatterns = {"/sign-up"})
 public class SignUpControl extends HttpServlet {
@@ -68,20 +68,24 @@ public class SignUpControl extends HttpServlet {
         
         if (!BusinessHelper.isValidFieldSignUp(username, email, password, repassword)) {
             this.HandleBusinessError(request, response, "Please fill out the form.");
+            return;
         }
         
         if (!BusinessHelper.validateEmail(email)) {
             this.HandleBusinessError(request, response, "Invalid email address.");
+            return;
         }
         
         if (!BusinessHelper.validatePassword(password, repassword)) {
             this.HandleBusinessError(request, response, "Password must be equal.");
+            return;
         }
         
         UserDAO userDAO = new UserDAO();
         User user = userDAO.GetUserByUsernameOrEmail(username, email);
         if (user != null) {
             this.HandleBusinessError(request, response, "Username or Email already exist!");
+            return;
         }
         
         // to do: handle verify email

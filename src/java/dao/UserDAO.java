@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 
 /**
  *
- * @author dung.nvan
+ * @author vanh
  */
 public class UserDAO extends DBContext {
     
