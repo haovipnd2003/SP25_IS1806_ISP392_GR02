@@ -1,6 +1,7 @@
 package context;
 
-//import dao.DAO;
+import dao.DAO;
+import entity.User;
 //import entity.Product;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,18 +33,30 @@ public class DBContext {
 //        } catch (ClassNotFoundException | SQLException ex) {
 //            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-        
+
 //        DB LOCALHOST:
-               try {
-                String user = "root"; // Change to your MySQL username
-                String pass = "1234"; // Change to your MySQL password
-                String url = "jdbc:mysql://localhost:3306/ricemanagement"; // Update the URL to fit MySQL format
-                Class.forName("com.mysql.cj.jdbc.Driver"); // MySQL JDBC driver
-                connection = DriverManager.getConnection(url, user, pass);
-            } catch (ClassNotFoundException | SQLException ex) {
-                Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            String user = "root"; // Change to your MySQL username
+            String pass = "1234"; // Change to your MySQL password
+            String url = "jdbc:mysql://localhost:3306/ricemanagement"; // Update the URL to fit MySQL format
+            Class.forName("com.mysql.cj.jdbc.Driver"); // MySQL JDBC driver
+            connection = DriverManager.getConnection(url, user, pass);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void main(String[] args) {
+        DAO d = new DAO();
+        ArrayList<User> accounts = d.getAccount(); 
+
+    for (User u : accounts) {
+        System.out.println("ID: " + u.getId() +
+                           ", Name: " + u.getName() +
+                           ", Email: " + u.getEmail() +
+                           ", Role: " + u.getRoletype() +
+                           ", Active: " + u.getIsactive());
+    }
     }
 
-    
 }

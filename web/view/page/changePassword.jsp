@@ -76,7 +76,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h4 class="text-right">Change Password</h4>
                         </div>
-                        <form action='changepassword' class="form-container" method='POST' id="submitForm">
+                        <form action='${pageContext.request.contextPath}/changepassword' class="form-container" method='POST' id="submitForm">
                             <p class="text-danger">${mess}</p>
                             <p class="text-success">${mess2}</p>
                             <div class="row mt-2">
