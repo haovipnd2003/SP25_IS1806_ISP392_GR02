@@ -6,7 +6,6 @@ package control;
 
 import dao.LoginDAO;
 import entity.User;
-import entity.hashpassword;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -47,7 +46,7 @@ public class LoginControl extends HttpServlet {
         request.setAttribute("name", username);
         request.setAttribute("password", password);
 
-//        password = hashpassword.toSHA1(password);
+        password = hashpassword.toSHA1(password);
         LoginDAO dao = new LoginDAO();
         User a = dao.login(username);
         if ( a == null || !a.getPassword().equals(password)) {
@@ -106,7 +105,7 @@ public class LoginControl extends HttpServlet {
             request.setAttribute("success", successMessage);
             session.removeAttribute("successMessage");
         }
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
+        request.getRequestDispatcher("view/page/login.jsp").forward(request, response);
     }
 
     /**

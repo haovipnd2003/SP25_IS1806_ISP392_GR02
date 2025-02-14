@@ -9,7 +9,8 @@ package entity;
  * @author Admin
  */
 public class User {
-    String id,name,password,email,phone,address,roletype,isactive;
+
+    String id, name, password, email, phone, address, roletype, isactive, code;
 
     public User() {
     }
@@ -23,6 +24,25 @@ public class User {
         this.address = address;
         this.roletype = roletype;
         this.isactive = isactive;
+    }
+        public User(String name, String password, String email, String roletype) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.roletype = roletype;
+    }
+
+    public User(String email, String code) {
+        this.email = email;
+        this.code = code;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getId() {
@@ -88,5 +108,5 @@ public class User {
     public void setIsactive(String isactive) {
         this.isactive = isactive;
     }
-    
+
 }

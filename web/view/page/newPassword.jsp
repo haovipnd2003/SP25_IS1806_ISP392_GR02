@@ -62,14 +62,14 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // H
 response.setHeader("Pragma", "no-cache"); // HTTP 1.0
 response.setDateHeader("Expires", 0); // Proxies
                                 %>
-                                <form class="form-horizontal" id="resetForm" action="ResetPassword" method="POST">
+                                <form class="form-horizontal" id="resetForm" action="${pageContext.request.contextPath}/ResetPassword" method="POST">
                                     <input type="hidden" name="email" value="${email}">
                                     <!-- User Name Input -->
                                     <div class="form-group row justify-content-center px-3">
                                         <div class="col-9 px-0">
                                             <div class="input-group mb-3">
                                                 <input type="password" id="newPassword" name="newpassword" placeholder="New Password"
-                                                       class="form-control border-info placeicon" value="${newpassword}" required="">
+                                                       class="form-control border-info placeicon" value="${newpassword}" >
                                                 <div class="input-group-append">
                                                     <button class="btn btn-outline-secondary eye-button" type="button" id="toggleNewPassword">
                                                         <i class="fa fa-eye" aria-hidden="true"></i>
@@ -78,7 +78,7 @@ response.setDateHeader("Expires", 0); // Proxies
                                             </div>
                                             <div class="input-group mb-3">
                                                 <input type="password" id="confirmPassword" name="confirm-password" placeholder="Confirm Password"
-                                                       class="form-control border-info placeicon" value="${confirmpassword}" required="">
+                                                       class="form-control border-info placeicon" value="${confirmpassword}" >
                                                 <div class="input-group-append">
                                                     <button class="btn btn-outline-secondary eye-button" type="button" id="toggleConfirmPassword">
                                                         <i class="fa fa-eye" aria-hidden="true"></i>

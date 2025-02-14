@@ -74,7 +74,7 @@ body {
 						next page</li>
 					</ol>
 				</div>
-				<form class="card mt-4" action="UserVerify" method="POST">
+				<form class="card mt-4" action="${pageContext.request.contextPath}/UserVerify" method="POST">
 					<div class="card-body">
 						<div class="form-group">
 							<label for="email-for-pass">Enter your email address</label> <input

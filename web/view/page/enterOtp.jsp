@@ -49,11 +49,11 @@
                                 <h3><i class="fa fa-lock fa-4x"></i></h3>
                                 <h2 class="text-center">Enter OTP</h2>
                                 <div class="panel-body">
-                                    <form id="register-form" action="VerifyCode" role="form" autocomplete="off" class="form" method="post">
+                                    <form id="register-form" action="${pageContext.request.contextPath}/VerifyCode" role="form" autocomplete="off" class="form" method="post">
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
-                                                <input id="otp" name="otp" placeholder="Enter OTP" class="form-control" type="text" value="${code}" required="required">
+                                                <input id="otp" name="otp" placeholder="Enter OTP" class="form-control" type="text" value="${code}" >
                                             </div>
                                             <p style="color: red">${error}</p>
                                         </div>
@@ -62,7 +62,7 @@
                                         </div>
                                         <input type="hidden" class="hide" name="token" id="token" value="">
                                     </form>
-                                    <form id="resend-form" action="UserVerify" method="post">
+                                    <form id="resend-form" action="${pageContext.request.contextPath}/UserVerify" method="post">
                                         <input type="hidden" name="resend">
                                         <div class="form-group">
                                             <input class="btn btn-lg btn-secondary btn-block" value="Resend OTP" type="submit">
