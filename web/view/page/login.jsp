@@ -55,7 +55,7 @@
                 <div class="form-group form-check">
                     <!--                    <input name="remember" value="1" type="checkbox" class="form-check-input" id="exampleCheck1">-->
 
-                    <a href="forgotPassword.jsp " >Forgot password?</a>
+                    <a href="view/page/forgotPassword.jsp " >Forgot password?</a>
                 </div>
 
                 <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>

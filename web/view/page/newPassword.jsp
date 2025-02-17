@@ -110,7 +110,7 @@ response.setDateHeader("Expires", 0); // Proxies
                     </div>
                 </div>
             </div>
-                                             
+
             <script type='text/javascript'
             src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js'></script>
             <script type='text/javascript'>
@@ -147,24 +147,38 @@ response.setDateHeader("Expires", 0); // Proxies
                         }
                     });
 
+//                    function getPasswordStrength(password) {
+//                        let message = '';
+//                        let color = '';
+//                        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+//                        const mediumRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+//
+//                        if (strongRegex.test(password)) {
+//                            message = 'Strong password';
+//                            color = 'green';
+//                        } else if (mediumRegex.test(password)) {
+//                            message = 'Medium strength password';
+//                            color = 'orange';
+//                        } else {
+//                            message = 'Password must have contain uppercase letter,lowercase letter,number,special character and at least 6 characters!';
+//                            color = 'red';
+//                        }
+//                        return {message, color};
+//                    }
                     function getPasswordStrength(password) {
                         let message = '';
                         let color = '';
-                        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-                        const mediumRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
-                        if (strongRegex.test(password)) {
-                            message = 'Strong password';
+                        if (password.length >= 6) {
+                            message = 'Valid password';
                             color = 'green';
-                        } else if (mediumRegex.test(password)) {
-                            message = 'Medium strength password';
-                            color = 'orange';
                         } else {
-                            message = 'Password must have contain uppercase letter,lowercase letter,number,special character and at least 6 characters!';
+                            message = 'Password must have at least 6 characters!';
                             color = 'red';
                         }
                         return {message, color};
                     }
+
                 });
                 toggleNewPassword.addEventListener('click', function () {
                     togglePasswordVisibility(newPassword);
