@@ -115,7 +115,7 @@ public class SignupControl extends HttpServlet {
     }
 
     public boolean validPass(String pass) {
-        String check = "^(?=.*[A-Z])(?=.*\\d)(?=.*[-!@#$%^&*()_+|~=`{}\\[\\]:\";'<>?,./]).{6,}$";
+        String check = ".{6,}";
         Pattern pattern = Pattern.compile(check);
         Matcher matcher = pattern.matcher(pass);
         return matcher.matches();

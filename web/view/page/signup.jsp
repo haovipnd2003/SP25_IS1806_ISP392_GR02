@@ -97,7 +97,7 @@
                 </div>
 
                 <button class="btn btn-primary btn-block" id="submitForm" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
-<!--                <a href="login" id="cancel_signup" class="btn btn-secondary btn-block"><i class="fas fa-angle-left"></i> Back</a>-->
+                <!--                <a href="login" id="cancel_signup" class="btn btn-secondary btn-block"><i class="fas fa-angle-left"></i> Back</a>-->
             </form>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -130,27 +130,39 @@
                     }
                 }
 
+//                function getPasswordStrength(password) {
+//                    let message = '';
+//                    let color = '';
+//                    const specialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/;
+//    
+//    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]).{8,}$/;
+//    const mediumRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]).{6,}$/;
+//
+//                    if (strongRegex.test(password)) {
+//                        message = 'Strong password';
+//                        color = 'green';
+//                    } else if (mediumRegex.test(password)) {
+//                        message = 'Medium strength password';
+//                        color = 'orange';
+//                    } else {
+//                        message = 'Password must have at least 6 characters!';
+//                        color = 'red';
+//                    }
+//                    return {message, color};
+//                }
                 function getPasswordStrength(password) {
                     let message = '';
                     let color = '';
-                    const specialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/;
-    
-    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]).{8,}$/;
-    const mediumRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]).{6,}$/;
 
-                    if (strongRegex.test(password)) {
-                        message = 'Strong password';
+                    if (password.length >= 6) {
+                        message = 'Valid password';
                         color = 'green';
-                    } else if (mediumRegex.test(password)) {
-                        message = 'Medium strength password';
-                        color = 'orange';
                     } else {
-                        message = 'Password must have contain uppercase letter,lowercase letter,number,special character and at least 6 characters!';
+                        message = 'Password must have at least 6 characters!';
                         color = 'red';
                     }
                     return {message, color};
                 }
-
                 newPassword.addEventListener('input', updatePassword);
                 confirmPassword.addEventListener('input', updatePassword);
 
