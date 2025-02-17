@@ -44,8 +44,10 @@ public class CustomerDAO extends DBContext{
             rs = stm.executeQuery();
 
             while (rs.next()) {
-                return new Customer(rs.getString()
-                      
+                 Customer cus = new Customer(rs.getString("id"),rs.getString("name")
+                            ,rs.getString("phone"),rs.getString("address"));
+                 list.add(cus);
+                 return list;
             }
         } catch (Exception e) {
         }
