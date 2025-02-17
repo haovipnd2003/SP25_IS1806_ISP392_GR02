@@ -114,25 +114,25 @@
                                                 <h2>Sale</h2>
                                             </div>
                                             <div class="card-body">
-                                                <form action="sale" method="POST">
+                                                <form action="${pageContext.request.contextPath}/sale" method="POST">
                                                     <table border="0">
                                                         <tbody>
                                                             <tr>
                                                                 <td>Search:</td>
                                                                 <td><t></t><input type="text" name="search" value="" placeholder="name or phone"/></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                            </tr>
+                                                        </tr>
                                                         </tbody>
                                                     </table>
-
                                                 </form>
+                                                    
+                                              
+
+                                                <form>
+                                                    <tbody id="content">
+                                                        
+                                                    </tbody>
+                                                </form>
+                                                <button onclick="loadMore">Load more</button>
                                             </div>
                                         </div>
                                     </div>
@@ -146,6 +146,21 @@
 
                 </div>
             </div>
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+            <script>
+                                                    function loadMore() {
+                                                        $.ajax({
+                                                            url: "/RiceManagement/loadCus",
+                                                            type: "get",
+                                                            success: function (data) {
+                                                                var row = document.getElementById("content");
+                                                                row.innerHTML += data;
+                                                            },
+                                                        });
+                                                    }
+
+            </script>
+
 
             <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/popper.js"></script>
