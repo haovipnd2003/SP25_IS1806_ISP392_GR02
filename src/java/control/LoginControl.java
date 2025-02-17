@@ -67,7 +67,7 @@ public class LoginControl extends HttpServlet {
             } else {
                 String script = "<script>"
                         + "alert('Logged in successfully.');"
-                        + "window.location='home';"
+                        + "window.location='view/page/dashboard.jsp';"
                         + "</script>";
                 response.getWriter().println(script);
             }
