@@ -1,9 +1,10 @@
 <%-- 
-    Document   : dashboard
-    Created on : 15 thg 2, 2025, 00:01:05
+    Document   : sale
+    Created on : 16 thg 2, 2025, 00:34:41
     Author     : binh2
 --%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -110,59 +111,43 @@
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h2>Information</h2>
+                                                <h2>Sale</h2>
                                             </div>
                                             <div class="card-body">
-                                                <div class="alert alert-light">
-                                                <c:set value="${sessionScope.acc}" var="u"></c:set>
+                                                <form action="sale" method="POST">
                                                     <table border="0">
                                                         <tbody>
                                                             <tr>
-                                                                <td><h4>Name:</h4></td>
-                                                                <td><h4><c:out value="${u.getName()}"></c:out></h4></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><h4>Email:</h4></td>
-                                                                <td><h4><c:out value="${u.getEmail()}"></c:out></h4></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><h4>Phone: </h4></td>
-                                                                <td><h4><c:out value="${u.getPhone()}"></c:out></h4></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><h4>Address:</h4></td>
-                                                                <td><h4><c:out value="${u.getAddress()}"></c:out></h4></td>
+                                                                <td>Search:</td>
+                                                                <td><t></t><input type="text" name="search" value="" placeholder="name or phone"/></td>
                                                             </tr>
                                                             <tr>
                                                                 <td></td>
                                                                 <td></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><a  style="margin: 10px" href="${pageContext.request.contextPath}/updateProfile" class="btn btn-outline-info">Update Profile</a></td>
-                                                        </tr>
-                                                        <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
 
-                                                            <td><a  style="margin: 10px" href="${pageContext.request.contextPath}/changePassword" class="btn btn-outline-warning">Change Password</a></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                    </div>
+
+
+
+
                 </div>
-
-
-
-
             </div>
-        </div>
 
-        <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
+            <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/popper.js"></script>
         <script src="${pageContext.request.contextPath}/modules/tooltip.js"></script>
         <script src="${pageContext.request.contextPath}/modules/bootstrap/js/bootstrap.min.js"></script>
@@ -176,3 +161,4 @@
         <script src="${pageContext.request.contextPath}/js/demo.js"></script>
     </body>
 </html>
+

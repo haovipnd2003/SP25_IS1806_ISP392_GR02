@@ -5,7 +5,6 @@
 
 package control;
 
-import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author binh2
  */
-@WebServlet(name="ProfileUserServlet", urlPatterns={"/profile"})
-public class ProfileUserServlet extends HttpServlet {
+@WebServlet(name="searchTop3CustomerServlet", urlPatterns={"/search3"})
+public class searchTop3CustomerServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,10 +35,10 @@ public class ProfileUserServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProfileUserServlet</title>");  
+            out.println("<title>Servlet searchTop3CustomerServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProfileUserServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet searchTop3CustomerServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,14 +55,7 @@ public class ProfileUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        //Check Sesson
-        HttpSession session = request.getSession();
-        User u = (User)session.getAttribute("acc");
-        if(u == null){
-            request.getRequestDispatcher("/login").forward(request, response);
-        }else{
-            request.getRequestDispatcher("/view/page/userProfile.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     } 
 
     /** 

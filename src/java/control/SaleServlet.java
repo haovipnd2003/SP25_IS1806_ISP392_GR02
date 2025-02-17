@@ -19,8 +19,8 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author binh2
  */
-@WebServlet(name="ProfileUserServlet", urlPatterns={"/profile"})
-public class ProfileUserServlet extends HttpServlet {
+@WebServlet(name="SaleServlet", urlPatterns={"/sale"})
+public class SaleServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,10 +37,10 @@ public class ProfileUserServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProfileUserServlet</title>");  
+            out.println("<title>Servlet SaleServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProfileUserServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet SaleServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,7 +63,7 @@ public class ProfileUserServlet extends HttpServlet {
         if(u == null){
             request.getRequestDispatcher("/login").forward(request, response);
         }else{
-            request.getRequestDispatcher("/view/page/userProfile.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/page/sale.jsp").forward(request, response);
         }
     } 
 

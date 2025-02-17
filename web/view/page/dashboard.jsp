@@ -94,108 +94,44 @@
                         </li>
                     </ul>
                 </nav>
-                <div class="main-sidebar">
-                    <aside id="sidebar-wrapper">
-                        <div class="sidebar-brand">
-                            <a href="index.html">Stisla Lite</a>
-                        </div>
-                        <div class="sidebar-user">
-                            <div class="sidebar-user-picture">
-                                <img alt="image" src="../dist/img/avatar/avatar-1.jpeg">
-                            </div>
-                            <div class="sidebar-user-details">
-                                <div class="user-name">Ujang Maman</div>
-                                <div class="user-role">
-                                    Administrator
-                                </div>
-                            </div>
-                        </div>
-                        <ul class="sidebar-menu">
-                            <li class="menu-header">Dashboard</li>
-                            <li>
-                                <a href="index.html"><i class="ion ion-speedometer"></i><span>Dashboard</span></a>
-                            </li>
 
-                            <li class="menu-header">Components</li>
-                            <li class="active">
-                                <a href="#" class="has-dropdown"><i class="ion ion-ios-albums-outline"></i><span>Components</span></a>
-                                <ul class="menu-dropdown">
-                                    <li><a href="general.html"><i class="ion ion-ios-circle-outline"></i> Basic</a></li>
-                                    <li><a href="components.html"><i class="ion ion-ios-circle-outline"></i> Main Components</a></li>
-                                    <li><a href="buttons.html"><i class="ion ion-ios-circle-outline"></i> Buttons</a></li>
-                                    <li class="active"><a href="toastr.html"><i class="ion ion-ios-circle-outline"></i> Toastr</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#" class="has-dropdown"><i class="ion ion-flag"></i><span>Icons</span></a>
-                                <ul class="menu-dropdown">
-                                    <li><a href="ion-icons.html"><i class="ion ion-ios-circle-outline"></i> Ion Icons</a></li>
-                                    <li><a href="fontawesome.html"><i class="ion ion-ios-circle-outline"></i> Font Awesome</a></li>
-                                    <li><a href="flag.html"><i class="ion ion-ios-circle-outline"></i> Flag</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="table.html"><i class="ion ion-clipboard"></i><span>Tables</span></a>
-                            </li>
-                            <li>
-                                <a href="chartjs.html"><i class="ion ion-stats-bars"></i><span>Chart.js</span></a>
-                            </li>
-                            <li>
-                                <a href="simple.html"><i class="ion ion-ios-location-outline"></i><span>Google Maps</span></a>
-                            </li>
-                            <li>
-                                <a href="#" class="has-dropdown"><i class="ion ion-ios-copy-outline"></i><span>Examples</span></a>
-                                <ul class="menu-dropdown">
-                                    <li><a href="login.html"><i class="ion ion-ios-circle-outline"></i> Login</a></li>
-                                    <li><a href="register.html"><i class="ion ion-ios-circle-outline"></i> Register</a></li>
-                                    <li><a href="forgot.html"><i class="ion ion-ios-circle-outline"></i> Forgot Password</a></li>
-                                    <li><a href="reset.html"><i class="ion ion-ios-circle-outline"></i> Reset Password</a></li>
-                                    <li><a href="404.html"><i class="ion ion-ios-circle-outline"></i> 404</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#"><i class="ion ion-heart"></i> Badges <div class="badge badge-primary">10</div></a>
-                            </li>
-                            <li>
-                                <a href="credits.html"><i class="ion ion-ios-information-outline"></i> Credits</a>
-                            </li>          </ul>
-                    </aside>
-                </div>
+                <!--MAIN-SIDEBAR-JSP-INCLUDE-->
+                <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
+                    <!--MAIN-SIDEBAR-JSP-INCLUDE-->
 
 
+                    <!--                MAIN CONTENT-->
+                    <div class="main-content" style="min-height: 600px;">
+                        <section class="section">
 
-<!--                MAIN CONTENT-->
-                <div class="main-content" style="min-height: 600px;">
-                    <section class="section">
 
-
-                        <div class="section-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4>Simple Maps</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="alert alert-light">
-                                                Here is a simple example using the map, we use the plugin <code>gmaps.js</code> made by <a href="https://github.com/hpneo" target="_blank">@hpneo</a>. You can learn more about this plugin <a href="https://github.com/hpneo/gmaps" target="_blank">here</a>.
+                            <div class="section-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Simple Maps</h4>
                                             </div>
-                                            <div id="simple-map" style="height: 400px; position: relative; overflow: hidden;"><div style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);"><div class="gm-err-container"><div class="gm-err-content"><div class="gm-err-icon"><img src="http://maps.gstatic.com/mapfiles/api-3/images/icon_error.png" alt="" draggable="false" style="user-select: none;"></div><div class="gm-err-title">Oops! Something went wrong.</div><div class="gm-err-message">This page didn't load Google Maps correctly. See the JavaScript console for technical details.</div></div></div></div></div>
+                                            <div class="card-body">
+                                                <div class="alert alert-light">
+                                                    Here is a simple example using the map, we use the plugin <code>gmaps.js</code> made by <a href="https://github.com/hpneo" target="_blank">@hpneo</a>. You can learn more about this plugin <a href="https://github.com/hpneo/gmaps" target="_blank">here</a>.
+                                                </div>
+                                                <div id="simple-map" style="height: 400px; position: relative; overflow: hidden;"><div style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);"><div class="gm-err-container"><div class="gm-err-content"><div class="gm-err-icon"><img src="http://maps.gstatic.com/mapfiles/api-3/images/icon_error.png" alt="" draggable="false" style="user-select: none;"></div><div class="gm-err-title">Oops! Something went wrong.</div><div class="gm-err-message">This page didn't load Google Maps correctly. See the JavaScript console for technical details.</div></div></div></div></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
-                </div>
-                
-                
-                
-                
-            </div>
-        </div>
+                        </section>
+                    </div>
 
-        <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
+
+
+
+                </div>
+            </div>
+
+            <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/popper.js"></script>
         <script src="${pageContext.request.contextPath}/modules/tooltip.js"></script>
         <script src="${pageContext.request.contextPath}/modules/bootstrap/js/bootstrap.min.js"></script>
