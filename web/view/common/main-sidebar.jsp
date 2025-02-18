@@ -12,8 +12,6 @@
         <ul class="sidebar-menu">
 
             <li class="menu-header">Menu</li>
-
-            
             <li>
                 <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Product</span></a>
             </li>
@@ -24,21 +22,41 @@
             <li>
                 <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Customer Management</span></a>
             </li>
-            <li>
-                <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Debt</span></a>
-            </li>
-            
+
             <li>
                 <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Invoice</span></a>        
             </li>
-            
-            <li>
-                <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Account Management</span></a>
-            </li>
-            
-            <li>
-                <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Staff Management</span></a>
-            </li>
+
+            <c:if test="${sessionScope.acc.roletype == 1}">
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Debt</span></a>
+                </li>
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Invoice</span></a>        
+                </li>
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Account Management</span></a>
+                </li>
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Staff Management</span></a>
+                </li>
+            </c:if>
+            <c:if test="${sessionScope.acc.roletype == 2}">
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Debt</span></a>
+                </li>
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Staff Management</span></a>
+                </li>
+            </c:if>
+
+
+
         </ul>
     </aside>
 </div>
