@@ -3,7 +3,7 @@
     Created on : 15 thg 2, 2025, 00:01:05
     Author     : binh2
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,9 +80,10 @@
                                 </div>
                             </div>
                         </li>
+                        <c:if test="${sessionScope.acc != null}">
                         <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
                                 <i class="ion ion-android-person d-lg-none"></i>
-                                <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div></a>
+                                <div class="d-sm-none d-lg-inline-block">Hi, ${sessionScope.acc.name}</div></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a href="${pageContext.request.contextPath}/profile" class="dropdown-item has-icon">
                                     <i class="ion ion-android-person"></i> Profile
@@ -92,6 +93,7 @@
                                 </a>
                             </div>
                         </li>
+                        </c:if>
                     </ul>
                 </nav>
 
