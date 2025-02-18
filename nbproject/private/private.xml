@@ -5,8 +5,12 @@
         <group>
             <file>file:/E:/SP25/ISP392/SP25_IS1806_ISP392_GR02/web/view/page/products.jsp</file>
             <file>file:/E:/SP25/ISP392/SP25_IS1806_ISP392_GR02/src/java/context/DBContext.java</file>
+            <file>file:/E:/SP25/ISP392/SP25_IS1806_ISP392_GR02/src/java/dao/ProductsDAO.java</file>
             <file>file:/E:/SP25/ISP392/SP25_IS1806_ISP392_GR02/web/view/page/userProfile.jsp</file>
             <file>file:/E:/SP25/ISP392/SP25_IS1806_ISP392_GR02/web/view/common/main-sidebar.jsp</file>
+            <file>file:/E:/SP25/ISP392/SP25_IS1806_ISP392_GR02/src/java/control/SendEmail.java</file>
+            <file>file:/E:/SP25/ISP392/SP25_IS1806_ISP392_GR02/src/java/entity/Products.java</file>
+            <file>file:/E:/SP25/ISP392/SP25_IS1806_ISP392_GR02/src/java/control/ProductsControl.java</file>
         </group>
     </open-files>
 </project-private>

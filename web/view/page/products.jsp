@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.List"%>
-<%@page import="entity.Products"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,150 +10,164 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/demo.css">
+        <style>
+            .main-content {
+                margin-left: 250px;
+                padding: 20px;
+                border-collapse: collapse;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            th, td {
+                padding: 12px;
+                text-align: left;
+                vertical-alignment: middle;
+            }
+
+            th {
+                background-color: #f8f9fa;
+            }
+
+            .section-body {
+                font-family: Arial, sans-serif;
+                max-width: 1000px;
+                margin: 40px auto;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+        </style>
     </head>
-    <body>
-        <div id="app">
-            <div class="main-wrapper">
+    )<tbody>
+        <c:forEach row="products">
+            <tr><td colspan="7" class="text-center border-b">Product Details</td>
+                <td><a href="#" class="waves-effect waves-light btn btn-primary mark-for-lev">View</a></td>
+            </tr>
+        </c:forEach>
 
-                <!-- Sidebar -->
-
-                <!--MAIN-SIDEBAR-JSP-INCLUDE-->
-                <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
-                    <!--MAIN-SIDEBAR-JSP-INCLUDE-->
-
-                    <!-- Main Content -->
-                    <div class="main-content" style="margin-left: 250px; padding: 20px;">
-                        <section class="section">
-                            <div class="section-header">
-                                <h1>Product List</h1>
-                            </div>
-
-                            <div class="section-body">
-                                <!-- Button to open Add Product modal -->
-                                <div style="margin-bottom: 20px;">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">
-                                        Add New Product
-                                    </button>
-                                </div>
-
-                                <!-- Product Table -->
-                                <table class="table table-bordered">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Price</th>
-                                            <th>Zone</th>
-                                            <th>Quantity</th>
-                                            <th>Zone ID</th>
-                                            <th>Active</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <% 
-                                        List<Products> productList = (List<Products>) request.getAttribute("productList");
-                                        if (productList != null) {
-                                            for (Products product : productList) {
-                                    %>
-                                    <tr>
-                                        <td><%= product.getId() %></td>
-                                        <td><%= product.getName() %></td>
-                                        <td><%= product.getDescribe() != null ? product.getDescribe().replaceAll("<", "&lt;").replaceAll(">", "&gt;") : "" %></td>
-                                        <td><%= product.getPrice() %></td>
-                                        <td><%= product.getZone() %></td>
-                                        <td><%= product.getQuantity() %></td>
-                                        <td><%= product.getZoneId() %></td>
-                                        <td><%= product.isActive() ? "Yes" : "No" %></td>
-                                        <td>
-                                            <form action="products" method="post" style="display:inline;">
-                                                <input type="hidden" name="action" value="delete">
-                                                <input type="hidden" name="id" value="<%= product.getId() %>">
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <% 
-                                            }
-                                        } else {
-                                    %>
-                                    <tr><td colspan="9" class="text-center">No products found.</td></tr>
-                                    <% } %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
+        <!-- Product Details Modal -->
+    <div class="modal fade" id="productDetailsModal" tabindex="-1" role="dialog" aria-labelledby="productDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productDetailsModalLabel">Product Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <form action="products" method="post">
+                    <div class="modal-body">
+                        <!-- Hidden fields -->
+                        <input type="hidden" name="action" value="insert">
+
+                        <!-- Product Details Fields -->
+                        <div class="form-group">
+                            <label for="id">ID:</label>
+                            <input type="text" class="form-control" id="id" name="id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="describe">Description:</label>
+                            <textarea class="form-control" id="describe" name="describe" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price:</label>
+                            <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="zoneId">Zone ID:</label>
+                            <input type="text" class="form-control" id="zoneId" name="zoneId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="isActive">Active:</label>
+                            <select class="form-control" id="isActive" name="isActive" required>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+
+                        <!-- Row Actions -->
+                        <div class="row-actions">
+                            <button onclick="deleteProduct(event)" class="btn btn-danger row-action-btn">Delete</button>
+                            <button onclick="markForLeverage(event)" class="btn btn-success row-action-btn">Mark for Leverage</button>
+                        </div>
+                    </div>
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update Product</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!-- Modal for Adding Product -->
-        <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+    <!-- Modal for Adding Product -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="products" method="post">
+                    <div class="modal-body">
+                        <!-- Hidden field -->
+                        <input type="hidden" name="action" value="insert">
+
+                        <!-- Form Fields -->
+                        <div class="form-group">
+                            <label for="id">ID:</label>
+                            <input type="text" class="form-control" id="id" name="id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="describe">Description:</label>
+                            <textarea class="form-control" id="describe" name="describe" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price:</label>
+                            <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="zoneId">Zone ID:</label>
+                            <input type="text" class="form-control" id="zoneId" name="zoneId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="isActive">Active:</label>
+                            <select class="form-control" id="isActive" name="isActive" required>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
+                        <button type="submit" class="btn btn-primary">Add Product</button>
                     </div>
-                    <form action="products" method="post">
-                        <div class="modal-body">
-                            <!-- Hidden field -->
-                            <input type="hidden" name="action" value="insert">
-
-                            <!-- Form Fields -->
-                            <div class="form-group">
-                                <label for="id">ID:</label>
-                                <input type="text" class="form-control" id="id" name="id" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="name">Name:</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="describe">Description:</label>
-                                <input type="text" class="form-control" id="describe" name="describe" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="price">Price:</label>
-                                <input type="number" class="form-control" id="price" name="price" step="0.01" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="zone">Zone:</label>
-                                <input type="text" class="form-control" id="zone" name="zone" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="quantity">Quantity:</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="zoneId">Zone ID:</label>
-                                <input type="text" class="form-control" id="zoneId" name="zoneId" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="isActive">Active:</label>
-                                <select class="form-control" id="isActive" name="isActive" required>
-                                    <option value="true">Yes</option>
-                                    <option value="false">No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add Product</button>
-                        </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!-- Required Scripts -->
-        <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
-        <script src="${pageContext.request.contextPath}/modules/bootstrap/js/bootstrap.bundle.min.js"></script>
-    </body>
+    <!-- Required Scripts -->
+    <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/modules/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
