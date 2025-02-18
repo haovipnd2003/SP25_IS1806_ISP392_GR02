@@ -45,18 +45,18 @@ public class DBContext {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static void main(String[] args) {
         DAO d = new DAO();
-        ArrayList<User> accounts = d.getAccount(); 
+        ArrayList<User> accounts = d.getAccount();
 
-    for (User u : accounts) {
-        System.out.println("ID: " + u.getId() +
-                           ", Name: " + u.getName() +
-                           ", Email: " + u.getEmail() +
-                           ", Role: " + u.getRoletype() +
-                           ", Active: " + u.getIsactive());
-    }
+        for (User u : accounts) {
+            System.out.println("ID: " + u.getId()
+                    + ", Name: " + u.getName()
+                    + ", Email: " + u.getEmail()
+                    + ", Role: " + u.getRoletype()
+                    + ", Active: " + u.getIsactive());
+        }
     }
 
 }

@@ -32,16 +32,15 @@ public class ProductsDAO extends DBContext {
 
     public void insert(Products p) {
         try {
-            String sql = "INSERT INTO product (id, name, describe, price, zone, quantity, zoneId, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO product (id, name, describe, price, quantity, zoneId, isActive) VALUES (?, ?, ?, ?, ?, ?, ?)";
             stm = cnn.prepareStatement(sql);
             stm.setString(1, p.getId());
             stm.setString(2, p.getName());
             stm.setString(3, p.getDescribe());
             stm.setDouble(4, p.getPrice());
-            stm.setString(5, p.getZone());
-            stm.setInt(6, p.getQuantity());
-            stm.setString(7, p.getZoneId());
-            stm.setBoolean(8, p.isActive());
+            stm.setInt(5, p.getQuantity());
+            stm.setString(6, p.getZoneId());
+            stm.setBoolean(7, p.isActive());
             stm.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Insert: " + e.getMessage());
@@ -50,12 +49,11 @@ public class ProductsDAO extends DBContext {
 
     public void update(Products p) {
         try {
-            String sql = "UPDATE product SET name=?, describe=?, price=?, zone=?, quantity=?, zoneId=?, isActive=? WHERE id=?";
+            String sql = "UPDATE product SET name=?, describe=?, price=?, quantity=?, zoneId=?, isActive=? WHERE id=?";
             stm = cnn.prepareStatement(sql);
             stm.setString(1, p.getName());
             stm.setString(2, p.getDescribe());
             stm.setDouble(3, p.getPrice());
-            stm.setString(4, p.getZone());
             stm.setInt(5, p.getQuantity());
             stm.setString(6, p.getZoneId());
             stm.setBoolean(7, p.isActive());
@@ -89,7 +87,6 @@ public class ProductsDAO extends DBContext {
                         rs.getString("name"),
                         rs.getString("describe"),
                         rs.getDouble("price"),
-                        rs.getString("zone"),
                         rs.getInt("quantity"),
                         rs.getString("zoneId"),
                         rs.getBoolean("isActive")

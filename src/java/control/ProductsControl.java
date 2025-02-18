@@ -25,7 +25,7 @@ public class ProductsControl extends HttpServlet {
             throws ServletException, IOException {
         List<Products> productList = productsDAO.getAllProducts();
         request.setAttribute("productList", productList);
-        request.getRequestDispatcher("products.jsp").forward(request, response);
+        request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
     }
 
     @Override
@@ -53,12 +53,11 @@ public class ProductsControl extends HttpServlet {
         String name = request.getParameter("name");
         String describe = request.getParameter("describe");
         double price = Double.parseDouble(request.getParameter("price"));
-        String zone = request.getParameter("zone");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         String zoneId = request.getParameter("zoneId");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
         
-        Products products = new Products(id, name, describe, price, zone, quantity, zoneId, isActive);
+        Products products = new Products(id, name, describe, price, quantity, zoneId, isActive);
         productsDAO.insert(products);
         response.sendRedirect("/products");
     }
@@ -68,12 +67,11 @@ public class ProductsControl extends HttpServlet {
         String name = request.getParameter("name");
         String describe = request.getParameter("describe");
         double price = Double.parseDouble(request.getParameter("price"));
-        String zone = request.getParameter("zone");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         String zoneId = request.getParameter("zoneId");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
         
-        Products product = new Products(id, name, describe, price, zone, quantity, zoneId, isActive);
+        Products product = new Products(id, name, describe, price, quantity, zoneId, isActive);
         productsDAO.update(product);
         response.sendRedirect("/products");
     }
