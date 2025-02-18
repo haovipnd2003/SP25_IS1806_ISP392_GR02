@@ -3,7 +3,7 @@ package entity;
 /**
  * Class representing a product entity.
  */
-public class Product {
+public class Products {
     private String id;
     private String name;
     private String describe;
@@ -13,7 +13,7 @@ public class Product {
     private String zoneId;
     private boolean isActive;
 
-    public Product(String id, String name, String describe, double price, String zone, int quantity, String zoneId, boolean isActive) {
+    public Products(String id, String name, String describe, double price, String zone, int quantity, String zoneId, boolean isActive) {
         this.id = id;
         this.name = name;
         this.describe = describe;

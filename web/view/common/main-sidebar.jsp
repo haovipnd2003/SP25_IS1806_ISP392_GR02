@@ -13,7 +13,7 @@
 
             <li class="menu-header">Menu</li>
             <li>
-                <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Product</span></a>
+                <a href="${pageContext.request.contextPath}/products"><i class="ion ion-clipboard"></i><span>Product</span></a>
             </li>
             <li>
                 <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Sale</span></a>
