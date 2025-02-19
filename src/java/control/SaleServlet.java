@@ -80,12 +80,7 @@ public class SaleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String key = request.getParameter("search");
-        CustomerDAO dao = new CustomerDAO();
-        ArrayList<Customer> list = dao.getTop3Customer("key", "key");
-        
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("view/page/sale.jsp").forward(request, response);
+       
     }
 
     /** 
