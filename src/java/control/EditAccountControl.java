@@ -82,14 +82,18 @@ public class EditAccountControl extends HttpServlet {
         String address = request.getParameter("address");
         String roletype = request.getParameter("roletype");
         String isactive = request.getParameter("isactive");
-    // Prevent changing Admin status
-    if ("1".equals(roletype)) {
-        request.getSession().setAttribute("message", "You cannot change the status of an Admin!");
-        response.sendRedirect("manageaccount");
-        return;
-    }
+
+        // Lấy thông tin tài khoản hiện tại từ CSDL
+        User existingUser = dao.getUserById(id);
+
+        if (existingUser != null && "1".equals(existingUser.getRoletype())) {
+            // Nếu là Admin thì không cho thay đổi trạng thái
+            isactive = existingUser.getIsactive(); // Giữ nguyên trạng thái cũ
+        }
+       
+
         dao.updateAccount(id, name, email, phone, address, roletype, isactive);
-        
+
         response.sendRedirect("manageaccount");
 
     }

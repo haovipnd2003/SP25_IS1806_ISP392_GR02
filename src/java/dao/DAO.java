@@ -120,4 +120,44 @@ public class DAO extends DBContext {
         }
     }
 
+    public void addAccount(String name, String email, String password, String phone, String address, String roletype) {
+        String query = "INSERT INTO user (name, email, password, phone, address, roletype, isactive) VALUES (?, ?, ?, ?, ?, ?, 3)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, password);
+            ps.setString(4, phone);
+            ps.setString(5, address);
+            ps.setInt(6, Integer.parseInt(roletype));
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public User getUserById(String id) {
+        String query = "SELECT id, name, email, password, phone, address, roletype, isactive FROM user WHERE id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getString(1));
+                user.setName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+                user.setPassword(rs.getString(4));
+                user.setPhone(rs.getString(5));
+                user.setAddress(rs.getString(6));
+                user.setRoletype(rs.getString(7));
+                user.setIsactive(rs.getString(8));
+                return user;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
