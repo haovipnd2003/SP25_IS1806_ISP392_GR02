@@ -64,7 +64,7 @@
                     <a href="${pageContext.request.contextPath}/profile" class="dropdown-item has-icon">
                         <i class="ion ion-android-person"></i> Profile
                     </a>
-                    <a href="#" class="dropdown-item has-icon">
+                    <a href="${pageContext.request.contextPath}/logout" class="dropdown-item has-icon">
                         <i class="ion ion-log-out"></i> Logout
                     </a>
                 </div>
