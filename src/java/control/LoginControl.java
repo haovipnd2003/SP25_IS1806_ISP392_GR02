@@ -36,10 +36,7 @@ public class LoginControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
-        // Add these headers to prevent caching
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-        response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-        response.setDateHeader("Expires", 0); // Proxies
+
 
         String username = request.getParameter("name");
         String password = request.getParameter("password");
@@ -51,7 +48,7 @@ public class LoginControl extends HttpServlet {
         User a = dao.login(username);
         if ( a == null || !a.getPassword().equals(password)) {
             request.setAttribute("mess", "Wrong User or Password");
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            request.getRequestDispatcher("view/page/login.jsp").forward(request, response);
         } else {
 
             session.setAttribute("acc", a);
@@ -67,7 +64,7 @@ public class LoginControl extends HttpServlet {
             } else {
                 String script = "<script>"
                         + "alert('Logged in successfully.');"
-                        + "window.location='home';"
+                        + "window.location='view/page/dashboard.jsp';"
                         + "</script>";
                 response.getWriter().println(script);
             }

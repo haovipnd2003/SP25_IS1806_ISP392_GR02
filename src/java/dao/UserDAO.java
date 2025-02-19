@@ -10,11 +10,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import java.sql.*;
+
 /**
  *
  * @author Admin
  */
 public class UserDAO extends DBContext {
+
+    private Connection conn;
 
     public UserDAO() {
         connectDB();
@@ -70,6 +74,33 @@ public class UserDAO extends DBContext {
 
             }
         } catch (Exception e) {
+            System.out.println("update: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public User checkLogin(String email, String password) {
+        try {
+            String sql = "SELECT * FROM user WHERE email = ? AND password = ? AND isactive = 1";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getString("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                user.setRoletype(rs.getString("roletype"));
+                user.setIsactive(rs.getString("isactive"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
         }
         return null;
     }

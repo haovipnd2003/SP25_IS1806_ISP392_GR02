@@ -4,6 +4,7 @@
  */
 package dao;
 
+
 import context.DBContext;
 import entity.Product;
 import java.sql.Connection;
@@ -62,4 +63,5 @@ public class ProductDAO extends DBContext{
                System.out.println(list);
            }
     }
+
 }

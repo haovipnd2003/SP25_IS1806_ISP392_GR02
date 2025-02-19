@@ -3,7 +3,7 @@
     Created on : 15 thg 2, 2025, 00:01:05
     Author     : binh2
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,11 +25,11 @@
         <div id="app">
             <div class="main-wrapper">
                 
-<jsp:include page="/view/common/nav_bar.jsp"></jsp:include>
+                <jsp:include page="/view/common/nav_bar.jsp"></jsp:include>
                 <!--MAIN-SIDEBAR-JSP-INCLUDE-->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
                     <!--MAIN-SIDEBAR-JSP-INCLUDE-->
-
+                
 
                     <!--                MAIN CONTENT-->
                     <div class="main-content" style="min-height: 600px;">
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/popper.js"></script>
         <script src="${pageContext.request.contextPath}/modules/tooltip.js"></script>
         <script src="${pageContext.request.contextPath}/modules/bootstrap/js/bootstrap.min.js"></script>

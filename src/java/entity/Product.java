@@ -1,23 +1,27 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entity;
 
 /**
- *
- * @author binh2
+ * Class representing a product entity.
  */
 public class Product {
-    String id,name,describe,img,price,quantity;
+    private String id;
+    private String name;
+    private String describe;
+    private double price;
+    private String zone;
+    private int quantity;
+    private String zoneId;
+    private boolean isActive;
 
-    public Product(String id, String name, String describe, String img, String price, String quantity) {
+    public Product(String id, String name, String describe, double price, String zone, int quantity, String zoneId, boolean isActive) {
         this.id = id;
         this.name = name;
         this.describe = describe;
-        this.img = img;
         this.price = price;
+        this.zone = zone;
         this.quantity = quantity;
+        this.zoneId = zoneId;
+        this.isActive = isActive;
     }
 
     public String getId() {
@@ -44,34 +48,57 @@ public class Product {
         this.describe = describe;
     }
 
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getQuantity() {
+    public String getZone() {
+        return zone;
+    }
+
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
+
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getZoneId() {
+        return zoneId;
+    }
+
+    public void setZoneId(String zoneId) {
+        this.zoneId = zoneId;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", describe=" + describe + ", img=" + img + ", price=" + price + ", quantity=" + quantity + '}';
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", describe='" + describe + '\'' +
+                ", price=" + price +
+                ", zone='" + zone + '\'' +
+                ", quantity=" + quantity +
+                ", zoneId='" + zoneId + '\'' +
+                ", isActive=" + isActive +
+                '}';
     }
-    
-    
 }
