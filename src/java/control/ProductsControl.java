@@ -28,23 +28,41 @@ public class ProductsControl extends HttpServlet {
         if (action != null) {
             switch (action) {
                 case "add":
-                    // Forward to the add product page
-                    request.getRequestDispatcher("view/page/addProduct.jsp").forward(request, response);
+                    handleAddProduct(request, response);
                     break;
-                
+                case "edit":
+                    handleEditProduct(request, response);
+                    break;
                 default:
-                    // Default behavior - show all products
-                    List<Products> productList = productsDAO.getAllProducts();
-                    request.setAttribute("productList", productList);
-                    request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
+                    handleDefault(request, response);
                     break;
             }
         } else {
-            // Default behavior - show all products
-            List<Products> productList = productsDAO.getAllProducts();
-            request.setAttribute("productList", productList);
-            request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
+            handleDefault(request, response);
         }
+    }
+
+    private void handleAddProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("view/page/addProduct.jsp").forward(request, response);
+    }
+
+    private void handleEditProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Lấy id từ request và lấy thông tin sản phẩm từ database
+        String id = request.getParameter("id");
+        Products product = productsDAO.getProductById(id);
+
+        // Đặt sản phẩm vào request attribute để hiển thị trong form cập nhật
+        request.setAttribute("product", product);
+        request.getRequestDispatcher("view/page/updateProduct.jsp").forward(request, response);
+    }
+
+    private void handleDefault(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        List<Products> productList = productsDAO.getAllProducts();
+        request.setAttribute("productList", productList);
+        request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
     }
 
     @Override
@@ -82,6 +100,7 @@ public class ProductsControl extends HttpServlet {
     }
 
     private void updateProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Retrieve product data from the form
         String id = request.getParameter("id");
         String name = request.getParameter("name");
         String describe = request.getParameter("describe");
@@ -90,8 +109,13 @@ public class ProductsControl extends HttpServlet {
         String zoneId = request.getParameter("zoneId");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
 
+        // Create a Products object with the updated data
         Products product = new Products(id, name, describe, price, quantity, zoneId, isActive);
+
+        // Update the product in the database
         productsDAO.update(product);
+
+        // Redirect back to the products list page
         response.sendRedirect("products");
     }
 

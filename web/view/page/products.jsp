@@ -107,8 +107,12 @@
                                                 <td>${product.zoneId}</td>
                                                 <td>${product.active ? 'Yes' : 'No'}</td>
                                                 <td>
-                                                    <a href="" class="btn btn-danger">Delete</a>
-                                                    <a href="updateProduct.jsp?id=${product.id}" class="btn btn-danger">Update</a>
+                                                    <form action="products" method="post" style="display: inline;" onsubmit="return deleteProduct(event)">
+                                                        <input type="hidden" name="action" value="delete">
+                                                        <input type="hidden" name="id" value="${product.id}">
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                    <a href="products?action=edit&id=${product.id}" class="btn btn-danger">Update</a>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -129,28 +133,13 @@
 
 
         <script>
-            function deleteProduct(productId) {
-                if (confirm('Are you sure you want to delete this product?')) {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '${pageContext.request.contextPath}/products';
-
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'action';
-                    input.value = 'delete';
-
-                    const idInput = document.createElement('input');
-                    idInput.type = 'hidden';
-                    idInput.name = 'id';
-                    idInput.value = productId;
-
-                    form.appendChild(input);
-                    form.appendChild(idInput);
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            }
+                                                        function deleteProduct(event) {
+                                                            event.preventDefault(); // Prevent the form from submitting immediately
+                                                            if (confirm('Are you sure you want to delete this product?')) {
+                                                                event.target.submit(); // Submit the form if user confirms
+                                                            }
+                                                            return false; // Prevent form submission if user cancels
+                                                        }
         </script>
         <!-- Required Scripts -->
         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
