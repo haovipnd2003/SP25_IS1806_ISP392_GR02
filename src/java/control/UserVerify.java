@@ -33,7 +33,7 @@ public class UserVerify extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-     private static final int OTP_EXPIRY_TIME = 60; // 5 minutes
+    private static final int OTP_EXPIRY_TIME = 60; // 5 minutes
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

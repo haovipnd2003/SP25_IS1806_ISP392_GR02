@@ -72,6 +72,9 @@ public class UserDAO extends DBContext{
                       
             }
         } catch (Exception e) {
+        }
+        return null;
+    }
     
     public User checkLogin(String email, String password) {
         try {
