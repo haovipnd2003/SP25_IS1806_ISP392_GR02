@@ -80,7 +80,7 @@ public class DAO extends DBContext {
     }
 
     public ArrayList<User> getAccount() {
-        String sql = "SELECT id, name, email, password, roletype,Isactive FROM User";
+        String sql = "SELECT id, name, email, password,phone,address, roletype,Isactive FROM User";
         ArrayList<User> list = new ArrayList<>();
         try {
             stm = cnn.prepareStatement(sql);
@@ -91,8 +91,10 @@ public class DAO extends DBContext {
                 c.setName(rs.getString(2));
                 c.setEmail(rs.getString(3));
                 c.setPassword(rs.getString(4));
-                c.setRoletype(rs.getString(5));
-                c.setIsactive(rs.getString(6));
+                c.setPhone(rs.getString(5));
+                c.setAddress(rs.getString(6));
+                c.setRoletype(rs.getString(7));
+                c.setIsactive(rs.getString(8));
                 list.add(c);
             }
         } catch (SQLException e) {
@@ -100,4 +102,22 @@ public class DAO extends DBContext {
         }
         return list;
     }
+
+    public void updateAccount(String id, String name, String email, String phone, String address, String roletype, String isactive) {
+        String query = "UPDATE user SET name = ?, email = ?, phone = ?, address = ?, roletype = ?, isactive = ? WHERE id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, phone);
+            ps.setString(4, address);
+            ps.setInt(5, Integer.parseInt(roletype));
+            ps.setInt(6, Integer.parseInt(isactive));
+            ps.setInt(7, Integer.parseInt(id));
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
