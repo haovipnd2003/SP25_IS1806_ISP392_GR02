@@ -51,7 +51,7 @@ public class UserDAO extends DBContext{
         }
     }
         
-        public User Relogin(String id) {
+    public User Relogin(String id) {
 
         try {
             String query = "select * from user where id = ?";
@@ -71,7 +71,9 @@ public class UserDAO extends DBContext{
                         rs.getString(8));
                       
             }
-        } catch (Exception e) {
+        } catch (Exception e) {}
+            return null;
+    }
     
     public User checkLogin(String email, String password) {
         try {
