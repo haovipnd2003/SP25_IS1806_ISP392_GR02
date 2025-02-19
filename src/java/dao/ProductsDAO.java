@@ -49,28 +49,7 @@ public class ProductsDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        // Create an instance of ProductsDAO
-        ProductsDAO dao = new ProductsDAO();
-
-        // Create a sample product to update
-        Products product = new Products(
-                "1", // id
-                "Updated Product Name", // name
-                "This is an updated", // describe
-                29.99, // price
-                200, // quantity
-                "1", // zoneId
-                false // isActive
-        );
-
-        // Call the update method
-        dao.update(product);
-
-        // Verify the update by retrieving the product
-        List<Products> products = dao.getAllProducts();
-        for (Products p : products) {
-            System.out.println(p.getId() + " - " + p.getName() + " - " + p.getDescribe() + " - " + p.getPrice() + " - " + p.getQuantity() + " - " + p.getZoneId() + " - " + p.isActive());
-        }
+        
     }
 
     public void update(Products p) {
