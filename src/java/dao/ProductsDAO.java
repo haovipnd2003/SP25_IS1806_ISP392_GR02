@@ -64,6 +64,31 @@ public class ProductsDAO extends DBContext {
         }
     }
 
+//    public Products getProductById(String id) {
+//        Products product = null;
+//        try {
+//            String sql = "SELECT * FROM product WHERE id = ?";
+//            stm = cnn.prepareStatement(sql);
+//            stm.setString(1, id);
+//            rs = stm.executeQuery();
+//
+//            if (rs.next()) {
+//                product = new Products(
+//                        rs.getString("id"),
+//                        rs.getString("name"),
+//                        rs.getString("describe"),
+//                        rs.getDouble("price"),
+//                        rs.getInt("quantity"),
+//                        rs.getString("zoneId"),
+//                        rs.getBoolean("isActive")
+//                );
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Get Product By ID: " + e.getMessage());
+//        }
+//        return product;
+//    }
+
     public void delete(String id) {
         try {
             String sql = "DELETE FROM product WHERE id = ?";

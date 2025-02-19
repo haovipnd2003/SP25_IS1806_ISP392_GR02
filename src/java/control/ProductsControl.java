@@ -23,16 +23,35 @@ public class ProductsControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Products> productList = productsDAO.getAllProducts();
-        request.setAttribute("productList", productList);
-        request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
+        String action = request.getParameter("action");
+
+        if (action != null) {
+            switch (action) {
+                case "add":
+                    // Forward to the add product page
+                    request.getRequestDispatcher("view/page/addProduct.jsp").forward(request, response);
+                    break;
+                
+                default:
+                    // Default behavior - show all products
+                    List<Products> productList = productsDAO.getAllProducts();
+                    request.setAttribute("productList", productList);
+                    request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
+                    break;
+            }
+        } else {
+            // Default behavior - show all products
+            List<Products> productList = productsDAO.getAllProducts();
+            request.setAttribute("productList", productList);
+            request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        
+
         if (action != null) {
             switch (action) {
                 case "insert":
@@ -56,10 +75,10 @@ public class ProductsControl extends HttpServlet {
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         String zoneId = request.getParameter("zoneId");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
-        
+
         Products products = new Products(id, name, describe, price, quantity, zoneId, isActive);
         productsDAO.insert(products);
-        response.sendRedirect("/products");
+        response.sendRedirect("products");
     }
 
     private void updateProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -70,15 +89,15 @@ public class ProductsControl extends HttpServlet {
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         String zoneId = request.getParameter("zoneId");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
-        
+
         Products product = new Products(id, name, describe, price, quantity, zoneId, isActive);
         productsDAO.update(product);
-        response.sendRedirect("/products");
+        response.sendRedirect("products");
     }
 
     private void deleteProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = request.getParameter("id");
         productsDAO.delete(id);
-        response.sendRedirect("/products");
+        response.sendRedirect("products");
     }
 }
