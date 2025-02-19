@@ -16,10 +16,9 @@ import java.sql.*;
  *
  * @author Admin
  */
-public class UserDAO extends DBContext {
-
+public class UserDAO extends DBContext{
     private Connection conn;
-
+    
     public UserDAO() {
         connectDB();
     }
@@ -52,7 +51,7 @@ public class UserDAO extends DBContext {
             System.out.println("update: " + e.getMessage());
         }
     }
-
+        
     public User Relogin(String id) {
 
         try {
