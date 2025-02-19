@@ -1,7 +1,7 @@
 <%-- 
     Document   : debt
     Created on : Feb 19, 2025, 8:45:42 AM
-    Author     : dung.nvan
+    Author     : vietanhdang
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -200,7 +200,7 @@
                                                         <h3>Add a debtor</h3>
                                                         <div class="close" onclick="closeModal()">&times;</div>
                                                     </div>
-                                                    <form class="form-signin" action="${pageContext.request.contextPath}/debt" method="post">
+                                                    <form class="form-signin" action="${pageContext.request.contextPath}/debt.do" method="post">
                                                         <div class="row display-flex-al-center">
                                                             <h6>Full name (*)</h6>
                                                             <input name="name" type="text" name="search" value=""/>

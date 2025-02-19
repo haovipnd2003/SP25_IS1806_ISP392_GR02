@@ -6,7 +6,7 @@ package entity;
 
 /**
  *
- * @author dung.nvan
+ * @author vietanhdang
  */
 public class Debtor {
     private int id;
