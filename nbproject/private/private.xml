@@ -3,23 +3,27 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/sale.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/control/SaleServlet.java</file>
-
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/dao/ProductDAO.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/dao/UserDAO.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/control/ChangePasswordServlet.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/control/SearchProductServlet.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/dao/DAO.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/dao/LoginDAO.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/sale.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/entity/Product.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/control/SearchCustomerForSale.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/updatePassword.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/control/hashpassword.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/control/SignupControl.java</file>
-
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/context/DBContext.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/page/login.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/DAO.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/CustomerDAO.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/AddAccountControl.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/LoginControl.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/admin/manageAccount.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/entity/Product.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/common/nav_bar.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/UserDAO.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/page/sale.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/ProductDAO.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/LogoutControl.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/SaleServlet.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/entity/User.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/SearchProductServlet.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/page/userProfile.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/LoginDAO.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/SignupControl.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/page/dashboard.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/common/main-sidebar.jsp</file>
         </group>
     </open-files>
 </project-private>
