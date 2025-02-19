@@ -14,8 +14,8 @@ import java.sql.ResultSet;
  *
  * @author Admin
  */
-public class UserDAO extends DBContext{
-    
+public class UserDAO extends DBContext {
+
     public UserDAO() {
         connectDB();
     }
@@ -33,7 +33,7 @@ public class UserDAO extends DBContext{
         }
     }
 
-        public void updateInfo(User u,String timeUpdate) {
+    public void updateInfo(User u, String timeUpdate) {
         try {
             String strSQL = "UPDATE user SET name= ?,email = ?,phone = ?, address=?, updateAt = ? WHERE id = ? and isactive = 1;";
             stm = cnn.prepareStatement(strSQL);
@@ -48,8 +48,8 @@ public class UserDAO extends DBContext{
             System.out.println("update: " + e.getMessage());
         }
     }
-        
-        public User Relogin(String id) {
+
+    public User Relogin(String id) {
 
         try {
             String query = "select * from user where id = ?";
@@ -67,10 +67,24 @@ public class UserDAO extends DBContext{
                         rs.getString(6),
                         rs.getString(7),
                         rs.getString(8));
-                      
+
             }
         } catch (Exception e) {
         }
         return null;
+    }
+
+    public void updatePassword(String newPass,String name) {
+        try {
+            String strSQL = "update user\n"
+                    + "SET password =?\n"
+                    + "WHERE name = ?";
+            stm = cnn.prepareStatement(strSQL);
+            stm.setString(1, newPass);
+            stm.setString(2, name);
+            stm.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("update: " + e.getMessage());
+        }
     }
 }

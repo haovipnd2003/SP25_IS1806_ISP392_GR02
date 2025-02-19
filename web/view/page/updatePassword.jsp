@@ -1,8 +1,9 @@
 <%-- 
-    Document   : dashboard
-    Created on : 15 thg 2, 2025, 00:01:05
+    Document   : updateProfile
+    Created on : 15 thg 2, 2025, 01:20:36
     Author     : binh2
 --%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -99,7 +100,6 @@
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
                     <!--MAIN-SIDEBAR-JSP-INCLUDE-->
 
-
                     <!--                MAIN CONTENT-->
                     <div class="main-content" style="min-height: 600px;">
                         <section class="section">
@@ -115,37 +115,37 @@
                                             <div class="card-body">
                                                 <div class="alert alert-light">
                                                 <c:set value="${sessionScope.acc}" var="u"></c:set>
+
+                                                    <form action="${pageContext.request.contextPath}/changePassword" method="POST">
+
                                                     <table border="0">
                                                         <tbody>
                                                             <tr>
-                                                                <td><h4>Name:</h4></td>
-                                                                <td><h4><c:out value="${u.getName()}"></c:out></h4></td>
+                                                                <td><h5>Name:</h5></td>
+                                                                <td><input type="text" name="name" value="${u.getName()}" readonly="" /></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><h4>Email:</h4></td>
-                                                                <td><h4><c:out value="${u.getEmail()}"></c:out></h4></td>
+                                                                <td><h5>Old Password: </h5></td>
+                                                                <td><input type="text" name="old_pass" value="" /></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><h4>Phone: </h4></td>
-                                                                <td><h4><c:out value="${u.getPhone()}"></c:out></h4></td>
+                                                                <td><h5>New Password: </h5></td>
+                                                                <td><input type="text" name="new_pass" value="" /></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><h4>Address:</h4></td>
-                                                                <td><h4><c:out value="${u.getAddress()}"></c:out></h4></td>
+                                                                <td><h5>Confirm Password: </h5></td>
+                                                                <td><input type="text" name="confirm_pass" value="" /></td>
                                                             </tr>
                                                             <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><a  style="margin: 10px" href="${pageContext.request.contextPath}/updateProfile" class="btn btn-outline-info">Update Profile</a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><a  style="margin: 10px" href="${pageContext.request.contextPath}/changePassword" class="btn btn-outline-warning">Change Password</a></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-
+                                                                <td>  <button style="margin: 10px" type="submit" class="btn btn-outline-info">
+                                                                        Change Password
+                                                                    </button></td>
+                                                            </tr>  
+                                                        </tbody>
+                                                    </table>
+                                                </form>
+                                                <h6>${requestScope.mess}</h6>
+                                                <h6>${requestScope.error}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -175,3 +175,4 @@
         <script src="${pageContext.request.contextPath}/js/demo.js"></script>
     </body>
 </html>
+

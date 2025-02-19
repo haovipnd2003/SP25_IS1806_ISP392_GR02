@@ -5,7 +5,7 @@
 package dao;
 
 import context.DBContext;
-import entity.Customer;
+import entity.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +15,9 @@ import java.util.ArrayList;
  *
  * @author Admin
  */
-public class CustomerDAO extends DBContext{
+public class ProductDAO extends DBContext{
     
-    public CustomerDAO() {
+    public ProductDAO() {
         connectDB();
     }
     //Khai báo các thành phần sử lí DB
@@ -34,19 +34,20 @@ public class CustomerDAO extends DBContext{
         }
     }
 
-       public ArrayList<Customer> searchCustomerByNameNPhone(String name, String phone) {
-           ArrayList<Customer> list = new ArrayList<>();
+       public ArrayList<Product> searchProductByNameNDescribe(String name, String describe) {
+           ArrayList<Product> list = new ArrayList<>();
         try {
-            String query = "SELECT * FROM customer WHERE name LIKE ? OR phone LIKE ? and isactive = 1";
+            String query = "Select * from product WHERE (name LIKE ? OR `describe` LIKE ?) and isactive = 1 ;";
             stm = cnn.prepareStatement(query);
             stm.setString(1, "%"+name+"%");
-            stm.setString(2, "%"+phone+"%");    
+            stm.setString(2, "%"+describe+"%");    
             rs = stm.executeQuery();
 
             while (rs.next()) {
-                 Customer cus = new Customer(rs.getString("id"),rs.getString("name")
-                            ,rs.getString("phone"),rs.getString("address"));
-                 list.add(cus);
+                Product pro = new Product(rs.getString("id"), rs.getString("name"),
+                        rs.getString("describe"), rs.getString("image"), 
+                        rs.getString("price"), rs.getString("quantity"));
+                 list.add(pro);
             }
             return list;
         } catch (Exception e) {
@@ -55,9 +56,9 @@ public class CustomerDAO extends DBContext{
     }
         
        public static void main(String[] args) {
-        CustomerDAO DAO = new CustomerDAO();
-        ArrayList<Customer> list = DAO.searchCustomerByNameNPhone("binh", "binh");
-           for (Customer customer : list) {
+        ProductDAO DAO = new ProductDAO();
+        ArrayList<Product> list = DAO.searchProductByNameNDescribe("A", "A");
+           for (Product pro : list) {
                System.out.println(list);
            }
     }
