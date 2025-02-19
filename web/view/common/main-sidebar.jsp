@@ -29,7 +29,7 @@
 
             <c:if test="${sessionScope.acc.roletype == 1}">
                 <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-cash"></i><span>Debt</span></a>
+                    <a href="${pageContext.request.contextPath}/debt.do"><i class="ion ion-clipboard"></i><span>Debt Management</span></a>
                 </li>
 
                 <li>

@@ -17,4 +17,13 @@
         <servlet-name>LogoutControl</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+    <servlet> 
+       <servlet-name>DebtServlet</servlet-name> 
+       <servlet-class>control.DebtServlet</servlet-class> 
+    </servlet> 
+  
+   <servlet-mapping> 
+       <servlet-name>DebtServlet</servlet-name> 
+       <url-pattern>/debt.do</url-pattern> 
+   </servlet-mapping> 
 </web-app>
