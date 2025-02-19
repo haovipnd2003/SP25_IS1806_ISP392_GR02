@@ -58,6 +58,22 @@
                 white-space: normal;
                 overflow: visible;
             }
+            .pagination {
+                margin-top: 20px;
+            }
+
+            .page-item.active .page-link {
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+
+            .page-link {
+                color: #007bff;
+            }
+
+            .page-link:hover {
+                color: #0056b3;
+            }
         </style>
     </head>
     <body>
@@ -78,6 +94,20 @@
                             </div>
 
                             <a href="products?action=add" class="btn btn-primary">Add Product</a>
+
+                            <div class="search-container mb-3">
+                                <form action="products" method="get" class="form-inline">
+                                    <input type="hidden" name="action" value="search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="Search products...">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                             <!-- Product Table -->
                             <table class="table table-bordered section-body">
                                 <thead class="thead-dark">
@@ -120,10 +150,36 @@
                                     <c:otherwise>
                                         <tr><td colspan="9" class="text-center">No products found.</td></tr>
                                     </c:otherwise>
+
                                 </c:choose>
                             </tbody>
                         </table>
+                        <!-- Phần phân trang -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <c:if test="${currentPage > 1}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="products?page=${currentPage - 1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
 
+                                <c:forEach begin="1" end="${totalPages}" var="i">
+                                    <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                        <a class="page-link" href="products?page=${i}">${i}</a>
+                                    </li>
+                                </c:forEach>
+
+                                <c:if test="${currentPage < totalPages}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="products?page=${currentPage + 1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
                         <!-- Required Scripts -->
                         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
                         <script src="${pageContext.request.contextPath}/modules/bootstrap/js/bootstrap.bundle.min.js"></script>

@@ -116,6 +116,39 @@ public class ProductsDAO extends DBContext {
         return product;
     }
 
+    public List<Products> searchProducts(String keyword) {
+        List<Products> productList = new ArrayList<>();
+        // Sửa câu lệnh SQL để tìm kiếm theo nhiều trường
+        String query = "SELECT * FROM product WHERE name LIKE ? OR `describe` LIKE ? OR id LIKE ? OR CAST(price AS CHAR) LIKE ? OR zoneId LIKE ?";
+
+        try {
+            stm = cnn.prepareStatement(query);
+            // Thêm các tham số tìm kiếm cho từng trường
+            stm.setString(1, "%" + keyword + "%");
+            stm.setString(2, "%" + keyword + "%");
+            stm.setString(3, "%" + keyword + "%");
+            stm.setString(4, "%" + keyword + "%");
+            stm.setString(5, "%" + keyword + "%");
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Products product = new Products(
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("describe"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity"),
+                        rs.getString("zoneId"),
+                        rs.getBoolean("isActive")
+                );
+                productList.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Search Products: " + e.getMessage());
+        }
+        return productList;
+    }
+
     public void delete(String id) {
         try {
             String sql = "DELETE FROM product WHERE id = ?";
@@ -127,11 +160,13 @@ public class ProductsDAO extends DBContext {
         }
     }
 
-    public List<Products> getAllProducts() {
+    public List<Products> getAllProducts(int page, int pageSize) {
         List<Products> productList = new ArrayList<>();
         try {
-            String sql = "SELECT * FROM product";
+            String sql = "SELECT * FROM product LIMIT ? OFFSET ?";
             stm = cnn.prepareStatement(sql);
+            stm.setInt(1, pageSize);
+            stm.setInt(2, (page - 1) * pageSize);
             rs = stm.executeQuery();
             while (rs.next()) {
                 Products product = new Products(
@@ -149,5 +184,20 @@ public class ProductsDAO extends DBContext {
             System.out.println("Get All Products: " + e.getMessage());
         }
         return productList;
+    }
+
+    public int getTotalProducts() {
+        int total = 0;
+        try {
+            String sql = "SELECT COUNT(*) FROM product";
+            stm = cnn.prepareStatement(sql);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Total Products: " + e.getMessage());
+        }
+        return total;
     }
 }

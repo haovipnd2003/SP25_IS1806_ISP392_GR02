@@ -33,6 +33,9 @@ public class ProductsControl extends HttpServlet {
                 case "edit":
                     handleEditProduct(request, response);
                     break;
+                case "search":  // Thêm case xử lý tìm kiếm
+                    handleSearch(request, response);
+                    break;
                 default:
                     handleDefault(request, response);
                     break;
@@ -60,7 +63,27 @@ public class ProductsControl extends HttpServlet {
 
     private void handleDefault(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Products> productList = productsDAO.getAllProducts();
+        int page = 1;
+        int pageSize = 10; // Số lượng sản phẩm mỗi trang
+
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
+        List<Products> productList = productsDAO.getAllProducts(page, pageSize);
+        int totalProducts = productsDAO.getTotalProducts();
+        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+
+        request.setAttribute("productList", productList);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
+    }
+
+    private void handleSearch(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String keyword = request.getParameter("keyword");
+        List<Products> productList = productsDAO.searchProducts(keyword);
         request.setAttribute("productList", productList);
         request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
     }
