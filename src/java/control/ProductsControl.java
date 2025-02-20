@@ -109,21 +109,27 @@ public class ProductsControl extends HttpServlet {
     }
 
     private void insertProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id");
         String name = request.getParameter("name");
         String describe = request.getParameter("describe");
         double price = Double.parseDouble(request.getParameter("price"));
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         String zoneId = request.getParameter("zoneId");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
+        String image = request.getParameter("image");
 
-        Products products = new Products(id, name, describe, price, quantity, zoneId, isActive);
+        Products products = new Products();
+        products.setName(name);
+        products.setDescribe(describe);
+        products.setPrice(price);
+        products.setQuantity(quantity);
+        products.setZoneId(zoneId);
+        products.setActive(isActive);
+        products.setImage(image);
         productsDAO.insert(products);
         response.sendRedirect("products");
     }
 
     private void updateProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Retrieve product data from the form
         String id = request.getParameter("id");
         String name = request.getParameter("name");
         String describe = request.getParameter("describe");
@@ -131,14 +137,18 @@ public class ProductsControl extends HttpServlet {
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         String zoneId = request.getParameter("zoneId");
         boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
+        String image = request.getParameter("image");
 
-        // Create a Products object with the updated data
-        Products product = new Products(id, name, describe, price, quantity, zoneId, isActive);
-
-        // Update the product in the database
+        Products product = new Products();
+        product.setId(id);
+        product.setName(name);
+        product.setDescribe(describe);
+        product.setPrice(price);
+        product.setQuantity(quantity);
+        product.setZoneId(zoneId);
+        product.setActive(isActive);
+        product.setImage(image);
         productsDAO.update(product);
-
-        // Redirect back to the products list page
         response.sendRedirect("products");
     }
 

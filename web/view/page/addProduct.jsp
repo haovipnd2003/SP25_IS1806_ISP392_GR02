@@ -33,10 +33,6 @@
                         <input type="hidden" name="action" value="insert">
 
                         <div class="form-group">
-                            <label for="id" class="form-label">ID:</label>
-                            <input type="text" class="form-control" id="id" name="id" required>
-                        </div>
-                        <div class="form-group">
                             <label for="name" class="form-label">Name:</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>

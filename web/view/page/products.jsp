@@ -95,6 +95,7 @@
 
                             <a href="products?action=add" class="btn btn-primary">Add Product</a>
 
+                            <!-- Search -->
                             <div class="search-container mb-3">
                                 <form action="products" method="get" class="form-inline">
                                     <input type="hidden" name="action" value="search">
@@ -114,6 +115,7 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
+                                        <th>Image</th>
                                         <th>Description</th>
                                         <th>Price</th>
                                         <th>Quantity</th>
@@ -129,6 +131,7 @@
                                             <tr>
                                                 <td>${product.id}</td>
                                                 <td>${product.name}</td>
+                                                <td>${product.image}</td>
                                                 <td class="description-cell" title="${fn:escapeXml(product.describe)}">
                                                     ${fn:escapeXml(product.describe)}
                                                 </td>
@@ -137,11 +140,11 @@
                                                 <td>${product.zoneId}</td>
                                                 <td>${product.active ? 'Yes' : 'No'}</td>
                                                 <td>
-                                                    <form action="products" method="post" style="display: inline;" onsubmit="return deleteProduct(event)">
-                                                        <input type="hidden" name="action" value="delete">
-                                                        <input type="hidden" name="id" value="${product.id}">
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                                    </form>
+                                                    <!--                                                    <form action="products" method="post" style="display: inline;" onsubmit="return deleteProduct(event)">
+                                                                                                            <input type="hidden" name="action" value="delete">
+                                                                                                            <input type="hidden" name="id" value="${product.id}">
+                                                                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                                                                        </form>-->
                                                     <a href="products?action=edit&id=${product.id}" class="btn btn-danger">Update</a>
                                                 </td>
                                             </tr>
@@ -189,13 +192,13 @@
 
 
         <script>
-                                                        function deleteProduct(event) {
-                                                            event.preventDefault(); // Prevent the form from submitting immediately
-                                                            if (confirm('Are you sure you want to delete this product?')) {
-                                                                event.target.submit(); // Submit the form if user confirms
-                                                            }
-                                                            return false; // Prevent form submission if user cancels
-                                                        }
+            function deleteProduct(event) {
+                event.preventDefault(); // Prevent the form from submitting immediately
+                if (confirm('Are you sure you want to delete this product?')) {
+                    event.target.submit(); // Submit the form if user confirms
+                }
+                return false; // Prevent form submission if user cancels
+            }
         </script>
         <!-- Required Scripts -->
         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>

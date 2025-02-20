@@ -12,8 +12,12 @@ public class Products {
     private int quantity;
     private String zoneId;
     private boolean isActive;
+    private String image;
 
-    public Products(String id, String name, String describe, double price, int quantity, String zoneId, boolean isActive) {
+    public Products() {
+    }
+
+    public Products(String id, String name, String describe, double price, int quantity, String zoneId, boolean isActive, String image) {
         this.id = id;
         this.name = name;
         this.describe = describe;
@@ -21,6 +25,7 @@ public class Products {
         this.quantity = quantity;
         this.zoneId = zoneId;
         this.isActive = isActive;
+        this.image = image;
     }
 
     public String getId() {
@@ -79,6 +84,14 @@ public class Products {
         isActive = active;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "Product{"
@@ -89,6 +102,7 @@ public class Products {
                 + ", quantity=" + quantity
                 + ", zoneId='" + zoneId + '\''
                 + ", isActive=" + isActive
+                + ", image='" + image + '\''
                 + '}';
     }
 }

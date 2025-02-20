@@ -30,43 +30,54 @@ public class ProductsDAO extends DBContext {
         }
     }
 
-    public void insert(Products p) {
-        try {
-            // Escape the reserved keyword 'describe' with backticks
-            String sql = "INSERT INTO product (id, name, `describe`, price, quantity, zoneId, isActive) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            stm = cnn.prepareStatement(sql);
-            stm.setString(1, p.getId());
-            stm.setString(2, p.getName());
-            stm.setString(3, p.getDescribe());
-            stm.setDouble(4, p.getPrice());
-            stm.setInt(5, p.getQuantity());
-            stm.setString(6, p.getZoneId());
-            stm.setBoolean(7, p.isActive());
+    public void insert(Products product) throws SQLException {
+        String sql = "INSERT INTO product (name, `describe`, price, quantity, zoneId, isActive, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stm = cnn.prepareStatement(sql)) {
+            stm.setString(1, product.getName());
+            stm.setString(2, product.getDescribe());
+            stm.setDouble(3, product.getPrice());
+            stm.setInt(4, product.getQuantity());
+            stm.setString(5, product.getZoneId());
+            stm.setBoolean(6, product.isActive());
+            stm.setString(7, product.getImage());
             stm.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Insert: " + e.getMessage());
         }
     }
 
     public static void main(String[] args) {
-        
+        ProductsDAO dao = new ProductsDAO();
+
+        // Tạo một sản phẩm mới để test
+        Products product = new Products();
+        product.setName("Test Product");
+        product.setDescribe("This is a test product");
+        product.setPrice(19.99);
+        product.setQuantity(10);
+        product.setZoneId("1");
+        product.setActive(true);
+        product.setImage("test_image.jpg");
+
+        try {
+            // Thực hiện insert
+            dao.insert(product);
+            System.out.println("Inserted product successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error inserting product: " + e.getMessage());
+        }
     }
 
-    public void update(Products p) {
-        try {
-            // Escape the reserved keyword 'describe' with backticks
-            String sql = "UPDATE product SET name=?, `describe`=?, price=?, quantity=?, zoneId=?, isActive=? WHERE id=?";
-            stm = cnn.prepareStatement(sql);
-            stm.setString(1, p.getName());
-            stm.setString(2, p.getDescribe());
-            stm.setDouble(3, p.getPrice());
-            stm.setInt(4, p.getQuantity());
-            stm.setString(5, p.getZoneId());
-            stm.setBoolean(6, p.isActive());
-            stm.setString(7, p.getId());
+    public void update(Products product) throws SQLException {
+        String sql = "UPDATE product SET name=?, describe=?, price=?, quantity=?, zoneId=?, isActive=?, image=? WHERE id=?";
+        try (PreparedStatement stm = cnn.prepareStatement(sql)) {
+            stm.setString(1, product.getName());
+            stm.setString(2, product.getDescribe());
+            stm.setDouble(3, product.getPrice());
+            stm.setInt(4, product.getQuantity());
+            stm.setString(5, product.getZoneId());
+            stm.setBoolean(6, product.isActive());
+            stm.setString(7, product.getImage()); // Thêm giá trị mới
+            stm.setString(8, product.getId());
             stm.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Update: " + e.getMessage());
         }
     }
 
@@ -86,7 +97,8 @@ public class ProductsDAO extends DBContext {
                         rs.getDouble("price"),
                         rs.getInt("quantity"),
                         rs.getString("zoneId"),
-                        rs.getBoolean("isActive")
+                        rs.getBoolean("isActive"),
+                        rs.getString("image")
                 );
             }
         } catch (SQLException e) {
@@ -118,7 +130,8 @@ public class ProductsDAO extends DBContext {
                         rs.getDouble("price"),
                         rs.getInt("quantity"),
                         rs.getString("zoneId"),
-                        rs.getBoolean("isActive")
+                        rs.getBoolean("isActive"),
+                        rs.getString("image")
                 );
                 productList.add(product);
             }
@@ -155,7 +168,8 @@ public class ProductsDAO extends DBContext {
                         rs.getDouble("price"),
                         rs.getInt("quantity"),
                         rs.getString("zoneId"),
-                        rs.getBoolean("isActive")
+                        rs.getBoolean("isActive"),
+                        rs.getString("image")
                 );
                 productList.add(product);
             }
