@@ -18,7 +18,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
-
+        <!-- jQuery first, then Bootstrap JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
@@ -50,19 +53,28 @@
                                     <div class="card-body">
                                         <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addAccountModal">+
                                             Add Account</button>
-                                        <table class="table table-bordered table-striped">
-                                            <thead class="table-dark">
-                                                <tr>
-                                                    <th>Account</th>
-                                                    <th>Email</th>
-                                                    <th>Address</th>
-                                                    <th>Phone</th>
-                                                    <th>Role</th>
-                                                    <th>Status</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                        <form action="searchaccount" method="post">
+                                            <div class="mb-3">
+                                                <input type="text" value="${keywordS}" name="keyword" id="search-input" class="form-control" placeholder="Search by name, email, address, phone, or role...">
+                                        </div>
+
+                                    </form>
+
+
+
+                                    <table class="table table-bordered table-striped">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Account</th>
+                                                <th>Email</th>
+                                                <th>Address</th>
+                                                <th>Phone</th>
+                                                <th>Role</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             <c:forEach var="account" items="${accounts}">
                                                 <tr>
                                                     <td>${account.name}</td>
@@ -113,6 +125,7 @@
                 </div>
             </section>
         </div>
+
         <!-- Modal Add Account -->
         <div class="modal fade" id="addAccountModal" tabindex="-1">
             <div class="modal-dialog">
@@ -122,29 +135,33 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form action="addaccount" method="POST" >
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" required>
+                                <input type="email" class="form-control" name="email" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Account</label>
-                                <input type="text" class="form-control" required>
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-control" name="name" >
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
-                                <input type="password" class="form-control" required>
+                                <input type="password" class="form-control" name="password" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" required>
+                                <label class="form-label">Phone</label>
+                                <input type="text" class="form-control" name="phone">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" name="address">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Role</label>
-                                <select class="form-control">
-                                    <option>Admin</option>
-                                    <option>Owner</option>
-                                    <option>Staff</option>
+                                <select class="form-control" name="roletype">
+                                    <option value="1">Admin</option>
+                                    <option value="2">Owner</option>
+                                    <option value="3" selected>Staff</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Add</button>
@@ -153,6 +170,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Modal Edit Account -->
         <div class="modal fade" id="editAccountModal" tabindex="-1" aria-labelledby="editAccountModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -203,8 +221,6 @@
             </div>
         </div>
 
-
-
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 let editButtons = document.querySelectorAll(".edit-btn");
@@ -243,13 +259,52 @@
                     }
                 });
             });
+        </script>  
+        <script>
+            $(document).ready(function () {
+                $("form[action='addaccount']").submit(function (event) {
+                    event.preventDefault(); // Ngăn form gửi đi mặc định
+        
+                    $.ajax({
+                        type: "POST",
+                        url: "addaccount",
+                        data: $(this).serialize(),
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.status === "success") {
+                                toastr.success(response.message, "Success", {
+                                    positionClass: "toast-top-right",
+                                    timeOut: 2000,
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut"
+                                });
+                                setTimeout(() => location.reload(), 1000); // Reload trang sau 2s
+                            } else {
+                                toastr.error(response.message, "Error", {
+                                    positionClass: "toast-top-right",
+                                    timeOut: 2000,
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut"
+                                });
+                            }
+                        },
+                        error: function () {
+                            toastr.error("Something went wrong!", "Error", {
+                                positionClass: "toast-top-right",
+                                timeOut: 2000
+                            });
+                        }
+                    });
+                });
+            });
         </script>
-
+        
 
         <script src="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/demo.js"></script>
+
 
         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/popper.js"></script>

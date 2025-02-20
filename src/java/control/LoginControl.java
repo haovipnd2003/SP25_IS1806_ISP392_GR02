@@ -57,7 +57,7 @@ public class LoginControl extends HttpServlet {
             if (returnUrl != null && returnUrl.equals("order")) {
                 session.removeAttribute("returnUrl");
                 String script = "<script>"
-                        + "alert('Logged in successfully. You will be redirected to the payment page.');"
+                        + "alert('Logged in successfully.');"
                         + "window.location='print';"
                         + "</script>";
                 response.getWriter().println(script);
