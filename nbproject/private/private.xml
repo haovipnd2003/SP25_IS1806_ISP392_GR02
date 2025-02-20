@@ -3,13 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ASUS/Git-projects/SP25_IS1806_ISP392_GR02/src/java/control/LoadMoreCustomer.java</file>
-            <file>file:/C:/Users/ASUS/Git-projects/SP25_IS1806_ISP392_GR02/src/java/control/SaleServlet.java</file>
-            <file>file:/C:/Users/ASUS/Git-projects/SP25_IS1806_ISP392_GR02/src/java/control/SendEmail.java</file>
-            <file>file:/C:/Users/ASUS/Git-projects/SP25_IS1806_ISP392_GR02/src/java/context/DBContext.java</file>
-            <file>file:/C:/Users/ASUS/Git-projects/SP25_IS1806_ISP392_GR02/src/java/dao/UserDAO.java</file>
-            <file>file:/C:/Users/ASUS/Git-projects/SP25_IS1806_ISP392_GR02/src/java/filter/AuthenticationFilter.java</file>
-            <file>file:/C:/Users/ASUS/Git-projects/SP25_IS1806_ISP392_GR02/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/dung.nvan/Documents/VietAnhDang/SP25_IS1806_ISP392_GR02/src/java/control/DebentureServlet.java</file>
+            <file>file:/C:/Users/dung.nvan/Documents/VietAnhDang/SP25_IS1806_ISP392_GR02/src/java/dao/DebentureDAO.java</file>
+            <file>file:/C:/Users/dung.nvan/Documents/VietAnhDang/SP25_IS1806_ISP392_GR02/web/view/page/debenture.jsp</file>
+            <file>file:/C:/Users/dung.nvan/Documents/VietAnhDang/SP25_IS1806_ISP392_GR02/src/java/dao/DebtDAO.java</file>
+            <file>file:/C:/Users/dung.nvan/Documents/VietAnhDang/SP25_IS1806_ISP392_GR02/web/view/page/debt.jsp</file>
         </group>
     </open-files>
 </project-private>

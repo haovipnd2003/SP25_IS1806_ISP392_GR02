@@ -93,6 +93,19 @@
                 width: 100%;
                 margin: 15px 0;
             }
+            
+            input#negative {
+                width: 18px;
+                height: 18px;
+                filter: hue-rotate(142deg);
+                margin-right: 15px
+            }
+            
+            input#positive {
+                width: 18px;
+                height: 18px;
+                filter: hue-rotate(276deg);
+            }
         </style>
     </head>
 
@@ -139,7 +152,7 @@
                                         </div>
                                         <div class="card-body">
                                             <!-- Trigger/Open The Modal -->
-                                            <button id="addBtn" onclick="openAddModal()">Add new</button>
+                                            <button id="addBtn" onclick="openModal('debtor')">Add new</button>
                                             <table class="table-list-content" border="1" cellpadding="5" cellspacing="5"> 
                                                 <tr> 
                                                     <th>ID</th> 
@@ -148,18 +161,32 @@
                                                     <th>Email</th> 
                                                     <th>Address</th>
                                                     <th>Total debt</th>
-                                                    <th style="width: 100px;"></th>
+                                                    <th style="width: 60px;"></th>
+                                                    <th style="width: 132px;"></th>
+                                                    <th style="width: 132px;"></th>
                                                 </tr> 
 
                                                 <c:forEach var="debtor" items="${debtorList}"> 
                                                     <tr> 
-                                                        <td>${debtor.getId()}</td> 
-                                                        <td>${debtor.getName()}</td> 
-                                                        <td>${debtor.getPhone()}</td> 
-                                                        <td>${debtor.getEmail()}</td> 
-                                                        <td>${debtor.getAddress()}</td> 
-                                                        <td>${debtor.getTotalDebt()}</td>
-                                                        <td class="display-flex-center" style="width: 100px;"><button onclick="openUpdateModal(${debtor.id})">Update</button></td>
+                                                        <td>${debtor.id}</td> 
+                                                        <td>${debtor.name}</td> 
+                                                        <td>${debtor.phone}</td> 
+                                                        <td>${debtor.email}</td> 
+                                                        <td>${debtor.address}</td> 
+                                                        <td>${debtor.totalDebt}</td>
+                                                        <td style="width: 60px;">
+                                                            <button onclick="openUpdateDebtorModal('${debtor.id}', '${debtor.name}', '${debtor.phone}', '${debtor.email}', '${debtor.address}', '${debtor.totalDebt}')">
+                                                                Update
+                                                            </button>
+                                                        </td>
+                                                        <td style="width: 132px;">
+                                                            <button onclick="openModal('debenture', '${debtor.id}')">
+                                                                Add a debenture
+                                                            </button>
+                                                        </td>
+                                                        <td style="width: 132px;">
+                                                            <a href="debenture.do?debtorId=${debtor.id}">Debenture detail</a>
+                                                        </td>
                                                     </tr> 
                                                 </c:forEach> 
 
@@ -193,35 +220,68 @@
                                                 </c:if> 
                                             </div>
                                             <!-- The Modal -->
-                                            <div id="myModal" class="modal">
+                                            <div id="debtor" class="modal">
                                                 <!-- Modal content -->
                                                 <div class="modal-content">
                                                     <div class="display-flex-al-center justify-space-between">
-                                                        <h3>Add a debtor</h3>
-                                                        <div class="close" onclick="closeModal()">&times;</div>
+                                                        <h3></h3>
+                                                        <div class="close" onclick="closeModal('debtor')">&times;</div>
                                                     </div>
                                                     <form class="form-signin" action="${pageContext.request.contextPath}/debt.do" method="post">
+                                                        <input id="id" style="display: none;" name="id" type="text" name="search"/>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Full name (*)</h6>
-                                                            <input name="name" type="text" name="search" value=""/>
+                                                            <input id="name" name="name" type="text" name="search"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Address</h6>
-                                                            <input name="address" type="text" name="search" value=""/>
+                                                            <input id="address" name="address" type="text" name="search"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Phone number</h6>
-                                                            <input name="phone" type="text" name="search" value=""/>
+                                                            <input id="phone" name="phone" type="text" name="search"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Email</h6>
-                                                            <input name="email" type="text" name="search" value=""/>
+                                                            <input id="email" name="email" type="text" name="search"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Total debt</h6>
-                                                            <input name="debt" type="text" name="search" value=""/>
+                                                            <input id="debt" name="debt" type="text" name="search"/>
                                                         </div>
-                                                        <button style="width: 60px; margin-top: 5px;" type="submit">Add</button>
+                                                        <button style="width: 80px; margin-top: 5px;" type="submit"></button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div id="debenture" class="modal">
+                                                <!-- Modal content -->
+                                                <div class="modal-content">
+                                                    <div class="display-flex-al-center justify-space-between">
+                                                        <h3></h3>
+                                                        <div class="close" onclick="closeModal('debenture')">&times;</div>
+                                                    </div>
+                                                    <form class="form-signin" action="${pageContext.request.contextPath}/debenture.do" method="post">
+                                                        <input id="debtor" style="display: none;" name="debtor" type="text" name="search"/>
+                                                        <div class="row display-flex-al-center">
+                                                            <h6>Note</h6>
+                                                            <input name="note" type="text" name="search"/>
+                                                        </div>
+                                                        <div class="row display-flex-al-center">
+                                                            <h6>Type (*)</h6>
+                                                            <div class="display-flex-al-center" style="width: 60%;">
+                                                                <input id="negative" type="radio" name="type" value="0" checked>  <%-- "checked" makes it default --%>
+                                                                <input id="positive" type="radio" name="type" value="1">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row display-flex-al-center">
+                                                            <h6>Amount (*)</h6>
+                                                            <input name="amount" type="text" name="search"/>
+                                                        </div>
+                                                        <div class="row display-flex-al-center">
+                                                            <h6>Created date</h6>
+                                                            <input name="created" type="date" name="search"/>
+                                                        </div>
+                                                        <button style="width: 80px; margin-top: 5px;" type="submit"></button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -236,17 +296,37 @@
         </div>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
         <script>
-            function openAddModal() {
-                $("#myModal").css('display', 'block');
+            function openModal(name, debtorIdToAddDebenture) {
+                $("#" + name +".modal h3").html('Add a ' + name);
+                $("#" + name +".modal button").html('Add');
+                
+                initializeInputValue();
+                
+                $("#" + name + ".modal").css('display', 'block');
+                if (debtorIdToAddDebenture) {
+                    $("#debenture.modal input#debtor").val(debtorIdToAddDebenture);
+                }
             };
-            function closeModal () {
-                $("#myModal").hide();
+            function closeModal (name) {
+                $("#" + name + ".modal").hide();
             };
-            function openUpdateModal(debtor) {
-                console.log(debtor);
+            function openUpdateDebtorModal(id, name, phone, email, address, totalDebt) {
+                $("#debtor.modal h3").html('Update a debtor');
+                $("#debtor.modal button").html('Update');
+                
+                initializeInputValue(id, name, phone, email, address, totalDebt);
+                
+                $("#debtor.modal").css('display', 'block');
+            }
+            function initializeInputValue(id, name, phone, email, address, totalDebt) {
+                $("#debtor.modal input#id").val(id);
+                $("#debtor.modal input#name").val(name);
+                $("#debtor.modal input#phone").val(phone);
+                $("#debtor.modal input#email").val(email);
+                $("#debtor.modal input#address").val(address);
+                $("#debtor.modal input#debt").val(totalDebt);
             }
         </script>
-
 
         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/popper.js"></script>

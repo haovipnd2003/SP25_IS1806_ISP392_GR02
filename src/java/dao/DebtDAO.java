@@ -54,6 +54,72 @@ public class DebtDAO extends DBContext {
         return success;
     }
     
+    public boolean updateDebtor(Debtor debtor) {
+        boolean success = false;
+        try {
+            String query = "update customer set name=?, phone=?, email=?, address=?, totaldebt=? where id=?";
+            
+            PreparedStatement stm = connection.prepareStatement(query);
+            stm.setString(1, debtor.getName());
+            stm.setString(2, debtor.getPhone());
+            stm.setString(3, debtor.getEmail());
+            stm.setString(4, debtor.getAddress());
+            stm.setDouble(5, debtor.getTotalDebt());
+            stm.setInt(6, debtor.getId());
+            
+            int res = stm.executeUpdate();
+            if (res != 0) success = true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally
+        { 
+            try { 
+                if (stmt != null) 
+                    stmt.close(); 
+                if (connection != null) 
+                    connection.close(); 
+            } 
+            catch (SQLException e) { 
+                e.printStackTrace(); 
+            } 
+        } 
+        return success;
+    }
+    
+    public boolean updateTotalDebtById(int id, double amount) 
+    { 
+        boolean success = false;
+        try {
+            char operator = amount > 0 ? '+' : ' ';
+            String query = "update customer set totaldebt=totaldebt" + operator + amount + " where id=?";
+            
+            PreparedStatement stm = connection.prepareStatement(query);
+            stm.setInt(1, id);
+            
+            int res = stm.executeUpdate();
+            if (res != 0) success = true;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally
+        { 
+            try { 
+                if (stmt != null) 
+                    stmt.close(); 
+                if (connection != null) 
+                    connection.close(); 
+            } 
+            catch (SQLException e) { 
+                e.printStackTrace(); 
+            } 
+        } 
+        return success;
+    } 
+    
+    
     public List<Debtor> viewAllDebtors(int offset, int noOfRecords) 
     { 
         String query = "select SQL_CALC_FOUND_ROWS * from customer limit " + offset + ", " + noOfRecords; 
@@ -69,7 +135,7 @@ public class DebtDAO extends DBContext {
                 debtor.setPhone(rs.getString(3)); 
                 debtor.setEmail(rs.getString(4)); 
                 debtor.setAddress(rs.getString(5)); 
-                debtor.setTotalDebt(rs.getDouble(6)); 
+                debtor.setTotalDebt(rs.getDouble(7)); 
                 list.add(debtor); 
             } 
   
