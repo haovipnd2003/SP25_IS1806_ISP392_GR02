@@ -34,10 +34,10 @@ public class CustomerDAO extends DBContext{
         }
     }
 
-       public ArrayList<Customer> getTop3Customer(String name, String phone) {
+       public ArrayList<Customer> searchCustomerByNameNPhone(String name, String phone) {
            ArrayList<Customer> list = new ArrayList<>();
         try {
-            String query = "SELECT * FROM customer WHERE name LIKE ? OR phone LIKE ? and isactive = 1 limit 3;";
+            String query = "SELECT * FROM customer WHERE name LIKE ? OR phone LIKE ? and isactive = 1";
             stm = cnn.prepareStatement(query);
             stm.setString(1, "%"+name+"%");
             stm.setString(2, "%"+phone+"%");    
@@ -56,7 +56,7 @@ public class CustomerDAO extends DBContext{
         
        public static void main(String[] args) {
         CustomerDAO DAO = new CustomerDAO();
-        ArrayList<Customer> list = DAO.getTop3Customer("binh", "binh");
+        ArrayList<Customer> list = DAO.searchCustomerByNameNPhone("binh", "binh");
            for (Customer customer : list) {
                System.out.println(list);
            }

@@ -19,43 +19,55 @@
                 <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Sale</span></a>
             </li>
 
-            <li>
-                <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Customer Management</span></a>
-            </li>
-
-            <li>
-                <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Invoice</span></a>        
-            </li>
 
             <c:if test="${sessionScope.acc.roletype == 1}">
                 <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Debt</span></a>
+                    <a href="${pageContext.request.contextPath}/manageaccount"><i class="ion ion-person"></i><span>Account Management</span></a>
                 </li>
 
-                <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Invoice</span></a>        
-                </li>
 
-                <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Account Management</span></a>
-                </li>
-
-                <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Staff Management</span></a>
-                </li>
             </c:if>
             <c:if test="${sessionScope.acc.roletype == 2}">
-
                 <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Debt</span></a>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-bag"></i><span>Product</span></a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Sale</span></a>
                 </li>
 
                 <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Staff Management</span></a>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
+                </li>
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-document-text"></i><span>Invoice</span></a>        
+                </li>
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/debt.do"><i class="ion ion-clipboard"></i><span>Debt Management</span></a>
+                </li>
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-briefcase"></i><span>Staff Management</span></a>
                 </li>
             </c:if>
+            <c:if test="${sessionScope.acc.roletype == 3}">
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-bag"></i><span>Product</span></a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Sale</span></a>
+                </li>
 
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
+                </li>
 
+                <li>
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-document-text"></i><span>Invoice</span></a>        
+                </li>
+
+            </c:if>    
 
         </ul>
     </aside>

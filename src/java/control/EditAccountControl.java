@@ -4,8 +4,8 @@
  */
 package control;
 
-import dao.CustomerDAO;
-import entity.Customer;
+import dao.DAO;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 
 /**
  *
- * @author binh2
+ * @author Admin
  */
-@WebServlet(name = "LoadMoreCustomer", urlPatterns = {"/loadCus"})
-public class LoadMoreCustomer extends HttpServlet {
+@WebServlet(name = "EditAccountControl", urlPatterns = {"/updateaccount"})
+public class EditAccountControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +38,10 @@ public class LoadMoreCustomer extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoadMoreCustomer</title>");
+            out.println("<title>Servlet EditAccountControl</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoadMoreCustomer at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EditAccountControl at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,21 +59,7 @@ public class LoadMoreCustomer extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
-        String key = request.getParameter("search");
-        CustomerDAO dao = new CustomerDAO();
-        ArrayList<Customer> list = dao.getTop3Customer("binh", "binh");
-
-        PrintWriter out = response.getWriter();
-
-        for (Customer customer : list) {
-            out.println("<tr>\n"
-                    + "                                                            <td><input type=\"submit\" value=\"+\" /></td>\n"
-                    + "                                                            <td>" + customer.getName() + " - " + customer.getPhone() + "</td>\n"
-                    + "                                                        </tr>");
-        }
-
+        processRequest(request, response);
     }
 
     /**
@@ -88,7 +73,29 @@ public class LoadMoreCustomer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        DAO dao = new DAO();
+
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String address = request.getParameter("address");
+        String roletype = request.getParameter("roletype");
+        String isactive = request.getParameter("isactive");
+
+        // Lấy thông tin tài khoản hiện tại từ CSDL
+        User existingUser = dao.getUserById(id);
+
+        if (existingUser != null && "1".equals(existingUser.getRoletype())) {
+            // Nếu là Admin thì không cho thay đổi trạng thái
+            isactive = existingUser.getIsactive(); // Giữ nguyên trạng thái cũ
+        }
+       
+
+        dao.updateAccount(id, name, email, phone, address, roletype, isactive);
+
+        response.sendRedirect("manageaccount");
+
     }
 
     /**

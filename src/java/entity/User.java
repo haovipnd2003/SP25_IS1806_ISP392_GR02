@@ -25,7 +25,16 @@ public class User {
         this.roletype = roletype;
         this.isactive = isactive;
     }
-        public User(String name, String password, String email, String roletype) {
+    public User(String name, String password, String email, String phone, String address, String roletype) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.roletype = roletype;
+    }
+
+    public User(String name, String password, String email, String roletype) {
         this.name = name;
         this.password = password;
         this.email = email;

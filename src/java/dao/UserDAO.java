@@ -52,7 +52,6 @@ public class UserDAO extends DBContext {
             System.out.println("update: " + e.getMessage());
         }
     }
-
     public User Relogin(String id) {
 
         try {
@@ -74,7 +73,7 @@ public class UserDAO extends DBContext {
 
             }
         } catch (Exception e) {
-
+            System.out.println("update: " + e.getMessage());
         }
         return null;
     }
@@ -103,5 +102,19 @@ public class UserDAO extends DBContext {
 
         }
         return null;
+    }
+
+    public void updatePassword(String newPass,String name) {
+        try {
+            String strSQL = "update user\n"
+                    + "SET password =?\n"
+                    + "WHERE name = ?";
+            stm = cnn.prepareStatement(strSQL);
+            stm.setString(1, newPass);
+            stm.setString(2, name);
+            stm.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("update: " + e.getMessage());
+        }
     }
 }

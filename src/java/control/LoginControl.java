@@ -36,10 +36,7 @@ public class LoginControl extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
-        // Add these headers to prevent caching
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-        response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-        response.setDateHeader("Expires", 0); // Proxies
+
 
         String username = request.getParameter("name");
         String password = request.getParameter("password");
@@ -60,7 +57,7 @@ public class LoginControl extends HttpServlet {
             if (returnUrl != null && returnUrl.equals("order")) {
                 session.removeAttribute("returnUrl");
                 String script = "<script>"
-                        + "alert('Logged in successfully. You will be redirected to the payment page.');"
+                        + "alert('Logged in successfully.');"
                         + "window.location='print';"
                         + "</script>";
                 response.getWriter().println(script);

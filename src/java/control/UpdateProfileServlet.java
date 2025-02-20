@@ -1,10 +1,13 @@
+package control;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package control;
 
+import dao.UserDAO;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +15,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
  * @author binh2
  */
-@WebServlet(name="searchTop3CustomerServlet", urlPatterns={"/search3"})
-public class searchTop3CustomerServlet extends HttpServlet {
+@WebServlet(urlPatterns={"/updateProfile"})
+public class UpdateProfileServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +41,10 @@ public class searchTop3CustomerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet searchTop3CustomerServlet</title>");  
+            out.println("<title>Servlet UpdateProfileServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet searchTop3CustomerServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet UpdateProfileServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +61,7 @@ public class searchTop3CustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        response.sendRedirect("view/page/updateProfile.jsp");
     } 
 
     /** 
@@ -68,9 +74,34 @@ public class searchTop3CustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String address = request.getParameter("address");
+        String updateTime = getLocalTime();
+        
+        User u = new User(id, name, null, email, phone, address, null, null);
+        UserDAO dao = new UserDAO();
+        dao.updateInfo(u, updateTime);
+        
+        u = dao.Relogin(id);
+        
+        
+        request.setAttribute("mess", "Update Successful");
+        HttpSession session = request.getSession();
+        session.setAttribute("acc", u);
+        request.getRequestDispatcher("view/page/updateProfile.jsp").forward(request, response);
     }
 
+    private String getLocalTime(){
+        LocalDateTime now = LocalDateTime.now();
+        
+        // Định dạng thời gian theo định dạng MySQL
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
+        return formattedDateTime;
+    }
     /** 
      * Returns a short description of the servlet.
      * @return a String containing servlet description
