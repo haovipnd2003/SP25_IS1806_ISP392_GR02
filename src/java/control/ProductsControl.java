@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import entity.User; // Add this import statement
 
 @WebServlet(name = "Products", urlPatterns = {"/products"})
 public class ProductsControl extends HttpServlet {
@@ -67,9 +68,16 @@ public class ProductsControl extends HttpServlet {
 
     private void handleDefault(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int page = 1;
-        int pageSize = 10; // Số lượng sản phẩm mỗi trang
 
+        User user = (User) request.getSession().getAttribute("acc");
+        if (user != null) {
+            request.setAttribute("roletype", user.getRoletype().toString()); // Convert to string for consistency
+        } else {
+            request.setAttribute("roletype", null);
+        }
+
+        int page = 1;
+        int pageSize = 10;
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
         }

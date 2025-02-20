@@ -103,7 +103,7 @@
                             <div class="section-header">
                                 <h1>Product List</h1>
                             </div>
-                        <c:if test="${userRole == 2}">
+                        <c:if test="${roletype == 2}">
                             <a href="products?action=add" class="btn btn-primary">Add Product</a>
                         </c:if>
                         <!-- Search -->
@@ -132,7 +132,7 @@
                                     <th>Quantity</th>
                                     <th>Zone ID</th>
                                     <th>Active</th>
-                                        <c:if test="${userRole == 2}">
+                                        <c:if test="${roletype == 2}">
                                         <th>Action</th>
                                         </c:if>
                                 </tr>
@@ -156,7 +156,7 @@
                                                 <td>${product.quantity}</td>
                                                 <td>${product.zoneId}</td>
                                                 <td style="color: ${product.active ? 'green' : 'red'}">${product.active ? 'Yes' : 'No'}</td>
-                                                <c:if test="${userRole == 2}">
+                                                <c:if test="${roletype == '2'}">
                                                     <td>
                                                         <a href="products?action=edit&id=${product.id}" class="btn btn-danger">Update</a>
                                                     </td>
