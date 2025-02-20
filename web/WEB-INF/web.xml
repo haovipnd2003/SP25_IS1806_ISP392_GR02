@@ -21,9 +21,16 @@
        <servlet-name>DebtServlet</servlet-name> 
        <servlet-class>control.DebtServlet</servlet-class> 
     </servlet> 
-  
    <servlet-mapping> 
        <servlet-name>DebtServlet</servlet-name> 
        <url-pattern>/debt.do</url-pattern> 
+   </servlet-mapping> 
+   <servlet> 
+       <servlet-name>DebentureServlet</servlet-name> 
+       <servlet-class>control.DebentureServlet</servlet-class> 
+    </servlet> 
+   <servlet-mapping> 
+       <servlet-name>DebentureServlet</servlet-name> 
+       <url-pattern>/debenture.do</url-pattern> 
    </servlet-mapping> 
 </web-app>
