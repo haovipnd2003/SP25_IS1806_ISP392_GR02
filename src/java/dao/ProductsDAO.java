@@ -44,30 +44,44 @@ public class ProductsDAO extends DBContext {
         }
     }
 
+    public boolean isProductNameExists(String productName) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM product WHERE name = ?";
+        try (PreparedStatement stm = cnn.prepareStatement(sql)) {
+            stm.setString(1, productName);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         ProductsDAO dao = new ProductsDAO();
 
-        // Tạo một sản phẩm mới để test
+        // Tạo một sản phẩm để test update
         Products product = new Products();
-        product.setName("Test Product");
-        product.setDescribe("This is a test product");
-        product.setPrice(19.99);
-        product.setQuantity(10);
+        product.setId("19"); // ID của sản phẩm cần cập nhật
+        product.setName("Updated Product Name");
+        product.setDescribe("Updated Description");
+        product.setPrice(99.99);
+        product.setQuantity(50);
         product.setZoneId("1");
-        product.setActive(true);
-        product.setImage("test_image.jpg");
+        product.setActive(false);
+        product.setImage("https://gaost.vn/wp-content/uploads/2020/12/gao-st-25-hanh-trinh-tro-thanh-gao-ngon-nhat-the-gioi.jpg");
 
         try {
-            // Thực hiện insert
-            dao.insert(product);
-            System.out.println("Inserted product successfully!");
+            // Thực hiện update
+            dao.update(product);
+            System.out.println("Updated product successfully!");
         } catch (SQLException e) {
-            System.out.println("Error inserting product: " + e.getMessage());
+            System.out.println("Error updating product: " + e.getMessage());
         }
     }
 
     public void update(Products product) throws SQLException {
-        String sql = "UPDATE product SET name=?, describe=?, price=?, quantity=?, zoneId=?, isActive=?, image=? WHERE id=?";
+        String sql = "UPDATE product SET name=?, `describe`=?, price=?, quantity=?, zoneId=?, isActive=?, image=? WHERE id=?";
         try (PreparedStatement stm = cnn.prepareStatement(sql)) {
             stm.setString(1, product.getName());
             stm.setString(2, product.getDescribe());
@@ -75,7 +89,7 @@ public class ProductsDAO extends DBContext {
             stm.setInt(4, product.getQuantity());
             stm.setString(5, product.getZoneId());
             stm.setBoolean(6, product.isActive());
-            stm.setString(7, product.getImage()); // Thêm giá trị mới
+            stm.setString(7, product.getImage());
             stm.setString(8, product.getId());
             stm.executeUpdate();
         }

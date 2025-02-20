@@ -3,6 +3,7 @@ package control;
 import dao.ProductsDAO;
 import entity.Products;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -47,6 +48,9 @@ public class ProductsControl extends HttpServlet {
 
     private void handleAddProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Get all existing products to check for duplicate names
+        List<Products> productList = productsDAO.getAllProducts(1, Integer.MAX_VALUE);
+        request.setAttribute("productList", productList);
         request.getRequestDispatcher("view/page/addProduct.jsp").forward(request, response);
     }
 
@@ -109,46 +113,55 @@ public class ProductsControl extends HttpServlet {
     }
 
     private void insertProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String name = request.getParameter("name");
-        String describe = request.getParameter("describe");
-        double price = Double.parseDouble(request.getParameter("price"));
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        String zoneId = request.getParameter("zoneId");
-        boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
-        String image = request.getParameter("image");
+        try {
+            String name = request.getParameter("name");
+            String describe = request.getParameter("describe");
+            double price = Double.parseDouble(request.getParameter("price"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            String zoneId = request.getParameter("zoneId");
+            boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
+            String image = request.getParameter("image");
 
-        Products products = new Products();
-        products.setName(name);
-        products.setDescribe(describe);
-        products.setPrice(price);
-        products.setQuantity(quantity);
-        products.setZoneId(zoneId);
-        products.setActive(isActive);
-        products.setImage(image);
-        productsDAO.insert(products);
+            Products products = new Products();
+            products.setName(name);
+            products.setDescribe(describe);
+            products.setPrice(price);
+            products.setQuantity(quantity);
+            products.setZoneId(zoneId);
+            products.setActive(isActive);
+            products.setImage(image);
+            productsDAO.insert(products);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         response.sendRedirect("products");
     }
 
     private void updateProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id");
-        String name = request.getParameter("name");
-        String describe = request.getParameter("describe");
-        double price = Double.parseDouble(request.getParameter("price"));
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        String zoneId = request.getParameter("zoneId");
-        boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
-        String image = request.getParameter("image");
+        try {
+            String id = request.getParameter("id");
+            String name = request.getParameter("name");
+            String describe = request.getParameter("describe");
+            double price = Double.parseDouble(request.getParameter("price"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            String zoneId = request.getParameter("zoneId");
+            boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
+            String image = request.getParameter("image");
 
-        Products product = new Products();
-        product.setId(id);
-        product.setName(name);
-        product.setDescribe(describe);
-        product.setPrice(price);
-        product.setQuantity(quantity);
-        product.setZoneId(zoneId);
-        product.setActive(isActive);
-        product.setImage(image);
-        productsDAO.update(product);
+            Products product = new Products();
+            product.setId(id);
+            product.setName(name);
+            product.setDescribe(describe);
+            product.setPrice(price);
+            product.setQuantity(quantity);
+            product.setZoneId(zoneId);
+            product.setActive(isActive);
+            product.setImage(image);
+            productsDAO.update(product);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Xử lý ngoại lệ nếu cần
+        }
         response.sendRedirect("products");
     }
 

@@ -73,6 +73,14 @@
 
             .page-link:hover {
                 color: #0056b3;
+                .main-sidebar {
+                    transition: all 0.3s ease;
+                }
+
+                .main-content {
+                    transition: margin-left 0.3s ease;
+                }
+
             }
         </style>
     </head>
@@ -88,65 +96,71 @@
 
                     <!-- Main Content -->
                     <div class="main-content" style="margin-left: 250px; padding: 20px;">
+                        <button id="sidebarToggle" class="btn btn-secondary mb-3">
+                            <i class="fas fa-bars"></i>
+                        </button>
                         <section class="section">
                             <div class="section-header">
                                 <h1>Product List</h1>
                             </div>
-
+                        <c:if test="${userRole == 2}">
                             <a href="products?action=add" class="btn btn-primary">Add Product</a>
-
-                            <!-- Search -->
-                            <div class="search-container mb-3">
-                                <form action="products" method="get" class="form-inline">
-                                    <input type="hidden" name="action" value="search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="keyword" placeholder="Search products...">
-                                        <div class="input-group-append">
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-search"></i>
-                                            </button>
-                                        </div>
+                        </c:if>
+                        <!-- Search -->
+                        <div class="search-container mb-3">
+                            <form action="products" method="get" class="form-inline">
+                                <input type="hidden" name="action" value="search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="Search products..." value="${param.keyword}">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-search"></i>
+                                        </button>
                                     </div>
-                                </form>
-                            </div>
-                            <!-- Product Table -->
-                            <table class="table table-bordered section-body">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Image</th>
-                                        <th>Description</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Zone ID</th>
-                                        <th>Active</th>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Product Table -->
+                        <table class="table table-bordered section-body">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Image</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Zone ID</th>
+                                    <th>Active</th>
+                                        <c:if test="${userRole == 2}">
                                         <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                        </c:if>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <c:choose>
                                     <c:when test="${not empty productList}">
                                         <c:forEach var="product" items="${productList}">
                                             <tr>
                                                 <td>${product.id}</td>
                                                 <td>${product.name}</td>
-                                                <td>${product.image}</td>
+                                                <td>
+                                                    <c:if test="${not empty product.image}">
+                                                        <img src="${product.image}" alt="${product.name}" style="max-width: 100px; max-height: 100px;">
+                                                    </c:if>
+                                                </td>
                                                 <td class="description-cell" title="${fn:escapeXml(product.describe)}">
                                                     ${fn:escapeXml(product.describe)}
                                                 </td>
                                                 <td>${product.price}</td>
                                                 <td>${product.quantity}</td>
                                                 <td>${product.zoneId}</td>
-                                                <td>${product.active ? 'Yes' : 'No'}</td>
-                                                <td>
-                                                    <!--                                                    <form action="products" method="post" style="display: inline;" onsubmit="return deleteProduct(event)">
-                                                                                                            <input type="hidden" name="action" value="delete">
-                                                                                                            <input type="hidden" name="id" value="${product.id}">
-                                                                                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                                                                                        </form>-->
-                                                    <a href="products?action=edit&id=${product.id}" class="btn btn-danger">Update</a>
-                                                </td>
+                                                <td style="color: ${product.active ? 'green' : 'red'}">${product.active ? 'Yes' : 'No'}</td>
+                                                <c:if test="${userRole == 2}">
+                                                    <td>
+                                                        <a href="products?action=edit&id=${product.id}" class="btn btn-danger">Update</a>
+                                                    </td>
+                                                </c:if>
                                             </tr>
                                         </c:forEach>
                                     </c:when>
@@ -190,6 +204,21 @@
             </div>
         </div>
 
+        <script>
+            // Toggle sidebar
+            document.getElementById('sidebarToggle').addEventListener('click', function () {
+                const sidebar = document.querySelector('.main-sidebar');
+                const mainContent = document.querySelector('.main-content');
+
+                if (sidebar.style.display === 'none') {
+                    sidebar.style.display = 'block';
+                    mainContent.style.marginLeft = '250px';
+                } else {
+                    sidebar.style.display = 'none';
+                    mainContent.style.marginLeft = '0';
+                }
+            });
+        </script>
 
         <script>
             function deleteProduct(event) {
