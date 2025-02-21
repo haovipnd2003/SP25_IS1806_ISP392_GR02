@@ -88,7 +88,7 @@
 
         <div id="app">
             <div class="main-wrapper">
-
+            
                 <!-- Sidebar -->
                 <!-- MAIN-SIDEBAR-JSP-INCLUDE -->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
