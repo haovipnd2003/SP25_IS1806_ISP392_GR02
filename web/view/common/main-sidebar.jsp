@@ -24,9 +24,6 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/products"><i class="ion ion-bag"></i><span>Product</span></a>
                 </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Sale</span></a>
-                </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
@@ -46,19 +43,15 @@
             </c:if>
             <c:if test="${sessionScope.acc.roletype == 3}">
                 <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-bag"></i><span>Product</span></a>
+                    <a href="${pageContext.request.contextPath}/products"><i class="ion ion-bag"></i><span>Product</span></a>
                 </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-clipboard"></i><span>Sale</span></a>
-                </li>
+               
 
                 <li>
                     <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
                 </li>
 
-                <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-document-text"></i><span>Invoice</span></a>        
-                </li>
+                
 
             </c:if>    
 
