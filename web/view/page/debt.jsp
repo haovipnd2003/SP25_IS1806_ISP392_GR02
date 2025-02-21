@@ -308,36 +308,61 @@
             if (keyword) {
                 $("#search-field").val(keyword);
             }
-            function openModal(name, debtorIdToAddDebenture) {
-                $("#" + name +".modal h3").html('Add a ' + name);
-                $("#" + name +".modal button").html('Add');
-                
-                initializeInputValue();
-                
-                $("#" + name + ".modal").css('display', 'block');
-                if (debtorIdToAddDebenture) {
-                    $("#debenture.modal input#debtor").val(debtorIdToAddDebenture);
-                }
-            };
-            function closeModal (name) {
-                $("#" + name + ".modal").hide();
-            };
-            function openUpdateDebtorModal(id, name, phone, email, address, totalDebt) {
-                $("#debtor.modal h3").html('Update a debtor');
-                $("#debtor.modal button").html('Update');
-                
-                initializeInputValue(id, name, phone, email, address, totalDebt);
-                
-                $("#debtor.modal").css('display', 'block');
-            }
-            function initializeInputValue(id, name, phone, email, address, totalDebt) {
-                $("#debtor.modal input#id").val(id);
-                $("#debtor.modal input#name").val(name);
-                $("#debtor.modal input#phone").val(phone);
-                $("#debtor.modal input#email").val(email);
-                $("#debtor.modal input#address").val(address);
-                $("#debtor.modal input#debt").val(totalDebt);
-            }
+            function closeModal(name) {
+    $("#" + name + ".modal").hide();
+}
+
+function openModal(name, debtorIdToAddDebenture) {
+    // Thiết lập tiêu đề và nút trong modal
+    $("#" + name + ".modal h3").html('Add a ' + name);
+    $("#" + name + ".modal button").html('Add');
+    
+    // Reset các ô nhập, và đặt ô Total debt mặc định là 0 và không cho sửa
+    $("#debtor.modal input#id").val("");
+    $("#debtor.modal input#name").val("");
+    $("#debtor.modal input#phone").val("");
+    $("#debtor.modal input#email").val("");
+    $("#debtor.modal input#address").val("");
+    $("#debtor.modal input#debt").val("0").prop("readonly", true);  // Không cho chỉnh sửa
+
+    // Hiển thị modal
+    $("#" + name + ".modal").css('display', 'block');
+    
+    // Nếu có truyền thêm debtorId để thêm debenture, gán giá trị đó
+    if (debtorIdToAddDebenture) {
+        $("#debenture.modal input#debtor").val(debtorIdToAddDebenture);
+    }
+}
+
+function openUpdateDebtorModal(id, name, phone, email, address, totalDebt) {
+    $("#" + "debtor.modal h3").html('Update a debtor');
+    $("#" + "debtor.modal button").html('Update');
+    
+    // Gán giá trị vào các ô nhập, và không cho phép chỉnh sửa ô Total debt
+    $("#debtor.modal input#id").val(id);
+    $("#debtor.modal input#name").val(name);
+    $("#debtor.modal input#phone").val(phone);
+    $("#debtor.modal input#email").val(email);
+    $("#debtor.modal input#address").val(address);
+    $("#debtor.modal input#debt").val(totalDebt).prop("readonly", true);
+    
+    $("#" + "debtor.modal").css('display', 'block');
+}
+
+function initializeInputValue(id = "", name = "", phone = "", email = "", address = "", totalDebt = "0", isUpdate = false) {
+    $("#debtor.modal input#id").val(id);
+    $("#debtor.modal input#name").val(name);
+    $("#debtor.modal input#phone").val(phone);
+    $("#debtor.modal input#email").val(email);
+    $("#debtor.modal input#address").val(address);
+    $("#debtor.modal input#debt").val(totalDebt);
+
+    if (isUpdate) {
+        $("#debtor.modal input#debt").prop("readonly", true); // Không cho chỉnh sửa khi update
+    } else {
+        $("#debtor.modal input#debt").prop("readonly", false); // Cho phép nhập khi thêm mới
+    }
+}
         </script>
 
         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
