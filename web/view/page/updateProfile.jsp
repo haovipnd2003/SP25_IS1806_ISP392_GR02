@@ -141,15 +141,14 @@
                                                                 <td>  <button style="margin: 10px" type="submit" class="btn btn-outline-info">
                                                                         Update Profile
                                                                     </button></td>
-                                                                <td><h6 style="color: #00cc33">${requestScope.mess}</h6></td>
+
                                                             </tr>
-
-
-
 
                                                         </tbody>
                                                     </table>
                                                 </form>
+                                                <h6 style="color: #00cc33">${requestScope.mess}</h6>
+                                                <h6 style="color: #ff3333">${requestScope.error}</h6>
                                             </div>
                                         </div>
                                     </div>
