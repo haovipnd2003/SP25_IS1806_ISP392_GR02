@@ -51,13 +51,12 @@ public class LoginControl extends HttpServlet {
             request.getRequestDispatcher("view/page/login.jsp").forward(request, response);
         } else {
 
-            session.setAttribute("acc", a);
-            // Kiểm tra xem có URL trả về không
+            session.setAttribute("acc", a);// Kiểm tra xem có URL trả về không
             String returnUrl = (String) session.getAttribute("returnUrl");
             if (returnUrl != null && returnUrl.equals("order")) {
                 session.removeAttribute("returnUrl");
                 String script = "<script>"
-                        + "alert('Logged in successfully. You will be redirected to the payment page.');"
+                        + "alert('Logged in successfully.');"
                         + "window.location='print';"
                         + "</script>";
                 response.getWriter().println(script);

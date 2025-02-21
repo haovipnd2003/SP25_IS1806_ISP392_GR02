@@ -9,11 +9,21 @@ public class Product {
     private String describe;
     private double price;
     private String zone;
-    private int quantity;
+    private double quantity;
     private String zoneId;
     private boolean isActive;
 
-    public Product(String id, String name, String describe, double price, String zone, int quantity, String zoneId, boolean isActive) {
+    public Product(String id, String name, String describe, double price, double quantity) {
+        this.id = id;
+        this.name = name;
+        this.describe = describe;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    
+    
+    public Product(String id, String name, String describe, double price, String zone, double quantity, String zoneId, boolean isActive) {
         this.id = id;
         this.name = name;
         this.describe = describe;
@@ -64,11 +74,11 @@ public class Product {
         this.zone = zone;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
