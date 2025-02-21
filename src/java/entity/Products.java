@@ -3,25 +3,29 @@ package entity;
 /**
  * Class representing a product entity.
  */
-public class Product {
+public class Products {
+
     private String id;
     private String name;
     private String describe;
     private double price;
-    private String zone;
     private int quantity;
     private String zoneId;
     private boolean isActive;
+    private String image;
 
-    public Product(String id, String name, String describe, double price, String zone, int quantity, String zoneId, boolean isActive) {
+    public Products() {
+    }
+
+    public Products(String id, String name, String describe, double price, int quantity, String zoneId, boolean isActive, String image) {
         this.id = id;
         this.name = name;
         this.describe = describe;
         this.price = price;
-        this.zone = zone;
         this.quantity = quantity;
         this.zoneId = zoneId;
         this.isActive = isActive;
+        this.image = image;
     }
 
     public String getId() {
@@ -56,14 +60,6 @@ public class Product {
         this.price = price;
     }
 
-    public String getZone() {
-        return zone;
-    }
-
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -88,17 +84,25 @@ public class Product {
         isActive = active;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
-        return "Product{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", describe='" + describe + '\'' +
-                ", price=" + price +
-                ", zone='" + zone + '\'' +
-                ", quantity=" + quantity +
-                ", zoneId='" + zoneId + '\'' +
-                ", isActive=" + isActive +
-                '}';
+        return "Product{"
+                + "id='" + id + '\''
+                + ", name='" + name + '\''
+                + ", describe='" + describe + '\''
+                + ", price=" + price
+                + ", quantity=" + quantity
+                + ", zoneId='" + zoneId + '\''
+                + ", isActive=" + isActive
+                + ", image='" + image + '\''
+                + '}';
     }
 }

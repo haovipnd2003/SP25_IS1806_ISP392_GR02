@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -53,12 +54,14 @@ public class DAO extends DBContext {
     }
 
     public void addUser(User c) {
-        String sql = "INSERT INTO user (name, password, email, roletype, isActive) VALUES (?, ?, ?, ?,1)";
+        String sql = "INSERT INTO user (name, password, email, phone, address, roletype, isActive) VALUES (?, ?, ?, ?, ?, ?,1)";
         try (PreparedStatement stm = cnn.prepareStatement(sql)) {
             stm.setString(1, c.getName());
             stm.setString(2, c.getPassword());
             stm.setString(3, c.getEmail());
-            stm.setString(4, c.getRoletype());
+            stm.setString(4, c.getPhone());
+            stm.setString(5, c.getAddress());
+            stm.setString(6, c.getRoletype());
 
             stm.executeUpdate();
         } catch (Exception e) {
@@ -80,7 +83,7 @@ public class DAO extends DBContext {
     }
 
     public ArrayList<User> getAccount() {
-        String sql = "SELECT id, name, email, password,phone,address, roletype,Isactive FROM User";
+        String sql = "SELECT id, name, email, password,phone,address, roletype,Isactive FROM User ORDER BY id DESC";
         ArrayList<User> list = new ArrayList<>();
         try {
             stm = cnn.prepareStatement(sql);
@@ -158,6 +161,33 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<User> searchUsers(String keyword) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT id, name, email, phone, address, roletype, isactive FROM user "
+                + "WHERE name LIKE ? OR email LIKE ? OR phone LIKE ? OR address LIKE ? OR roletype LIKE ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            for (int i = 1; i <= 5; i++) {
+                ps.setString(i, "%" + keyword + "%");
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getString("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                user.setRoletype(rs.getString("roletype"));
+                user.setIsactive(rs.getString("isactive"));
+                list.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }

@@ -69,5 +69,7 @@ public class SendEmail {
 
         return test;
     }
-    
+    public static void main(String[] args) {
+        new SendEmail().sendEmail(new User("hailongv2004@gmail.com", "1234"));
+    }
 }
