@@ -16,7 +16,6 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
-
         <link rel="stylesheet" href="${pageContext.request.contextPath}//modules/toastr/build/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/demo.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/style.css">
@@ -35,7 +34,6 @@
                 width: 100%; /* Full width */
                 height: 100%; /* Full height */
                 overflow: auto; /* Enable scroll if needed */
-                background-color: rgb(0,0,0); /* Fallback color */
                 background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
             }
 
@@ -98,7 +96,7 @@
                 width: 18px;
                 height: 18px;
                 filter: hue-rotate(142deg);
-                margin-right: 15px
+                margin-right: 15px;
             }
             
             input#positive {
@@ -116,15 +114,20 @@
                 <nav class="navbar navbar-expand-lg main-navbar">
                     <form class="form-inline mr-auto">
                         <ul class="navbar-nav mr-3">
-                            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="ion ion-navicon-round"></i></a></li>
-                            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="ion ion-search"></i></a></li>
+                            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg">
+                                <i class="ion ion-navicon-round"></i></a>
+                            </li>
+                            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none">
+                                <i class="ion ion-search"></i></a>
+                            </li>
                         </ul>
-
                     </form>
                     <ul class="navbar-nav navbar-right">
-                        <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
+                        <li class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
                                 <i class="ion ion-android-person d-lg-none"></i>
-                                <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div></a>
+                                <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div>
+                            </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a href="${pageContext.request.contextPath}/profile" class="dropdown-item has-icon">
                                     <i class="ion ion-android-person"></i> Profile
@@ -154,7 +157,7 @@
                                             <!-- Trigger/Open The Modal -->
                                             <div class="display-flex-al-center justify-space-between">
                                                 <form action="${pageContext.request.contextPath}/debt.do" method="get">
-                                                <input id="search-field" type="text" name="keyword" value="${keyword}">
+                                                    <input id="search-field" type="text" name="keyword" value="${keyword}">
                                                     <button type="submit">Search</button>
                                                 </form>
                                                 <button id="addBtn" onclick="openModal('debtor')">Add new</button>
@@ -171,7 +174,6 @@
                                                     <th style="width: 132px;"></th>
                                                     <th style="width: 132px;"></th>
                                                 </tr> 
-
                                                 <c:forEach var="debtor" items="${debtorList}"> 
                                                     <tr> 
                                                         <td>${debtor.id}</td> 
@@ -195,17 +197,13 @@
                                                         </td>
                                                     </tr> 
                                                 </c:forEach> 
-
                                             </table> 
-                                            <%--For displaying Previous link except for the 1st page --%> 
+
+                                            <%--For displaying Previous/Next links--%> 
                                             <div class="display-flex-al-center" style="justify-content: flex-end;">
                                                 <c:if test="${currentPage != 1}"> 
                                                     <td><a href="debt.do?keyword=${keyword}&page=${currentPage - 1}">Previous</a></td> 
                                                 </c:if> 
-
-                                                <%--For displaying Page numbers. The when condition does not display 
-                                                            a link for the current page--%> 
-
                                                 <table style="margin: 0 5px;" border="1" cellpadding="5" cellspacing="5"> 
                                                     <tr> 
                                                         <c:forEach begin="1" end="${noOfPages}" var="i"> 
@@ -220,74 +218,74 @@
                                                         </c:forEach> 
                                                     </tr> 
                                                 </table> 
-                                                <%--For displaying Next link --%> 
                                                 <c:if test="${currentPage lt noOfPages}"> 
                                                     <td><a href="debt.do?keyword=${keyword}&page=${currentPage + 1}">Next</a></td> 
                                                 </c:if> 
                                             </div>
-                                            <!-- The Modal -->
+
+                                            <!-- Modal Debtor (Add/Update) -->
                                             <div id="debtor" class="modal">
-                                                <!-- Modal content -->
                                                 <div class="modal-content">
                                                     <div class="display-flex-al-center justify-space-between">
                                                         <h3></h3>
                                                         <div class="close" onclick="closeModal('debtor')">&times;</div>
                                                     </div>
-                                                    <form class="form-signin" action="${pageContext.request.contextPath}/debt.do" method="post">
-                                                        <input id="id" style="display: none;" name="id" type="text" name="search"/>
+                                                    <form id="debtorForm" class="form-signin" action="${pageContext.request.contextPath}/debt.do" method="post">
+                                                        <input id="id" style="display: none;" name="id" type="text"/>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Full name (*)</h6>
-                                                            <input id="name" name="name" type="text" name="search"/>
+                                                            <input id="name" name="name" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Address</h6>
-                                                            <input id="address" name="address" type="text" name="search"/>
+                                                            <input id="address" name="address" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Phone number</h6>
-                                                            <input id="phone" name="phone" type="text" name="search"/>
+                                                            <input id="phone" name="phone" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Email</h6>
-                                                            <input id="email" name="email" type="text" name="search"/>
+                                                            <input id="email" name="email" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Total debt</h6>
-                                                            <input id="debt" name="debt" type="text" name="search"/>
+                                                            <input id="debt" name="debt" type="text" readonly/>
                                                         </div>
-                                                        <button style="width: 80px; margin-top: 5px;" type="submit"></button>
+                                                        <button style="width: 80px; margin-top: 5px;" type="submit">Add</button>
                                                     </form>
                                                 </div>
                                             </div>
+
+                                            <!-- Modal Debenture -->
                                             <div id="debenture" class="modal">
-                                                <!-- Modal content -->
                                                 <div class="modal-content">
                                                     <div class="display-flex-al-center justify-space-between">
                                                         <h3></h3>
                                                         <div class="close" onclick="closeModal('debenture')">&times;</div>
                                                     </div>
                                                     <form class="form-signin" action="${pageContext.request.contextPath}/debenture.do" method="post">
-                                                        <input id="debtor" style="display: none;" name="debtor" type="text" name="search"/>
+                                                        <input id="debtor" style="display: none;" name="debtor" type="text"/>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Note</h6>
-                                                            <input name="note" type="text" name="search"/>
+                                                            <input name="note" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Type (*)</h6>
                                                             <div class="display-flex-al-center" style="width: 60%;">
-                                                                <input id="negative" type="radio" name="type" value="0" checked>  <%-- "checked" makes it default --%>
+                                                                <input id="negative" type="radio" name="type" value="0" checked>
                                                                 <input id="positive" type="radio" name="type" value="1">
                                                             </div>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Amount (*)</h6>
-                                                            <input name="amount" type="text" name="search"/>
+                                                            <input name="amount" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Created date</h6>
-                                                            <input name="created" type="date" name="search"/>
+                                                            <input name="created" type="date"/>
                                                         </div>
-                                                        <button style="width: 80px; margin-top: 5px;" type="submit"></button>
+                                                        <button style="width: 80px; margin-top: 5px;" type="submit">Submit</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -300,69 +298,87 @@
                 </div>
             </div>
         </div>
+
+        <!-- jQuery từ Google (chú ý không trùng lặp với jQuery khác) -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
         <script>
+            // Lấy giá trị search từ URL nếu có
             let url_string = window.location.href; 
             let url = new URL(url_string);
             let keyword = url.searchParams.get("keyword");
             if (keyword) {
                 $("#search-field").val(keyword);
             }
+
             function closeModal(name) {
-    $("#" + name + ".modal").hide();
-}
+                $("#" + name + ".modal").hide();
+            }
 
-function openModal(name, debtorIdToAddDebenture) {
-    // Thiết lập tiêu đề và nút trong modal
-    $("#" + name + ".modal h3").html('Add a ' + name);
-    $("#" + name + ".modal button").html('Add');
-    
-    // Reset các ô nhập, và đặt ô Total debt mặc định là 0 và không cho sửa
-    $("#debtor.modal input#id").val("");
-    $("#debtor.modal input#name").val("");
-    $("#debtor.modal input#phone").val("");
-    $("#debtor.modal input#email").val("");
-    $("#debtor.modal input#address").val("");
-    $("#debtor.modal input#debt").val("0").prop("readonly", true);  // Không cho chỉnh sửa
+            function openModal(name, debtorIdToAddDebenture) {
+                $("#" + name + ".modal h3").html('Add a ' + name);
+                $("#" + name + ".modal button[type='submit']").html('Add');
+                
+                // Reset các ô nhập, đặt Total debt mặc định là 0 và readonly
+                $("#debtor.modal input#id").val("");
+                $("#debtor.modal input#name").val("");
+                $("#debtor.modal input#phone").val("");
+                $("#debtor.modal input#email").val("");
+                $("#debtor.modal input#address").val("");
+                $("#debtor.modal input#debt").val("0").prop("readonly", true);
+                
+                $("#" + name + ".modal").css('display', 'block');
+                
+                if (debtorIdToAddDebenture) {
+                    $("#debenture.modal input#debtor").val(debtorIdToAddDebenture);
+                }
+            }
 
-    // Hiển thị modal
-    $("#" + name + ".modal").css('display', 'block');
-    
-    // Nếu có truyền thêm debtorId để thêm debenture, gán giá trị đó
-    if (debtorIdToAddDebenture) {
-        $("#debenture.modal input#debtor").val(debtorIdToAddDebenture);
-    }
-}
+            function openUpdateDebtorModal(id, name, phone, email, address, totalDebt) {
+                $("#debtor.modal h3").html('Update a debtor');
+                $("#debtor.modal button[type='submit']").html('Update');
+                
+                $("#debtor.modal input#id").val(id);
+                $("#debtor.modal input#name").val(name);
+                $("#debtor.modal input#phone").val(phone);
+                $("#debtor.modal input#email").val(email);
+                $("#debtor.modal input#address").val(address);
+                $("#debtor.modal input#debt").val(totalDebt).prop("readonly", true);
+                
+                $("#debtor.modal").css('display', 'block');
+            }
 
-function openUpdateDebtorModal(id, name, phone, email, address, totalDebt) {
-    $("#" + "debtor.modal h3").html('Update a debtor');
-    $("#" + "debtor.modal button").html('Update');
-    
-    // Gán giá trị vào các ô nhập, và không cho phép chỉnh sửa ô Total debt
-    $("#debtor.modal input#id").val(id);
-    $("#debtor.modal input#name").val(name);
-    $("#debtor.modal input#phone").val(phone);
-    $("#debtor.modal input#email").val(email);
-    $("#debtor.modal input#address").val(address);
-    $("#debtor.modal input#debt").val(totalDebt).prop("readonly", true);
-    
-    $("#" + "debtor.modal").css('display', 'block');
-}
+            // Bắt sự kiện submit của form "Add/Update"
+            $(document).ready(function(){
+                $("#debtorForm").on("submit", function(e) {
+                    // Kiểm tra các trường bắt buộc
+                    var name = $("#debtor.modal input#name").val().trim();
+                    var phone = $("#debtor.modal input#phone").val().trim();
+                    var email = $("#debtor.modal input#email").val().trim();
+                    var address = $("#debtor.modal input#address").val().trim();
 
-function initializeInputValue(id = "", name = "", phone = "", email = "", address = "", totalDebt = "0", isUpdate = false) {
-    $("#debtor.modal input#id").val(id);
-    $("#debtor.modal input#name").val(name);
-    $("#debtor.modal input#phone").val(phone);
-    $("#debtor.modal input#email").val(email);
-    $("#debtor.modal input#address").val(address);
-    $("#debtor.modal input#debt").val(totalDebt);
+                    if(name === "" || phone === "" || email === "" || address === "") {
+                        alert("Please fill information complete!"); // thong bao khi submit 
+                        e.preventDefault();
+                        return;
+                    }
 
-    if (isUpdate) {
-        $("#debtor.modal input#debt").prop("readonly", true); // Không cho chỉnh sửa khi update
-    } else {
-        $("#debtor.modal input#debt").prop("readonly", false); // Cho phép nhập khi thêm mới
-    }
-}
+                    // Sử dụng Ajax để submit form
+                    e.preventDefault();
+                    $.ajax({
+                        url: $(this).attr("action"),
+                        type: "POST",
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            // Sau khi add/update thành công, redirect về trang debt.do
+                            window.location.href = "${pageContext.request.contextPath}/debt.do";
+                             alert("Save successfully!");
+                        },
+                        error: function(xhr, status, error) {
+                            alert("Có lỗi xảy ra: " + error);
+                        }
+                    });
+                });
+            });
         </script>
 
         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
@@ -372,7 +388,6 @@ function initializeInputValue(id = "", name = "", phone = "", email = "", addres
         <script src="${pageContext.request.contextPath}/modules/nicescroll/jquery.nicescroll.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sa-functions.js"></script>
-
         <script src="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
