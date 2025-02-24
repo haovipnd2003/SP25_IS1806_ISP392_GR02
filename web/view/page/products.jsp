@@ -120,6 +120,32 @@
                                 </div>
                             </form>
                         </div>
+                        <!-- Add this after the search form -->
+                        <div class="filter-container mb-3">
+                            <form action="products" method="get" class="form-inline">
+                                <input type="hidden" name="action" value="filter">
+                                <div class="form-group mr-2">
+                                    <label for="isActive" class="mr-2">Active Status:</label>
+                                    <select name="isActive" id="isActive" class="form-control">
+                                        <option value="default">All Statuses</option>
+                                        <option value="true">Active</option>
+                                        <option value="false">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mr-2">
+                                    <label for="zoneId" class="mr-2">Zone:</label>
+                                    <select name="zoneId" id="zoneId" class="form-control">
+                                        <option value="default">All Zones</option>
+                                        <c:forEach var="zone" items="${zones}">
+                                            <option value="${zone.id}" ${param.zoneId == zone.id ? 'selected' : ''}>
+                                                ${zone.name}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </form>
+                        </div>
                         <!-- Product Table -->
                         <table class="table table-bordered section-body">
                             <thead class="thead-dark">
