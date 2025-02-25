@@ -81,6 +81,12 @@ public class UpdateProfileServlet extends HttpServlet {
         String address = request.getParameter("address");
         String updateTime = getLocalTime();
         
+        if( name.isEmpty() || email.isEmpty() ){
+            request.setAttribute("error", "Name, email, or phone must not empty");
+            request.getRequestDispatcher("view/page/updateProfile.jsp").forward(request, response);
+            return;
+        }
+        
         User u = new User(id, name, null, email, phone, address, null, null);
         UserDAO dao = new UserDAO();
         dao.updateInfo(u, updateTime);

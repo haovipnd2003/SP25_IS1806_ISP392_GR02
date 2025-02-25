@@ -1,0 +1,168 @@
+.invoice-form {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fff;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+
+        .search-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"], 
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Style cho bảng hiển thị nội dung tìm kiếm */
+        #content, #contentPro {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        #content td, #contentPro td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd; /* Thêm đường viền cho nội dung */
+        }
+
+        /* Style cho bảng lựa chọn (không có đường viền) */
+        .choose-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .choose-table td {
+            padding: 12px;
+            text-align: left;
+            border: none;
+        }
+
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .product-table th, 
+        .product-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .product-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .customer-info {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .customer-info input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .payment-method {
+            margin: 20px 0;
+        }
+
+        .payment-method label {
+            margin-right: 20px;
+        }
+
+        .create-invoice-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .create-invoice-btn:hover {
+            background-color: #218838;
+        }
+
+        .product-section {
+            margin-top: 20px;
+        }
+
+/* Thay đổi màu gạch dưới khi focus */
+.underline-input:focus {
+    border-bottom: 2px solid #007BFF; /* Màu gạch dưới khi focus */
+}
+/*Time Inteface*/
+.invoice-date {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.invoice-date label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 15px;
+    min-width: 80px;
+}
+
+#invoiceDate {
+    font-size: 16px;
+    color: #007bff;
+    padding: 5px 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
