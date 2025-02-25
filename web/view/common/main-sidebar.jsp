@@ -13,14 +13,10 @@
 
             <li class="menu-header">Menu</li>
 
-            <c:if test="${sessionScope.acc.roletype == 1}">
+            <c:if test="${sessionScope.acc.roletype == 2}">
                 <li>
                     <a href="${pageContext.request.contextPath}/manageaccount"><i class="ion ion-person"></i><span>Account Management</span></a>
                 </li>
-
-
-            </c:if>
-            <c:if test="${sessionScope.acc.roletype == 2}">
                 <li>
                     <a href="${pageContext.request.contextPath}/products"><i class="ion ion-bag"></i><span>Product</span></a>
                 </li>
