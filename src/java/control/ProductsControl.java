@@ -1,7 +1,7 @@
 package control;
 
-import dao.ProductsDAO;
-import entity.Products;
+import dao.ProductDAO;
+import entity.Product;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -11,15 +11,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import entity.User; // Add this import statement
+import dao.ZoneDAO;
+import entity.Zone;
 
 @WebServlet(name = "Products", urlPatterns = {"/products"})
 public class ProductsControl extends HttpServlet {
 
-    private ProductsDAO productsDAO;
+    private ProductDAO productDAO;
+    private ZoneDAO zoneDAO;
 
     @Override
     public void init() throws ServletException {
-        productsDAO = new ProductsDAO();
+        productDAO = new ProductDAO();
+        zoneDAO = new ZoneDAO();
     }
 
     @Override
@@ -35,8 +39,11 @@ public class ProductsControl extends HttpServlet {
                 case "edit":
                     handleEditProduct(request, response);
                     break;
-                case "search":  // Thêm case xử lý tìm kiếm
+                case "search":  
                     handleSearch(request, response);
+                    break;
+                case "filter":
+                    handleFilter(request, response);
                     break;
                 default:
                     handleDefault(request, response);
@@ -49,20 +56,21 @@ public class ProductsControl extends HttpServlet {
 
     private void handleAddProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Get all existing products to check for duplicate names
-        List<Products> productList = productsDAO.getAllProducts(1, Integer.MAX_VALUE);
+        List<Product> productList = productDAO.getAllProducts(1, Integer.MAX_VALUE);
+        List<Zone> activeZones = zoneDAO.getActiveZones();
         request.setAttribute("productList", productList);
+        request.setAttribute("activeZones", activeZones);
         request.getRequestDispatcher("view/page/addProduct.jsp").forward(request, response);
     }
 
     private void handleEditProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy id từ request và lấy thông tin sản phẩm từ database
         String id = request.getParameter("id");
-        Products product = productsDAO.getProductById(id);
-
-        // Đặt sản phẩm vào request attribute để hiển thị trong form cập nhật
+        Product product = productDAO.getProductById(id);
+        List<Zone> activeZones = zoneDAO.getActiveZones();
+        
         request.setAttribute("product", product);
+        request.setAttribute("activeZones", activeZones);
         request.getRequestDispatcher("view/page/updateProduct.jsp").forward(request, response);
     }
 
@@ -71,7 +79,7 @@ public class ProductsControl extends HttpServlet {
 
         User user = (User) request.getSession().getAttribute("acc");
         if (user != null) {
-            request.setAttribute("roletype", user.getRoletype().toString()); // Convert to string for consistency
+            request.setAttribute("roletype", user.getRoletype().toString()); 
         } else {
             request.setAttribute("roletype", null);
         }
@@ -82,11 +90,13 @@ public class ProductsControl extends HttpServlet {
             page = Integer.parseInt(request.getParameter("page"));
         }
 
-        List<Products> productList = productsDAO.getAllProducts(page, pageSize);
-        int totalProducts = productsDAO.getTotalProducts();
+        List<Product> productList = productDAO.getAllProducts(page, pageSize);
+        int totalProducts = productDAO.getTotalProducts();
         int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+        List<Zone> zones = zoneDAO.getActiveZones();
 
         request.setAttribute("productList", productList);
+        request.setAttribute("zones", zones);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
@@ -95,8 +105,34 @@ public class ProductsControl extends HttpServlet {
     private void handleSearch(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String keyword = request.getParameter("keyword");
-        List<Products> productList = productsDAO.searchProducts(keyword);
+        List<Product> productList = productDAO.searchProducts(keyword);
         request.setAttribute("productList", productList);
+        request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
+    }
+
+    private void handleFilter(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Boolean isActive = null;
+        String zoneId = null;
+
+        // Lấy tham số lọc với kiểm tra null và giá trị mặc định
+        String isActiveParam = request.getParameter("isActive");
+        if (isActiveParam != null && !isActiveParam.equals("default")) {
+            isActive = Boolean.parseBoolean(isActiveParam);
+        }
+
+        String zoneIdParam = request.getParameter("zoneId");
+        if (zoneIdParam != null && !zoneIdParam.equals("default")) {
+            zoneId = zoneIdParam;
+        }
+
+        // Gọi DAO để lọc
+        List<Product> productList = productDAO.filterProductsByActiveAndZone(isActive, zoneId);
+        List<Zone> zones = zoneDAO.getActiveZones();
+
+        // Set các attribute cho JSP
+        request.setAttribute("productList", productList);
+        request.setAttribute("zones", zones);
         request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
     }
 
@@ -125,20 +161,20 @@ public class ProductsControl extends HttpServlet {
             String name = request.getParameter("name");
             String describe = request.getParameter("describe");
             double price = Double.parseDouble(request.getParameter("price"));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            double quantity = Double.parseDouble(request.getParameter("quantity"));
             String zoneId = request.getParameter("zoneId");
             boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
             String image = request.getParameter("image");
 
-            Products products = new Products();
-            products.setName(name);
-            products.setDescribe(describe);
-            products.setPrice(price);
-            products.setQuantity(quantity);
-            products.setZoneId(zoneId);
-            products.setActive(isActive);
-            products.setImage(image);
-            productsDAO.insert(products);
+            Product product = new Product();
+            product.setName(name);
+            product.setDescribe(describe);
+            product.setPrice(price);
+            product.setQuantity(quantity);
+            product.setZoneId(zoneId);
+            product.setActive(isActive);
+            product.setImage(image);
+            productDAO.insert(product);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -151,12 +187,12 @@ public class ProductsControl extends HttpServlet {
             String name = request.getParameter("name");
             String describe = request.getParameter("describe");
             double price = Double.parseDouble(request.getParameter("price"));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            double quantity = Double.parseDouble(request.getParameter("quantity"));
             String zoneId = request.getParameter("zoneId");
             boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
             String image = request.getParameter("image");
 
-            Products product = new Products();
+            Product product = new Product();
             product.setId(id);
             product.setName(name);
             product.setDescribe(describe);
@@ -165,7 +201,7 @@ public class ProductsControl extends HttpServlet {
             product.setZoneId(zoneId);
             product.setActive(isActive);
             product.setImage(image);
-            productsDAO.update(product);
+            productDAO.update(product);
         } catch (SQLException e) {
             e.printStackTrace();
             // Xử lý ngoại lệ nếu cần
@@ -175,7 +211,7 @@ public class ProductsControl extends HttpServlet {
 
     private void deleteProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = request.getParameter("id");
-        productsDAO.delete(id);
+        productDAO.delete(id);
         response.sendRedirect("products");
     }
 }

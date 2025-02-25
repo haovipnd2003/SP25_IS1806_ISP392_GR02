@@ -4,17 +4,19 @@ package entity;
  * Class representing a product entity.
  */
 public class Product {
+
     private String id;
     private String name;
     private String describe;
     private double price;
     private String zone;
+    private String zoneId;
     private double quantity;
     private boolean isActive;
+    private String image;
 
     public Product() {
     }
-
 
     public Product(String id, String name, String describe, double price, double quantity) {
         this.id = id;
@@ -24,8 +26,40 @@ public class Product {
         this.quantity = quantity;
     }
 
-    
- 
+    public Product(String id, String name, String describe, double price, double quantity, String zoneId, boolean isActive, String image) {
+        this.id = id;
+        this.name = name;
+        this.describe = describe;
+        this.price = price;
+        this.zoneId = zoneId;
+        this.quantity = quantity;
+        this.isActive = isActive;
+        this.image = image;
+    }
+
+    public String getZoneId() {
+        return zoneId;
+    }
+
+    public void setZoneId(String zoneId) {
+        this.zoneId = zoneId;
+    }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getId() {
         return id;
@@ -75,9 +109,6 @@ public class Product {
         this.quantity = quantity;
     }
 
-
-
-
     public boolean isActive() {
         return isActive;
     }
@@ -85,7 +116,6 @@ public class Product {
     public void setActive(boolean active) {
         isActive = active;
     }
-
 
     @Override
     public String toString() {
