@@ -56,9 +56,10 @@ public class ProductsControl extends HttpServlet {
 
     private void handleAddProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Get all existing products to check for duplicate names
         List<Product> productList = productDAO.getAllProducts(1, Integer.MAX_VALUE);
+        List<Zone> activeZones = zoneDAO.getActiveZones();
         request.setAttribute("productList", productList);
+        request.setAttribute("activeZones", activeZones);
         request.getRequestDispatcher("view/page/addProduct.jsp").forward(request, response);
     }
 
@@ -66,8 +67,10 @@ public class ProductsControl extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
         Product product = productDAO.getProductById(id);
-
+        List<Zone> activeZones = zoneDAO.getActiveZones();
+        
         request.setAttribute("product", product);
+        request.setAttribute("activeZones", activeZones);
         request.getRequestDispatcher("view/page/updateProduct.jsp").forward(request, response);
     }
 

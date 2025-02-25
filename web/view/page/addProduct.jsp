@@ -91,8 +91,12 @@
                                                         <textarea class="form-control" id="describe" name="describe" rows="3"></textarea>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="zoneId" class="form-label">Zone ID:</label>
-                                                        <input type="text" class="form-control" id="zoneId" name="zoneId" required>
+                                                        <label for="zoneId" class="form-label">Zone:</label>
+                                                        <select class="form-select" id="zoneId" name="zoneId" required>
+                                                            <c:forEach var="zone" items="${activeZones}">
+                                                                <option value="${zone.id}">${zone.name}</option>
+                                                            </c:forEach>
+                                                        </select>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="isActive" class="form-label">Active:</label>
