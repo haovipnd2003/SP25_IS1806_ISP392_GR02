@@ -65,7 +65,7 @@ public class SaleServlet extends HttpServlet {
         if (u == null) {
             request.getRequestDispatcher("/login").forward(request, response);
         } else {
-            request.getRequestDispatcher("/view/page/sale.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/page/saleInterface.jsp").forward(request, response);
         }
 
     }

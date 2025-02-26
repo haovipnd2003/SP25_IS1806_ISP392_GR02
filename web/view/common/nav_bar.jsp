@@ -1,5 +1,41 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<style>
+    .navbar-bg {
+        background-color: #517ea6       !important;
+    }
+    
+    .main-navbar {
+        background-color: #517ea6       !important;
+    }
+    
+    .beep:after {
+        background-color: #ffffff !important;
+    }
+    
+    .notification-toggle:hover, 
+    .nav-link:hover,
+    .dropdown-toggle:hover {
+        background-color: #517ea6       !important;
+    }
+    
+    .dropdown-item:active, 
+    .dropdown-item:focus,
+    .dropdown-item:hover {
+        background-color: #edfcfb !important;
+        color: #517ea6       !important;
+    }
+    
+    .dropdown-header {
+        background-color: #f9f9f9 !important;
+        color: #517ea6       !important;
+    }
+    
+    .time {
+        color: #517ea6       !important;
+    }
+</style>
 <div class="navbar-bg"></div>
 <nav class="navbar navbar-expand-lg main-navbar">
     <form class="form-inline mr-auto">
