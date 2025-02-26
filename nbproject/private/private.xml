@@ -3,17 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/saleInterface.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/control/SearchProductServlet.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/login.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/admin/manageAccount.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/dashboard.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/sale.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/css/login.css</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/css/login_1.css</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/signup.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/enterOtp.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/common/nav_bar.jsp</file>
+            <file>file:/H:/Code/SP25_IS1806_ISP392_GR02/SP25_IS1806_ISP392_GR02/web/view/page/debtor.jsp</file>
+            <file>file:/H:/Code/SP25_IS1806_ISP392_GR02/SP25_IS1806_ISP392_GR02/src/java/control/DebtorServlet.java</file>
+            <file>file:/H:/Code/SP25_IS1806_ISP392_GR02/SP25_IS1806_ISP392_GR02/web/view/page/debenture.jsp</file>
+            <file>file:/H:/Code/SP25_IS1806_ISP392_GR02/SP25_IS1806_ISP392_GR02/src/java/control/SendEmail.java</file>
         </group>
     </open-files>
 </project-private>

@@ -17,21 +17,20 @@ import java.util.List;
  *
  * @author vietanhdang
  */
-public class DebtDAO extends DBContext {
+public class DebtorDAO extends DBContext {
     Statement stmt; 
     private int noOfRecords; 
     
     public boolean insertDebtor(Debtor debtor) {
         boolean success = false;
         try {
-            String query = "insert into customer(name, phone, email, address, totaldebt) values(?,?,?,?,?)";
+            String query = "insert into customer(name, phone, email, address) values(?,?,?,?)";
             
             PreparedStatement stm = connection.prepareStatement(query);
             stm.setString(1, debtor.getName());
             stm.setString(2, debtor.getPhone());
             stm.setString(3, debtor.getEmail());
             stm.setString(4, debtor.getAddress());
-            stm.setDouble(5, debtor.getTotalDebt());
             
             int res = stm.executeUpdate();
             if (res != 0) success = true;
@@ -57,15 +56,14 @@ public class DebtDAO extends DBContext {
     public boolean updateDebtor(Debtor debtor) {
         boolean success = false;
         try {
-            String query = "update customer set name=?, phone=?, email=?, address=?, totaldebt=? where id=?";
+            String query = "update customer set name=?, phone=?, email=?, address=? where id=?";
             
             PreparedStatement stm = connection.prepareStatement(query);
             stm.setString(1, debtor.getName());
             stm.setString(2, debtor.getPhone());
             stm.setString(3, debtor.getEmail());
             stm.setString(4, debtor.getAddress());
-            stm.setDouble(5, debtor.getTotalDebt());
-            stm.setInt(6, debtor.getId());
+            stm.setInt(5, debtor.getId());
             
             int res = stm.executeUpdate();
             if (res != 0) success = true;
@@ -88,46 +86,23 @@ public class DebtDAO extends DBContext {
         return success;
     }
     
-    public boolean updateTotalDebtById(int id, double amount) 
+    public List<Debtor> viewAllDebtors(String keyword, int offset, int noOfRecords) 
     { 
-        boolean success = false;
-        try {
-            char operator = amount > 0 ? '+' : ' ';
-            String query = "update customer set totaldebt=totaldebt" + operator + amount + " where id=?";
-            
-            PreparedStatement stm = connection.prepareStatement(query);
-            stm.setInt(1, id);
-            
-            int res = stm.executeUpdate();
-            if (res != 0) success = true;
+        StringBuilder query = new StringBuilder();
+        query.append("select SQL_CALC_FOUND_ROWS * from customer");
+        
+        String searchQuery = this.buildSearchQuery(keyword);
+        if (!searchQuery.isBlank() && !searchQuery.isEmpty()) {
+            query.append(searchQuery);
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally
-        { 
-            try { 
-                if (stmt != null) 
-                    stmt.close(); 
-                if (connection != null) 
-                    connection.close(); 
-            } 
-            catch (SQLException e) { 
-                e.printStackTrace(); 
-            } 
-        } 
-        return success;
-    } 
-    
-    
-    public List<Debtor> viewAllDebtors(int offset, int noOfRecords) 
-    { 
-        String query = "select SQL_CALC_FOUND_ROWS * from customer limit " + offset + ", " + noOfRecords; 
+        
+        query.append(" order by createdAt desc limit ").append(offset).append(", ").append(noOfRecords);
+        
         List<Debtor> list = new ArrayList<Debtor>(); 
         Debtor debtor = null; 
         try { 
             stmt = connection.createStatement(); 
-            ResultSet rs = stmt.executeQuery(query); 
+            ResultSet rs = stmt.executeQuery(query.toString()); 
             while (rs.next()) { 
                 debtor = new Debtor(); 
                 debtor.setId(rs.getInt(1)); 
@@ -164,4 +139,20 @@ public class DebtDAO extends DBContext {
     } 
     
     public int getNoOfRecords() { return noOfRecords; } 
+    
+    private String buildSearchQuery(String keyword) {
+        StringBuilder query = new StringBuilder();
+        if (keyword != null && !keyword.isBlank() && !keyword.isEmpty()) {
+            query.append (" where id like '%");
+            query.append (keyword);
+            query.append ("%'");
+            query.append (" or name like '%");
+            query.append (keyword);
+            query.append ("%'");
+            query.append (" or phone like '%");
+            query.append (keyword);
+            query.append ("%'");
+        }
+        return query.toString();
+    }
 }

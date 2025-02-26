@@ -1,5 +1,5 @@
 <%-- 
-    Document   : debt
+    Document   : debtor
     Created on : Feb 19, 2025, 8:45:42 AM
     Author     : vietanhdang
 --%>
@@ -16,7 +16,6 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
-
         <link rel="stylesheet" href="${pageContext.request.contextPath}//modules/toastr/build/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/demo.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/style.css">
@@ -27,16 +26,15 @@
             /* The Modal (background) */
             .modal {
                 display: none; /* Hidden by default */
-                position: fixed; /* Stay in place */
-                z-index: 1; /* Sit on top */
-                padding-top: 100px; /* Location of the box */
+                position: fixed;
+                z-index: 1;
+                padding-top: 100px;
                 left: 0;
                 top: 0;
-                width: 100%; /* Full width */
-                height: 100%; /* Full height */
-                overflow: auto; /* Enable scroll if needed */
-                background-color: rgb(0,0,0); /* Fallback color */
-                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0,0,0,0.4);
             }
 
             /* Modal Content */
@@ -81,7 +79,6 @@
                 font-size: 28px;
                 font-weight: bold;
             }
-
             .close:hover,
             .close:focus {
                 color: #000;
@@ -98,7 +95,7 @@
                 width: 18px;
                 height: 18px;
                 filter: hue-rotate(142deg);
-                margin-right: 15px
+                margin-right: 15px;
             }
             
             input#positive {
@@ -113,30 +110,8 @@
         <div id="app">
             <div class="main-wrapper">
                 <div class="navbar-bg"></div>
-                <nav class="navbar navbar-expand-lg main-navbar">
-                    <form class="form-inline mr-auto">
-                        <ul class="navbar-nav mr-3">
-                            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="ion ion-navicon-round"></i></a></li>
-                            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="ion ion-search"></i></a></li>
-                        </ul>
-
-                    </form>
-                    <ul class="navbar-nav navbar-right">
-                        <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
-                                <i class="ion ion-android-person d-lg-none"></i>
-                                <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="${pageContext.request.contextPath}/profile" class="dropdown-item has-icon">
-                                    <i class="ion ion-android-person"></i> Profile
-                                </a>
-                                <a href="#" class="dropdown-item has-icon">
-                                    <i class="ion ion-log-out"></i> Logout
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </nav>
-
+                
+                <jsp:include page="/view/common/nav_bar.jsp"></jsp:include>
                 <!--MAIN-SIDEBAR-JSP-INCLUDE-->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
                 <!--MAIN-SIDEBAR-JSP-INCLUDE-->
@@ -148,11 +123,17 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h2>Debt</h2>
+                                            <h2>Debtor</h2>
                                         </div>
                                         <div class="card-body">
                                             <!-- Trigger/Open The Modal -->
-                                            <button id="addBtn" onclick="openModal('debtor')">Add new</button>
+                                            <div class="display-flex-al-center justify-space-between">
+                                                <form action="${pageContext.request.contextPath}/debtor.do" method="get">
+                                                    <input id="search-field" type="text" name="keyword" value="${keyword}">
+                                                    <button type="submit">Search</button>
+                                                </form>
+                                                <button id="addBtn" onclick="openModal('debtor')">Add new</button>
+                                            </div>
                                             <table class="table-list-content" border="1" cellpadding="5" cellspacing="5"> 
                                                 <tr> 
                                                     <th>ID</th> 
@@ -165,7 +146,6 @@
                                                     <th style="width: 132px;"></th>
                                                     <th style="width: 132px;"></th>
                                                 </tr> 
-
                                                 <c:forEach var="debtor" items="${debtorList}"> 
                                                     <tr> 
                                                         <td>${debtor.id}</td> 
@@ -173,7 +153,7 @@
                                                         <td>${debtor.phone}</td> 
                                                         <td>${debtor.email}</td> 
                                                         <td>${debtor.address}</td> 
-                                                        <td>${debtor.totalDebt}</td>
+                                                        <td>${debtor.getTotalDebtString()}</td>
                                                         <td style="width: 60px;">
                                                             <button onclick="openUpdateDebtorModal('${debtor.id}', '${debtor.name}', '${debtor.phone}', '${debtor.email}', '${debtor.address}', '${debtor.totalDebt}')">
                                                                 Update
@@ -185,21 +165,17 @@
                                                             </button>
                                                         </td>
                                                         <td style="width: 132px;">
-                                                            <a href="debenture.do?debtorId=${debtor.id}">Debenture detail</a>
+                                                            <a href="debenture.do?debtorId=${debtor.id}"><button>Debenture detail</button></a>
                                                         </td>
                                                     </tr> 
                                                 </c:forEach> 
-
                                             </table> 
-                                            <%--For displaying Previous link except for the 1st page --%> 
+
+                                            <!-- Pagination -->
                                             <div class="display-flex-al-center" style="justify-content: flex-end;">
                                                 <c:if test="${currentPage != 1}"> 
-                                                    <td><a href="debt.do?page=${currentPage - 1}">Previous</a></td> 
+                                                    <td><a href="debtor.do?keyword=${keyword}&page=${currentPage - 1}">Previous</a></td> 
                                                 </c:if> 
-
-                                                <%--For displaying Page numbers. The when condition does not display 
-                                                            a link for the current page--%> 
-
                                                 <table style="margin: 0 5px;" border="1" cellpadding="5" cellspacing="5"> 
                                                     <tr> 
                                                         <c:forEach begin="1" end="${noOfPages}" var="i"> 
@@ -208,80 +184,81 @@
                                                                     <td>${i}</td> 
                                                                 </c:when> 
                                                                 <c:otherwise> 
-                                                                    <td><a href="debt.do?page=${i}">${i}</a></td> 
+                                                                    <td><a href="debtor.do?keyword=${keyword}&page=${i}">${i}</a></td> 
                                                                 </c:otherwise> 
                                                             </c:choose> 
                                                         </c:forEach> 
                                                     </tr> 
                                                 </table> 
-                                                <%--For displaying Next link --%> 
                                                 <c:if test="${currentPage lt noOfPages}"> 
-                                                    <td><a href="debt.do?page=${currentPage + 1}">Next</a></td> 
+                                                    <td><a href="debtor.do?keyword=${keyword}&page=${currentPage + 1}">Next</a></td> 
                                                 </c:if> 
                                             </div>
-                                            <!-- The Modal -->
+
+                                            <!-- Modal Debtor (Add/Update) -->
                                             <div id="debtor" class="modal">
-                                                <!-- Modal content -->
                                                 <div class="modal-content">
                                                     <div class="display-flex-al-center justify-space-between">
                                                         <h3></h3>
                                                         <div class="close" onclick="closeModal('debtor')">&times;</div>
                                                     </div>
-                                                    <form class="form-signin" action="${pageContext.request.contextPath}/debt.do" method="post">
-                                                        <input id="id" style="display: none;" name="id" type="text" name="search"/>
+                                                    <form id="debtorForm" class="form-signin" action="${pageContext.request.contextPath}/debtor.do" method="post">
+                                                        <input id="id" style="display: none;" name="id" type="text"/>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Full name (*)</h6>
-                                                            <input id="name" name="name" type="text" name="search"/>
+                                                            <input id="name" name="name" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Address</h6>
-                                                            <input id="address" name="address" type="text" name="search"/>
+                                                            <input id="address" name="address" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Phone number</h6>
-                                                            <input id="phone" name="phone" type="text" name="search"/>
+                                                            <input id="phone" name="phone" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Email</h6>
-                                                            <input id="email" name="email" type="text" name="search"/>
+                                                            <input id="email" name="email" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Total debt</h6>
-                                                            <input id="debt" name="debt" type="text" name="search"/>
+                                                            <input id="debt" name="debt" type="text" readonly/>
                                                         </div>
-                                                        <button style="width: 80px; margin-top: 5px;" type="submit"></button>
+                                                        <button style="width: 80px; margin-top: 5px;" type="submit">Add</button>
                                                     </form>
                                                 </div>
                                             </div>
+
+                                            <!-- Modal Debenture -->
                                             <div id="debenture" class="modal">
-                                                <!-- Modal content -->
                                                 <div class="modal-content">
                                                     <div class="display-flex-al-center justify-space-between">
                                                         <h3></h3>
                                                         <div class="close" onclick="closeModal('debenture')">&times;</div>
                                                     </div>
-                                                    <form class="form-signin" action="${pageContext.request.contextPath}/debenture.do" method="post">
-                                                        <input id="debtor" style="display: none;" name="debtor" type="text" name="search"/>
+                                                    <!-- Đặt id="debentureForm" để bắt sự kiện submit -->
+                                                    <form id="debentureForm" class="form-signin" action="${pageContext.request.contextPath}/debenture.do" method="post">
+                                                        <input id="debtor" style="display: none;" name="debtor" type="text"/>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Note</h6>
-                                                            <input name="note" type="text" name="search"/>
+                                                            <input name="note" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Type (*)</h6>
                                                             <div class="display-flex-al-center" style="width: 60%;">
-                                                                <input id="negative" type="radio" name="type" value="0" checked>  <%-- "checked" makes it default --%>
+                                                                <input id="negative" type="radio" name="type" value="0" checked>
                                                                 <input id="positive" type="radio" name="type" value="1">
                                                             </div>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Amount (*)</h6>
-                                                            <input name="amount" type="text" name="search"/>
+                                                            <input name="amount" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
                                                             <h6>Created date</h6>
-                                                            <input name="created" type="date" name="search"/>
+                                                            <input name="created" type="date"/>
                                                         </div>
-                                                        <button style="width: 80px; margin-top: 5px;" type="submit"></button>
+                                                        <button style="width: 80px; margin-top: 5px;" type="submit">Submit</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -294,38 +271,108 @@
                 </div>
             </div>
         </div>
+
+        <!-- jQuery từ Google (không trùng lặp) -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
         <script>
+            // Lấy giá trị search từ URL nếu có
+            let url_string = window.location.href; 
+            let url = new URL(url_string);
+            let keyword = url.searchParams.get("keyword");
+            if (keyword) {
+                $("#search-field").val(keyword);
+            }
+
+            function closeModal(name) {
+                $("#" + name + ".modal").hide();
+            }
+
             function openModal(name, debtorIdToAddDebenture) {
-                $("#" + name +".modal h3").html('Add a ' + name);
-                $("#" + name +".modal button").html('Add');
+                $("#"+ name +".modal h3").html('Add a ' + name);
+                $("#"+ name +".modal button[type='submit']").html('Add');
                 
-                initializeInputValue();
+                // Reset các ô nhập cho modal Debtor
+                $("#debtor.modal input#id").val("");
+                $("#debtor.modal input#name").val("");
+                $("#debtor.modal input#phone").val("");
+                $("#debtor.modal input#email").val("");
+                $("#debtor.modal input#address").val("");
+                $("#debtor.modal input#debt").val("0").prop("readonly", true);
                 
-                $("#" + name + ".modal").css('display', 'block');
+                $("#"+ name +".modal").css('display', 'block');
+                
                 if (debtorIdToAddDebenture) {
                     $("#debenture.modal input#debtor").val(debtorIdToAddDebenture);
                 }
-            };
-            function closeModal (name) {
-                $("#" + name + ".modal").hide();
-            };
+            }
+
             function openUpdateDebtorModal(id, name, phone, email, address, totalDebt) {
                 $("#debtor.modal h3").html('Update a debtor');
-                $("#debtor.modal button").html('Update');
+                $("#debtor.modal button[type='submit']").html('Update');
                 
-                initializeInputValue(id, name, phone, email, address, totalDebt);
-                
-                $("#debtor.modal").css('display', 'block');
-            }
-            function initializeInputValue(id, name, phone, email, address, totalDebt) {
                 $("#debtor.modal input#id").val(id);
                 $("#debtor.modal input#name").val(name);
                 $("#debtor.modal input#phone").val(phone);
                 $("#debtor.modal input#email").val(email);
                 $("#debtor.modal input#address").val(address);
-                $("#debtor.modal input#debt").val(totalDebt);
+                $("#debtor.modal input#debt").val(totalDebt).prop("readonly", true);
+                
+                $("#debtor.modal").css('display', 'block');
             }
+
+            // Bắt sự kiện submit của form Debtor (Add/Update)
+            $(document).ready(function(){
+                $("#debtorForm").on("submit", function(e) {
+                    var name = $("#debtor.modal input#name").val().trim();
+                    var phone = $("#debtor.modal input#phone").val().trim();
+                    var email = $("#debtor.modal input#email").val().trim();
+                    var address = $("#debtor.modal input#address").val().trim();
+
+                    if(name === "" || phone === "" || email === "" || address === "") {
+                        alert("Please fill information complete!");
+                        e.preventDefault();
+                        return;
+                    }
+
+                    e.preventDefault();
+                    $.ajax({
+                        url: $(this).attr("action"),
+                        type: "POST",
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            alert("Save successfully!");
+                            window.location.href = "${pageContext.request.contextPath}/debtor.do";
+                        },
+                        error: function(xhr, status, error) {
+                            alert("Có lỗi xảy ra: " + error);
+                        }
+                    });
+                });
+
+                // Bắt sự kiện submit của form Debenture
+                $("#debentureForm").on("submit", function(e) {
+                    // Ví dụ kiểm tra trường Amount, có thể bổ sung kiểm tra các trường khác nếu cần
+                    var amount = $("input[name='amount']").val().trim();
+                    if(amount === ""){
+                        alert("Please fill in the amount!");
+                        e.preventDefault();
+                        return;
+                    }
+                    e.preventDefault();
+                    $.ajax({
+                        url: $(this).attr("action"),
+                        type: "POST",
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            alert("Save successfully!");
+                            window.location.href = "${pageContext.request.contextPath}/debtor.do";
+                        },
+                        error: function(xhr, status, error) {
+                            alert("Có lỗi xảy ra: " + error);
+                        }
+                    });
+                });
+            });
         </script>
 
         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
@@ -335,7 +382,6 @@
         <script src="${pageContext.request.contextPath}/modules/nicescroll/jquery.nicescroll.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sa-functions.js"></script>
-
         <script src="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>

@@ -37,7 +37,7 @@ public class DBContext {
 //        DB LOCALHOST:
         try {
             String user = "root"; // Change to your MySQL username
-            String pass = "1234"; // Change to your MySQL password
+            String pass = "123456"; // Change to your MySQL password
             String url = "jdbc:mysql://localhost:3306/ricemanagement"; // Update the URL to fit MySQL format
             Class.forName("com.mysql.cj.jdbc.Driver"); // MySQL JDBC driver
             connection = DriverManager.getConnection(url, user, pass);

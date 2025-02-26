@@ -4,6 +4,9 @@
  */
 package entity;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  *
  * @author vietanhdang
@@ -73,5 +76,9 @@ public class Debtor {
 
     public void setTotalDebt(double totalDebt) {
         this.totalDebt = totalDebt;
+    }
+    
+    public String getTotalDebtString() {
+        return NumberFormat.getNumberInstance(Locale.US).format(this.getTotalDebt());
     }
 }

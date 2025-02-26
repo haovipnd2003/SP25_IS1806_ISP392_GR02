@@ -4,7 +4,7 @@
  */
 package control;
 
-import dao.DebtDAO;
+import dao.DebtorDAO;
 import entity.Debtor;
 import entity.User;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author vietanhdang
  */
-public class DebtServlet extends HttpServlet {
+public class DebtorServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -44,8 +44,10 @@ public class DebtServlet extends HttpServlet {
             if (request.getParameter("page") != null) 
                 page = Integer.parseInt( 
                     request.getParameter("page")); 
-            DebtDAO dao = new DebtDAO(); 
+            String keyword = request.getParameter("keyword");
+            DebtorDAO dao = new DebtorDAO(); 
             List<Debtor> list = dao.viewAllDebtors( 
+                keyword,
                 (page - 1) * recordsPerPage, 
                 recordsPerPage); 
             int noOfRecords = dao.getNoOfRecords(); 
@@ -54,13 +56,13 @@ public class DebtServlet extends HttpServlet {
             request.setAttribute("debtorList", list); 
             request.setAttribute("noOfPages", noOfPages); 
             request.setAttribute("currentPage", page); 
-            request.getRequestDispatcher("/view/page/debt.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/page/debtor.jsp").forward(request, response);
         }
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
-     *
+     *deb
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -76,15 +78,15 @@ public class DebtServlet extends HttpServlet {
         String address = request.getParameter("address");
         double totalDebt = Double.parseDouble(request.getParameter("debt"));
         Debtor debtor = new Debtor(name, phone, email, address, totalDebt);
-        DebtDAO debtDAO = new DebtDAO();
+        DebtorDAO debtorDAO = new DebtorDAO();
         if (id != null && !id.isBlank() && !id.isEmpty()) {
             debtor.setId(Integer.parseInt(id));
-            debtDAO.updateDebtor(debtor);
+            debtorDAO.updateDebtor(debtor);
         }
         else {
-            debtDAO.insertDebtor(debtor);
+            debtorDAO.insertDebtor(debtor);
         }
-        request.getRequestDispatcher("/view/page/debt.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/page/debtor.jsp").forward(request, response);
     }
 
     /**
