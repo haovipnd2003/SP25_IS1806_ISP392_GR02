@@ -22,7 +22,7 @@
                 </li>
 
                 <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
+                    <a href="${pageContext.request.contextPath}/customer"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
                 </li>
 
                 <li>
