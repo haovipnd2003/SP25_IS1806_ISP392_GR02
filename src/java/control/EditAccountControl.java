@@ -86,7 +86,7 @@ public class EditAccountControl extends HttpServlet {
         // Lấy thông tin tài khoản hiện tại từ CSDL
         User existingUser = dao.getUserById(id);
 
-        if (existingUser != null && "1".equals(existingUser.getRoletype())) {
+        if (existingUser != null && "2".equals(existingUser.getRoletype())) {
             // Nếu là Admin thì không cho thay đổi trạng thái
             isactive = existingUser.getIsactive(); // Giữ nguyên trạng thái cũ
         }

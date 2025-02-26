@@ -207,4 +207,48 @@ public class ProductsDAO extends DBContext {
         }
         return total;
     }
+
+    public List<Products> filterProductsByActiveAndZone(Boolean isActive, String zoneId) {
+        List<Products> productList = new ArrayList<>();
+        try {
+            StringBuilder sql = new StringBuilder("SELECT * FROM product WHERE 1=1");
+            List<Object> params = new ArrayList<>();
+            
+            // Thêm điều kiện lọc theo active status
+            if (isActive != null) {
+                sql.append(" AND isActive = ?");
+                params.add(isActive);
+            }
+            
+            // Thêm điều kiện lọc theo zone
+            if (zoneId != null) {
+                sql.append(" AND zoneId = ?");
+                params.add(zoneId);
+            }
+            
+            PreparedStatement stm = cnn.prepareStatement(sql.toString());
+            for (int i = 0; i < params.size(); i++) {
+                stm.setObject(i + 1, params.get(i));
+            }
+            
+            ResultSet rs = stm.executeQuery();
+            
+            while (rs.next()) {
+                Products product = new Products(
+                    rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getString("describe"),
+                    rs.getDouble("price"),
+                    rs.getInt("quantity"),
+                    rs.getString("zoneId"),
+                    rs.getBoolean("isActive"),
+                    rs.getString("image")
+                );
+                productList.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Filter Products: " + e.getMessage());
+        }
+        return productList;
+    }
 }

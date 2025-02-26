@@ -103,22 +103,53 @@
                             <div class="section-header">
                                 <h1>Product List</h1>
                             </div>
-                        <c:if test="${roletype == 2}">
-                            <a href="products?action=add" class="btn btn-primary">Add Product</a>
-                        </c:if>
-                        <!-- Search -->
-                        <div class="search-container mb-3">
-                            <form action="products" method="get" class="form-inline">
-                                <input type="hidden" name="action" value="search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="keyword" placeholder="Search products..." value="${param.keyword}">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </div>
+                            <c:if test="${roletype == 2}">
+                                <div class="text-right mb-3">
+                                    <a href="products?action=add" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-plus"></i> Add Product
+                                    </a>
                                 </div>
-                            </form>
+                            </c:if>
+                        <!-- Search and Filter -->
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="search-container mr-3">
+                                <form action="products" method="get" class="form-inline">
+                                    <input type="hidden" name="action" value="search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="Search products..." value="${param.keyword}">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="filter-container">
+                                <form action="products" method="get" class="form-inline">
+                                    <input type="hidden" name="action" value="filter">
+                                    <div class="form-group mr-2">
+                                        <label for="isActive" class="mr-2">Active Status:</label>
+                                        <select name="isActive" id="isActive" class="form-control">
+                                            <option value="default">All Statuses</option>
+                                            <option value="true">Active</option>
+                                            <option value="false">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mr-2">
+                                        <label for="zoneId" class="mr-2">Zone:</label>
+                                        <select name="zoneId" id="zoneId" class="form-control">
+                                            <option value="default">All Zones</option>
+                                            <c:forEach var="zone" items="${zones}">
+                                                <option value="${zone.id}" ${param.zoneId == zone.id ? 'selected' : ''}>
+                                                    ${zone.name}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </form>
+                            </div>
                         </div>
                         <!-- Product Table -->
                         <table class="table table-bordered section-body">
@@ -158,7 +189,7 @@
                                                 <td style="color: ${product.active ? 'green' : 'red'}">${product.active ? 'Yes' : 'No'}</td>
                                                 <c:if test="${roletype == '2'}">
                                                     <td>
-                                                        <a href="products?action=edit&id=${product.id}" class="btn btn-danger">Update</a>
+                                                        <a href="products?action=edit&id=${product.id}" class="btn btn-primary">Update</a>
                                                     </td>
                                                 </c:if>
                                             </tr>
@@ -237,7 +268,6 @@
         <script src="${pageContext.request.contextPath}/modules/nicescroll/jquery.nicescroll.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sa-functions.js"></script>
-
         <script src="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>

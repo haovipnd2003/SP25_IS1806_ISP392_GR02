@@ -155,7 +155,6 @@
                                                     <td>${account.phone}</td>
                                                     <td>
                                                         <c:choose>
-                                                            <c:when test="${account.roletype == '1'}">Admin</c:when>
                                                             <c:when test="${account.roletype == '2'}">Owner</c:when>
                                                             <c:when test="${account.roletype == '3'}">Staff</c:when>
                                                             <c:otherwise>Unknown</c:otherwise>
@@ -231,7 +230,6 @@
                             <div class="mb-3">
                                 <label class="form-label">Role</label>
                                 <select class="form-control" name="roletype">
-                                    <option value="1">Admin</option>
                                     <option value="2">Owner</option>
                                     <option value="3" selected>Staff</option>
                                 </select>
@@ -274,7 +272,6 @@
                             <div class="mb-3">
                                 <label class="form-label">Role</label>
                                 <select class="form-control" id="edit-roletype" name="roletype">
-                                    <option value="1">Admin</option>
                                     <option value="2">Owner</option>
                                     <option value="3">Staff</option>
                                 </select>
@@ -313,7 +310,7 @@
 
                         // Ẩn Status nếu là Admin (roletype == 1)
                         let statusGroup = document.getElementById("status-group");
-                        if (roletype === "1") {
+                        if (roletype === "2") {
                             statusGroup.style.display = "none";
                         } else {
                             statusGroup.style.display = "block";

@@ -52,8 +52,12 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="zoneId">Zone ID:</label>
-                                <input type="text" class="form-control" id="zoneId" name="zoneId" value="${product.zoneId}" required>
+                                <label for="zoneId" class="form-label">Zone:</label>
+                                <select class="form-select" id="zoneId" name="zoneId" required>
+                                    <c:forEach var="zone" items="${activeZones}">
+                                        <option value="${zone.id}" ${product.zoneId == zone.id ? 'selected' : ''}>${zone.name}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
 
                             <div class="form-group">
