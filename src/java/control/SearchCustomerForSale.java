@@ -76,7 +76,7 @@ public class SearchCustomerForSale extends HttpServlet {
                     + "<input type='hidden' id='cName_" + customer.getId() + "' value='" + customer.getName() + "' />"
                     + "<input type='hidden' id='cPhone_" + customer.getId() + "' value='" + customer.getPhone() + "' />"
                     + "<input type='hidden' id='cAddress_" + customer.getId() + "' value='" + customer.getAddress() + "' />"
-                    + "<button onclick=\"choose('" + customer.getId() + "')\">Choose</button>"
+                    + "<button class=\"tab-button\" onclick=\"choose('" + customer.getId() + "')\">Choose</button>"
                     + "</td>\n"
                     + "</tr>");
         }
