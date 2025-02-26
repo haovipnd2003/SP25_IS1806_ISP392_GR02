@@ -1,4 +1,5 @@
 
+
 /* sign in FORM */
 #logreg-forms{
     width:412px;
@@ -107,14 +108,15 @@
     }
     
 }
+
 /* Thay đổi kiểu nút làm mới CAPTCHA */
 .captcha-container button {
-    margin-left: 5px; /* Tạo khoảng cách giữa nút và hình ảnh */
+    margin-left: 5px; 
 }
 
 /* Thay đổi kích thước của hình ảnh CAPTCHA */
 .captcha-container img {
     width: 150px;
     height: auto;
-    margin-bottom: 5px; /* Tạo khoảng cách dưới cho hình ảnh */
+    margin-bottom: 5px; 
 }

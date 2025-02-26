@@ -26,11 +26,6 @@
 
     <body>
 
-        <jsp:include page="/view/common/nav_bar.jsp"></jsp:include>
-            <!--MAIN-SIDEBAR-JSP-INCLUDE-->
-        <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
-            <!--MAIN-SIDEBAR-JSP-INCLUDE-->
-
 
             <!--                MAIN CONTENT-->
             <div class="main-content" style="min-height: 600px;">
@@ -49,6 +44,8 @@
                                             <label>Date created: </label>
                                             <span id="invoiceDate"></span>
                                         </div>
+                                        
+                                        
                                         <!-- Phần thông tin khách hàng -->
                                         <div class="section">
                                             <div class="section-title">Customer Information</div>
@@ -70,6 +67,7 @@
                                             </div>
                                         </div>
 
+                                        
                                         <!-- Phần thông tin sản phẩm và danh sách mua hàng -->
                                         <div class="section">
                                             <div class="section-title">Product Infomation</div>
@@ -134,11 +132,7 @@
                     </div>
                 </section>
             </div>
-
-
-
-
-        </div>
+ </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>

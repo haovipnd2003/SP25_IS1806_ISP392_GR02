@@ -199,7 +199,7 @@ public class CustomerDAO extends DBContext {
     public ArrayList<Customer> searchCustomerByNameNPhone(String name, String phone) {
         ArrayList<Customer> list = new ArrayList<>();
         try {
-            String query = "SELECT * FROM customer WHERE name LIKE ? OR phone LIKE ? and isactive = 1";
+            String query = "SELECT * FROM customer WHERE (name LIKE ? OR phone LIKE ?) and isactive = 1";
             stm = cnn.prepareStatement(query);
             stm.setString(1, "%" + name + "%");
             stm.setString(2, "%" + phone + "%");

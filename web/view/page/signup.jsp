@@ -13,49 +13,154 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-        <style>
-            body {
-                background-color: #f7f9fc;
-                font-family: Arial, sans-serif;
+
+ <style>
+            :root {
+                --primary-color: #2563eb;
+                --primary-light: #dbeafe;
+                --primary-dark: #1e40af;
+                --white: #ffffff;
+                --gray-light: #f8fafc;
+                --text-dark: #1e293b;
             }
+            
+            body {
+                background-color: var(--gray-light);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                color: var(--text-dark);
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-image: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            }
+            
             #logreg-forms {
                 width: 100%;
-                max-width: 400px;
-                margin: 10vh auto;
-                background: #e0f7fa;
-                padding: 2rem;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
+                max-width: 450px;
+                margin: 0 auto;
+                background: var(--white);
+                padding: 2.5rem;
+                box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1);
+                border-radius: 12px;
+                border-top: 5px solid var(--primary-color);
             }
+            
             .form-signup h1 {
+                margin-bottom: 1.5rem;
+                color: var(--primary-color);
+                font-weight: 600;
+            }
+            
+            .form-control {
+                border-radius: 8px;
+                padding: 12px 15px;
+                height: auto;
+                border: 1px solid #e2e8f0;
                 margin-bottom: 1rem;
+                transition: all 0.3s ease;
             }
-            .captcha-container {
-                margin-bottom: 1rem;
-                text-align: center;
+            
+            .form-control:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
             }
-            .captcha-container img {
-                max-height: 100px;
-                display: inline-block;
+            
+            .input-group-append .btn {
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+                padding: 0 15px;
+                border-color: #e2e8f0;
             }
-            .captcha-container button {
-                margin-left: 10px;
-                vertical-align: middle;
+            
+            .input-group-append .btn:hover {
+                background-color: var(--primary-light);
+                border-color: var(--primary-color);
             }
-            .captcha-input {
-                width: 100%;
-                max-width: 150px;
-                display: inline-block;
-                vertical-align: middle;
+            
+            .eye-button {
+                color: var(--primary-color);
             }
+            
+            .btn-primary {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+                padding: 12px;
+                border-radius: 8px;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                transition: all 0.3s ease;
+            }
+            
+            .btn-primary:hover {
+                background-color: var(--primary-dark);
+                border-color: var(--primary-dark);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+            }
+            
+            .btn-secondary {
+                background-color: #94a3b8;
+                border-color: #94a3b8;
+                padding: 12px;
+                border-radius: 8px;
+            }
+            
             .btn-block {
-                margin-top: 1rem;
+                margin-top: 1.5rem;
             }
+            
             .text-center {
                 text-align: center;
             }
+            
             .text-danger {
                 margin-bottom: 1rem;
+                color: #ef4444 !important;
+            }
+            
+            .form-text {
+                margin-top: 0.5rem;
+                font-size: 0.875rem;
+            }
+            
+            .form-group label {
+                font-weight: 500;
+                color: #475569;
+                margin-bottom: 8px;
+                display: block;
+            }
+            
+            .logo-area {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+            
+            .logo-area i {
+                font-size: 3rem;
+                color: var(--primary-color);
+                background: var(--primary-light);
+                width: 80px;
+                height: 80px;
+                line-height: 80px;
+                border-radius: 50%;
+            }
+            
+            .footer-text {
+                text-align: center;
+                margin-top: 1.5rem;
+                font-size: 0.875rem;
+                color: #64748b;
+            }
+            
+            .footer-text a {
+                color: var(--primary-color);
+                text-decoration: none;
+                font-weight: 500;
+            }
+            
+            .input-group .form-control {
+                margin-bottom: 0;
             }
         </style>
         <title>Sign Up Form</title>
@@ -77,7 +182,7 @@
                         <input name="password" type="password" id="password" class="form-control" placeholder="Password" value="${password}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary eye-button" type="button" id="togglePassword">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <i class="fa fa-eye fa-eye-slash" aria-hidden="true"></i>
                             </button>
                         </div>
 
@@ -88,7 +193,7 @@
                         <input name="repass" type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" value="${confirmpassword}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary eye-button" type="button" id="toggleConfirmPassword">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <i class="fa fa-eye fa-eye-slash" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>

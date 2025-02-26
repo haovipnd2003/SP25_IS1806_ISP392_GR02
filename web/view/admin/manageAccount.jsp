@@ -32,7 +32,79 @@
     </head>
 
     <body>
+        <style>
+            /* Blue color scheme (#2563eb) styling */
+            .card-header {
+                background-color: #3b82f6  !important;
+                color: white !important;
+            }
 
+            .btn-primary {
+                background-color: #2563eb !important;
+                border-color: #2563eb !important;
+            }
+
+            .btn-primary:hover {
+                background-color: #1d4ed8 !important;
+                border-color: #1d4ed8 !important;
+            }
+
+            .btn-warning {
+                background-color: #3b82f6 !important;
+                border-color: #3b82f6 !important;
+                color: white !important;
+            }
+
+            .btn-warning:hover {
+                background-color: #2563eb !important;
+                border-color: #2563eb !important;
+            }
+
+            thead.table-dark th {
+                background-color: #3b82f6 !important; /* Màu xanh nhạt hơn */
+                color: white !important; /* Màu chữ trắng */
+            }
+
+            .form-control:focus {
+                border-color: #3b82f6 !important;
+                box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25) !important;
+            }
+
+            .badge.bg-primary {
+                background-color: #2563eb !important;
+            }
+
+            .badge.bg-info {
+                background-color: #3b82f6 !important;
+            }
+
+            .modal-header {
+                background-color: #2563eb !important;
+                color: white !important;
+            }
+
+            .toast-success {
+                background-color: #2563eb !important;
+            }
+
+            /* Simple enhancements that don't change layout */
+            .card {
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                border: none;
+            }
+
+            .table {
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+
+            .badge {
+                font-weight: 500;
+                padding: 5px 10px;
+                border-radius: 20px;
+            }
+        </style>
         <jsp:include page="/view/common/nav_bar.jsp"></jsp:include>
             <!--MAIN-SIDEBAR-JSP-INCLUDE-->
         <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
@@ -261,7 +333,7 @@
             $(document).ready(function () {
                 $("form[action='addaccount']").submit(function (event) {
                     event.preventDefault(); // Ngăn form gửi đi mặc định
-        
+
                     $.ajax({
                         type: "POST",
                         url: "addaccount",
@@ -295,7 +367,7 @@
                 });
             });
         </script>
-        
+
 
         <script src="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
