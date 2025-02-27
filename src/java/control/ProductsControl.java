@@ -106,7 +106,18 @@ public class ProductsControl extends HttpServlet {
             throws ServletException, IOException {
         String keyword = request.getParameter("keyword");
         List<Product> productList = productDAO.searchProducts(keyword);
+        List<Zone> zones = zoneDAO.getActiveZones();
+        
+        // Thêm thông tin người dùng
+        User user = (User) request.getSession().getAttribute("acc");
+        if (user != null) {
+            request.setAttribute("roletype", user.getRoletype().toString()); 
+        } else {
+            request.setAttribute("roletype", null);
+        }
+        
         request.setAttribute("productList", productList);
+        request.setAttribute("zones", zones);
         request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
     }
 
@@ -175,8 +186,12 @@ public class ProductsControl extends HttpServlet {
             product.setActive(isActive);
             product.setImage(image);
             productDAO.insert(product);
+            request.getSession().setAttribute("toastMessage", "Product added successfully!");
+            request.getSession().setAttribute("toastType", "success");
         } catch (SQLException e) {
             e.printStackTrace();
+            request.getSession().setAttribute("toastMessage", "Failed to add product!");
+            request.getSession().setAttribute("toastType", "error");
         }
         response.sendRedirect("products");
     }
@@ -202,9 +217,12 @@ public class ProductsControl extends HttpServlet {
             product.setActive(isActive);
             product.setImage(image);
             productDAO.update(product);
+            request.getSession().setAttribute("toastMessage", "Product updated successfully!");
+            request.getSession().setAttribute("toastType", "success");
         } catch (SQLException e) {
             e.printStackTrace();
-            // Xử lý ngoại lệ nếu cần
+            request.getSession().setAttribute("toastMessage", "Failed to update product!");
+            request.getSession().setAttribute("toastType", "error");
         }
         response.sendRedirect("products");
     }
@@ -212,6 +230,10 @@ public class ProductsControl extends HttpServlet {
     private void deleteProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = request.getParameter("id");
         productDAO.delete(id);
+        if (request.getSession().getAttribute("toastMessage") == null) {
+            request.getSession().setAttribute("toastMessage", "Product deleted successfully!");
+            request.getSession().setAttribute("toastType", "success");
+        }
         response.sendRedirect("products");
     }
 }
