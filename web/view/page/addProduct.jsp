@@ -91,23 +91,31 @@
                                                         <textarea class="form-control" id="describe" name="describe" rows="3"></textarea>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="zoneId" class="form-label">Zone:</label>
-                                                        <select class="form-select" id="zoneId" name="zoneId" required>
-                                                        <c:forEach var="zone" items="${activeZones}">
-                                                            <option value="${zone.id}">${zone.name}</option>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="isActive" class="form-label">Active:</label>
-                                                    <select class="form-select" id="isActive" name="isActive" required>
-                                                        <option value="true">Yes</option>
-                                                        <option value="false">No</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="image" class="form-label">Image URL:</label>
-                                                    <input type="text" class="form-control" id="image" name="image" placeholder="Enter image URL">
+                                                        <label class="form-label">Zones:</label>
+                                                        <div class="zone-checkbox-container">
+                                                            <c:forEach var="zone" items="${activeZones}">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" name="zoneIds" 
+                                                                           id="zone${zone.id}" value="${zone.id}">
+                                                                    <label class="form-check-label" for="zone${zone.id}">
+                                                                        ${zone.name}
+                                                                    </label>
+                                                                </div>
+                                                            </c:forEach>
+                                                        </div>
+                                                        <small class="form-text text-muted">Select all zones where this product should be available</small>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="isActive" class="form-label">Active:</label>
+                                                        <select class="form-select" id="isActive" name="isActive" required>
+                                                            <option value="true">Yes</option>
+                                                            <option value="false">No</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="image" class="form-label">Image URL:</label>
+                                                        <input type="text" class="form-control" id="image" name="image" placeholder="Enter image URL">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -147,7 +155,45 @@
                     event.preventDefault();
                 }
             });
+            
+            // Toggle sidebar
+            document.getElementById('sidebarToggle').addEventListener('click', function () {
+                const sidebar = document.querySelector('.main-sidebar');
+                const mainContent = document.querySelector('.main-content');
+
+                if (sidebar.style.display === 'none') {
+                    sidebar.style.display = 'block';
+                    mainContent.style.marginLeft = '250px';
+                } else {
+                    sidebar.style.display = 'none';
+                    mainContent.style.marginLeft = '0';
+                }
+            });
         </script>
+        
+        <!-- Toast notification script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var toastMessage = "${sessionScope.toastMessage}";
+                var toastType = "${sessionScope.toastType}";
+                if (toastMessage) {
+                    iziToast.show({
+                        title: toastType === 'success' ? 'Success' : 'Error',
+                        message: toastMessage,
+                        position: 'topRight',
+                        color: toastType === 'success' ? 'green' : 'red',
+                        timeout: 5000
+                    });
+                    
+                    // Clear toast messages from session immediately after showing
+                    <% 
+                        session.removeAttribute("toastMessage");
+                        session.removeAttribute("toastType");
+                    %>
+                }
+            });
+        </script>
+        
         <!-- Bootstrap JS (optional) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
@@ -162,6 +208,5 @@
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/demo.js"></script>
-    </div>
-</body>
+    </body>
 </html>

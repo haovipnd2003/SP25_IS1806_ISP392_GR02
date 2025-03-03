@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.List;
+
 /**
  * Class representing a product entity.
  */
@@ -10,10 +12,10 @@ public class Product {
     private String describe;
     private double price;
     private String zone;
-    private String zoneId;
     private double quantity;
     private boolean isActive;
     private String image;
+    private String[] zoneIds;
 
     public Product() {
     }
@@ -26,23 +28,14 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public Product(String id, String name, String describe, double price, double quantity, String zoneId, boolean isActive, String image) {
+    public Product(String id, String name, String describe, double price, double quantity, boolean isActive, String image) {
         this.id = id;
         this.name = name;
         this.describe = describe;
         this.price = price;
-        this.zoneId = zoneId;
         this.quantity = quantity;
         this.isActive = isActive;
         this.image = image;
-    }
-
-    public String getZoneId() {
-        return zoneId;
-    }
-
-    public void setZoneId(String zoneId) {
-        this.zoneId = zoneId;
     }
 
     public boolean isIsActive() {
@@ -115,6 +108,35 @@ public class Product {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String[] getZoneIds() {
+        return zoneIds;
+    }
+
+    public void setZoneIds(String[] zoneIds) {
+        this.zoneIds = zoneIds;
+    }
+
+    public String getZoneNames(List<Zone> allZones) {
+        if (zoneIds == null || zoneIds.length == 0) {
+            return "";
+        }
+        
+        StringBuilder zoneNames = new StringBuilder();
+        for (int i = 0; i < zoneIds.length; i++) {
+            String zoneId = zoneIds[i];
+            for (Zone zone : allZones) {
+                if (zone.getId().equals(zoneId)) {
+                    if (zoneNames.length() > 0) {
+                        zoneNames.append(", ");
+                    }
+                    zoneNames.append(zone.getName());
+                    break;
+                }
+            }
+        }
+        return zoneNames.toString();
     }
 
     @Override

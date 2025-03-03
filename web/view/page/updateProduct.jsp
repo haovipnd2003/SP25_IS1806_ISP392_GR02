@@ -52,12 +52,22 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="zoneId" class="form-label">Zone:</label>
-                                <select class="form-select" id="zoneId" name="zoneId" required>
+                                <label class="form-label">Zones:</label>
+                                <div class="zone-checkbox-container">
                                     <c:forEach var="zone" items="${activeZones}">
-                                        <option value="${zone.id}" ${product.zoneId == zone.id ? 'selected' : ''}>${zone.name}</option>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="zoneIds" 
+                                                   id="zone${zone.id}" value="${zone.id}"
+                                                   <c:forEach var="productZoneId" items="${product.zoneIds}">
+                                                       <c:if test="${productZoneId == zone.id}">checked</c:if>
+                                                   </c:forEach>>
+                                            <label class="form-check-label" for="zone${zone.id}">
+                                                ${zone.name}
+                                            </label>
+                                        </div>
                                     </c:forEach>
-                                </select>
+                                </div>
+                                <small class="form-text text-muted">Select all zones where this product should be available</small>
                             </div>
 
                             <div class="form-group">

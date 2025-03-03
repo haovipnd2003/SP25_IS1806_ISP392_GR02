@@ -191,11 +191,15 @@
                                                 </td>
                                                 <td>${product.quantity}</td>
                                                 <td>
-                                                    <c:forEach var="zone" items="${zones}">
-                                                        <c:if test="${zone.id == product.zoneId}">
-                                                            ${zone.name}
-                                                        </c:if>
-                                                    </c:forEach>
+                                                    <c:if test="${not empty product.zoneIds}">
+                                                        <c:forEach var="zoneId" items="${product.zoneIds}" varStatus="status">
+                                                            <c:forEach var="zone" items="${zones}">
+                                                                <c:if test="${zone.id == zoneId}">
+                                                                    ${zone.name}<c:if test="${!status.last}">, </c:if>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:forEach>
+                                                    </c:if>
                                                 </td>
                                                 <td style="color: ${product.active ? 'green' : 'red'}">${product.active ? 'Yes' : 'No'}</td>
                                                 <c:if test="${roletype == '2'}">
@@ -294,29 +298,14 @@
                         message: toastMessage,
                         position: 'topRight',
                         color: toastType === 'success' ? 'green' : 'red',
-                        timeout: 5000,
-                        onClosing: function () {
-                            fetch('${pageContext.request.contextPath}/remove-toast', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded',
-                                },
-                            }).then(response => {
-                                if (!response.ok) {
-                                    console.error('Failed to remove toast attributes');
-                                }
-                            }).catch(error => {
-                                console.error('Error:', error);
-                            });
-                        }
+                        timeout: 5000
                     });
-                    // Xóa thông báo khỏi session sau khi hiển thị
-                    fetch('${pageContext.request.contextPath}/remove-toast', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                    });
+                    
+                    // Clear toast messages from session immediately after showing
+                    <% 
+                        session.removeAttribute("toastMessage");
+                        session.removeAttribute("toastType");
+                    %>
                 }
             });
         </script>

@@ -173,7 +173,7 @@ public class ProductsControl extends HttpServlet {
             String describe = request.getParameter("describe");
             double price = Double.parseDouble(request.getParameter("price"));
             double quantity = Double.parseDouble(request.getParameter("quantity"));
-            String zoneId = request.getParameter("zoneId");
+            String[] zoneIds = request.getParameterValues("zoneIds");
             boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
             String image = request.getParameter("image");
 
@@ -182,7 +182,7 @@ public class ProductsControl extends HttpServlet {
             product.setDescribe(describe);
             product.setPrice(price);
             product.setQuantity(quantity);
-            product.setZoneId(zoneId);
+            product.setZoneIds(zoneIds);
             product.setActive(isActive);
             product.setImage(image);
             productDAO.insert(product);
@@ -203,7 +203,7 @@ public class ProductsControl extends HttpServlet {
             String describe = request.getParameter("describe");
             double price = Double.parseDouble(request.getParameter("price"));
             double quantity = Double.parseDouble(request.getParameter("quantity"));
-            String zoneId = request.getParameter("zoneId");
+            String[] zoneIds = request.getParameterValues("zoneIds");
             boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
             String image = request.getParameter("image");
 
@@ -213,7 +213,7 @@ public class ProductsControl extends HttpServlet {
             product.setDescribe(describe);
             product.setPrice(price);
             product.setQuantity(quantity);
-            product.setZoneId(zoneId);
+            product.setZoneIds(zoneIds);
             product.setActive(isActive);
             product.setImage(image);
             productDAO.update(product);
