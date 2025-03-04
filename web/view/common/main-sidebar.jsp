@@ -36,18 +36,22 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-briefcase"></i><span>Staff Management</span></a>
                 </li>
+
+                <li>
+                    <a href="${pageContext.request.contextPath}/zoneControl"><i class="ion ion-cube"></i><span>Zone Management</span></a>
+                </li>
             </c:if>
             <c:if test="${sessionScope.acc.roletype == 3}">
                 <li>
                     <a href="${pageContext.request.contextPath}/products"><i class="ion ion-bag"></i><span>Product</span></a>
                 </li>
-               
+
 
                 <li>
                     <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
                 </li>
 
-                
+
 
             </c:if>    
 
