@@ -44,7 +44,7 @@
                                     <div class="card-body">
                                         <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addShiftModal">+
                                             Add Shift</button>
-                                        <form action="searchShift" method="post">
+                                        <form action="searchshift" method="post">
                                             <div class="mb-3">
                                                 <input type="text" value="${keywordS}" name="keyword" id="search-input" class="form-control" placeholder="Search by shift">
                                         </div>

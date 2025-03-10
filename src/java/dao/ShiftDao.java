@@ -6,9 +6,11 @@ package dao;
 
 import context.DBContext;
 import entity.Shift;
+import entity.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +98,32 @@ public class ShiftDao extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Shift> searchShift(String keyword) {
+        List<Shift> list = new ArrayList<>();
+        String sql = "SELECT id, name, start_time, end_time, total_time, isactive FROM shift "
+                + "WHERE name LIKE ? OR start_time LIKE ? OR end_time LIKE ? OR total_time LIKE ? ";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            for (int i = 1; i <= 4; i++) {
+                ps.setString(i, "%" + keyword + "%");
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Shift shift = new Shift();
+                shift.setId(rs.getInt("id"));
+                shift.setName(rs.getString("name"));
+                shift.setStart_time(rs.getString("start_time"));
+                shift.setEnd_time(rs.getString("end_time"));
+                shift.setTotal_time(rs.getDouble("total_time"));
+                shift.setIsactive(rs.getInt("isactive"));
+                list.add(shift);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }
