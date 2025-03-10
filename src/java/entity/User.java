@@ -10,7 +10,7 @@ package entity;
  */
 public class User {
 
-    String id, name, password, email, phone, address, roletype, isactive, code;
+    String id, name, password, email, phone, address, roletype, isactive, code,fullname;
 
     public User() {
     }
@@ -25,13 +25,34 @@ public class User {
         this.roletype = roletype;
         this.isactive = isactive;
     }
-    public User(String name, String password, String email, String phone, String address, String roletype) {
+    
+    public User(String id,String name, String password, String email, String phone, String address, String roletype, String isactive, String fullname) {
+        this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.roletype = roletype;
+        this.isactive = isactive;
+        this.fullname = fullname;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+    public User(String name, String password, String email, String phone, String address, String roletype, String fullname) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.roletype = roletype;
+        this.fullname = fullname;
     }
 
     public User(String name, String password, String email, String roletype) {

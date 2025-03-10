@@ -4,8 +4,7 @@
  */
 package control;
 
-import dao.CustomerDAO;
-import entity.Customer;
+import dao.ShiftDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,10 +15,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Viet Duc
+ * @author Admin
  */
-@WebServlet(name = "UpdateCustomerServlet", urlPatterns = {"/updatecustomer"})
-public class UpdateCustomerServlet extends HttpServlet {
+@WebServlet(name = "DeleteShiftControl", urlPatterns = {"/deleteShift"})
+public class DeleteShiftControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +37,10 @@ public class UpdateCustomerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpdateCustomerServlet</title>");
+            out.println("<title>Servlet DeleteShiftControl</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UpdateCustomerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DeleteShiftControl at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -56,15 +55,15 @@ public class UpdateCustomerServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    CustomerDAO dao = new CustomerDAO();
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-        Customer updatedCustomer = dao.getCustomerById(id);
-        request.setAttribute("updateCus", updatedCustomer);
-        request.getRequestDispatcher("view/page/updateCustomer.jsp").forward(request, response);
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        ShiftDao dao = new ShiftDao();
+        dao.deleteShift(id);
+
+        response.sendRedirect("shift");
     }
 
     /**
@@ -78,18 +77,7 @@ public class UpdateCustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String idUpdate = request.getParameter("id"); // ID vẫn cần để xác định khách hàng cần update
-        String updateName = request.getParameter("name");
-        String updatePhone = request.getParameter("phone");
-        String updateEmail = request.getParameter("email");
-        String updateAddress = request.getParameter("address");
-        
-        Customer updateCustomer = new Customer(idUpdate, updateName, updatePhone, updateEmail, updateAddress);
-        dao.updateCustomer(idUpdate, updateCustomer);
-        
-         request.getSession().setAttribute("succMess", "Update Customer " + idUpdate + " Successful");
-         
-        response.sendRedirect("customer?action=view");
+        processRequest(request, response);
     }
 
     /**

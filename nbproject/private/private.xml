@@ -3,17 +3,28 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/saleInterface.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/src/java/control/SearchProductServlet.java</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/login.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/admin/manageAccount.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/dashboard.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/sale.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/css/login.css</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/css/login_1.css</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/signup.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/page/enterOtp.jsp</file>
-            <file>file:/C:/Users/binh2/OneDrive/Máy%20tính/ISP%20Project/SP25_IS1806_ISP392_GR02/web/view/common/nav_bar.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/context/DBContext.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/DAO.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/CustomerDAO.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/AddAccountControl.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/admin/shift.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/AddShiftControl.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/entity/Shift.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/admin/manageAccount.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/ShiftDao.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/UserDAO.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/page/saleInterface.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/dao/ProductDAO.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/SearchProductServlet.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/entity/User.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/nbproject/build-impl.xml</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/admin/schedule.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/page/dashboard.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/ShiftControl.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/ManageAccount.java</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/common/main-sidebar.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/web/view/page/products.jsp</file>
+            <file>file:/D:/PRJ302/SP25_IS1806_ISP392_GR02/src/java/control/EditAccountControl.java</file>
         </group>
     </open-files>
 </project-private>

@@ -4,8 +4,8 @@
  */
 package control;
 
-import dao.CustomerDAO;
-import entity.Customer;
+import dao.ShiftDao;
+import entity.Shift;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 
 /**
  *
- * @author Viet Duc
+ * @author Admin
  */
-@WebServlet(name = "BanCustomerServlet", urlPatterns = {"/bancustomer"})
-public class BanCustomerServlet extends HttpServlet {
+@WebServlet(name = "AddShiftControl", urlPatterns = {"/addshift"})
+public class AddShiftControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +38,10 @@ public class BanCustomerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BanCustomerServlet</title>");
+            out.println("<title>Servlet AddShiftControl</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet BanCustomerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddShiftControl at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,14 +59,7 @@ public class BanCustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("banId");
-        CustomerDAO dao = new CustomerDAO();
-        dao.banCustomer(id);
-        ArrayList<Customer> newlistCus = dao.getAllCustomers();
-        request.setAttribute("listCus", newlistCus);
-        request.getSession().setAttribute("succMess", "Ban id " + id + " Successfull");
-        response.sendRedirect("customer?action=view");
-
+        processRequest(request, response);
     }
 
     /**
@@ -81,7 +73,38 @@ public class BanCustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        String name = request.getParameter("name");
+        String startTime = request.getParameter("start_time");
+        String endTime = request.getParameter("end_time");
+
+        // Tính tổng thời gian làm việc
+        double totalTime = calculateTotalTime(startTime, endTime);
+        int isActive = 1; // Mặc định ca làm việc mới là Active
+
+        Shift shift = new Shift(name, startTime, endTime, totalTime, isActive);
+        ShiftDao shiftDao = new ShiftDao();
+        shiftDao.addShift(shift);
+
+        response.sendRedirect("shift");
+    }
+
+    private double calculateTotalTime(String start, String end) {
+        String[] startParts = start.split(":");
+        String[] endParts = end.split(":");
+
+        int startHour = Integer.parseInt(startParts[0]);
+        int startMinute = Integer.parseInt(startParts[1]);
+        int endHour = Integer.parseInt(endParts[0]);
+        int endMinute = Integer.parseInt(endParts[1]);
+
+        double startTimeInHours = startHour + startMinute / 60.0;
+        double endTimeInHours = endHour + endMinute / 60.0;
+
+        double total = endTimeInHours - startTimeInHours;
+        return total < 0 ? total + 24 : total;
     }
 
     /**

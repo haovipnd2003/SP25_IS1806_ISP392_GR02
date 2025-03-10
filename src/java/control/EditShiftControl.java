@@ -4,8 +4,8 @@
  */
 package control;
 
-import dao.DAO;
-import entity.User;
+import dao.ShiftDao;
+import entity.Shift;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,8 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Admin
  */
-@WebServlet(name = "EditAccountControl", urlPatterns = {"/updateaccount"})
-public class EditAccountControl extends HttpServlet {
+@WebServlet(name = "EditShiftControl", urlPatterns = {"/editShift"})
+public class EditShiftControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,18 +33,33 @@ public class EditAccountControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EditAccountControl</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EditAccountControl at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String startTime = request.getParameter("start_time");
+        String endTime = request.getParameter("end_time");
+        double totalTime = calculateTotalTime(startTime, endTime);
+
+        int isActive = Integer.parseInt(request.getParameter("isactive"));
+        ShiftDao shiftDao = new ShiftDao();
+        Shift shift = new Shift(id, name, startTime, endTime, totalTime, isActive);
+        shiftDao.updateShift(shift);
+        response.sendRedirect("shift");
+    }
+
+    private double calculateTotalTime(String start, String end) {
+        String[] startParts = start.split(":");
+        String[] endParts = end.split(":");
+
+        int startHour = Integer.parseInt(startParts[0]);
+        int startMinute = Integer.parseInt(startParts[1]);
+        int endHour = Integer.parseInt(endParts[0]);
+        int endMinute = Integer.parseInt(endParts[1]);
+
+        double startTimeInHours = startHour + startMinute / 60.0;
+        double endTimeInHours = endHour + endMinute / 60.0;
+
+        double total = endTimeInHours - startTimeInHours;
+        return total < 0 ? total + 24 : total;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -73,30 +88,7 @@ public class EditAccountControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAO dao = new DAO();
-
-        String id = request.getParameter("id");
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String roletype = request.getParameter("roletype");
-        String isactive = request.getParameter("isactive");
-        String fullname = request.getParameter("fullname");
-
-        // Lấy thông tin tài khoản hiện tại từ CSDL
-        User existingUser = dao.getUserById(id);
-
-        if (existingUser != null && "2".equals(existingUser.getRoletype())) {
-            // Nếu là Admin thì không cho thay đổi trạng thái
-            isactive = existingUser.getIsactive(); // Giữ nguyên trạng thái cũ
-        }
-       
-
-        dao.updateAccount(id, name, email, phone, address, roletype, isactive, fullname);
-
-        response.sendRedirect("manageaccount");
-
+        processRequest(request, response);
     }
 
     /**

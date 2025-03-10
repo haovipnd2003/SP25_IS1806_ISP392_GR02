@@ -138,6 +138,7 @@
                                         <thead class="table-dark">
                                             <tr>
                                                 <th>Account</th>
+                                                <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Address</th>
                                                 <th>Phone</th>
@@ -150,6 +151,7 @@
                                             <c:forEach var="account" items="${accounts}">
                                                 <tr>
                                                     <td>${account.name}</td>
+                                                    <td>${account.fullname}</td>
                                                     <td>${account.email}</td>
                                                     <td>${account.address}</td>
                                                     <td>${account.phone}</td>
@@ -177,6 +179,7 @@
                                                                 data-bs-target="#editAccountModal"
                                                                 data-id="${account.id}"
                                                                 data-name="${account.name}"
+                                                                data-fullname="${account.fullname}"
                                                                 data-email="${account.email}"
                                                                 data-phone="${account.phone}"
                                                                 data-address="${account.address}"
@@ -220,6 +223,10 @@
                                 <input type="password" class="form-control" name="password" >
                             </div>
                             <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" name="fullname" >
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label">Phone</label>
                                 <input type="text" class="form-control" name="phone">
                             </div>
@@ -256,6 +263,10 @@
                             <div class="mb-3">
                                 <label class="form-label">Username</label>
                                 <input type="text" class="form-control" id="edit-name" name="name" >
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="edit-fullname" name="fullname" >
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
@@ -298,6 +309,7 @@
                     button.addEventListener("click", function () {
                         document.getElementById("edit-id").value = this.getAttribute("data-id");
                         document.getElementById("edit-name").value = this.getAttribute("data-name");
+                        document.getElementById("edit-fullname").value = this.getAttribute("data-fullname");
                         document.getElementById("edit-email").value = this.getAttribute("data-email");
                         document.getElementById("edit-phone").value = this.getAttribute("data-phone");
                         document.getElementById("edit-address").value = this.getAttribute("data-address");
@@ -321,10 +333,16 @@
                 // Kiểm tra khi submit form chỉnh sửa
                 document.querySelector("#editAccountModal form").addEventListener("submit", function (event) {
                     let nameField = document.getElementById("edit-name");
+                    let nameField2 = document.getElementById("edit-fullname");
                     if (nameField.value.trim() === "") {
                         event.preventDefault(); // Ngăn form gửi đi
                         alert("User name not allow blank!"); // Hiển thị popup cảnh báo
                         nameField.focus(); // Đưa con trỏ vào ô nhập
+                    }
+                    if (nameField2.value.trim() === "") {
+                        event.preventDefault(); // Ngăn form gửi đi
+                        alert("Name not allow blank!"); // Hiển thị popup cảnh báo
+                        nameField2.focus(); // Đưa con trỏ vào ô nhập
                     }
                 });
             });

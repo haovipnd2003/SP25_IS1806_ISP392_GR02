@@ -34,7 +34,7 @@
                 </li>
 
                 <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-briefcase"></i><span>Staff Management</span></a>
+                    <a href="${pageContext.request.contextPath}/shift"><i class="ion ion-briefcase"></i><span>Staff Management</span></a>
                 </li>
             </c:if>
             <c:if test="${sessionScope.acc.roletype == 3}">
