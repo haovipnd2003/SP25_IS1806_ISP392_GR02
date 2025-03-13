@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.sql.Time;
+
 /**
  *
  * @author Admin
@@ -35,6 +37,14 @@ public class Shift {
         this.end_time = end_time;
         this.total_time = total_time;
         this.isactive = isactive;
+    }
+
+    public Shift(int id, String name, String start_time, String end_time) {
+        this.id = id;
+        this.name = name;
+        this.start_time = start_time;
+        this.end_time = end_time;
+
     }
 
     public int getId() {

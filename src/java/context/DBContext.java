@@ -1,7 +1,9 @@
 package context;
 
 import dao.DAO;
+import dao.ScheduleDAO;
 import dao.ShiftDao;
+import entity.Schedule;
 import entity.Shift;
 import entity.User;
 //import entity.Product;
@@ -52,6 +54,7 @@ public class DBContext {
     public static void main(String[] args) {
         DAO d = new DAO();
         ShiftDao shiftDAO = new ShiftDao();
+        ScheduleDAO ScheduleDAO = new ScheduleDAO();
         ArrayList<User> accounts = d.getAccount();
 
         for (User u : accounts) {
@@ -59,11 +62,14 @@ public class DBContext {
                     + ", Name: " + u.getName()
                     + ", Email: " + u.getEmail()
                     + ", Role: " + u.getRoletype()
-                    + ", Active: " + u.getIsactive());
+                    + ", Active: " + u.getIsactive()
+                    + ", fullname: " + u.getFullname());
         }
 
         List<Shift> shifts = shiftDAO.getAllShifts();
-
+        List<User> employees = ScheduleDAO.getEmployees();
+        List<Shift> shift1 = ScheduleDAO.getShifts();
+        List<Schedule> schedule = ScheduleDAO.getScheduleByWeek("2025-03-7", "2025-03-14");
         if (shifts.isEmpty()) {
             System.out.println("Không có ca làm việc nào trong database.");
         } else {
@@ -71,6 +77,25 @@ public class DBContext {
             for (Shift shift : shifts) {
                 System.out.println(shift);
             }
+        }
+
+        for (Shift shift12 : shift1) {
+            System.out.println("ID: " + shift12.getId()
+                    + ", Name: " + shift12.getName()
+                    + ", Start_time: " + shift12.getStart_time()
+                    + ", End_time: " + shift12.getEnd_time());
+        }
+        for (User emp : employees) {
+            System.out.println("ID: " + emp.getId()
+                    + ", Name: " + emp.getFullname()
+            );
+        }
+        for (Schedule schedule1 : schedule) {
+            System.out.println("ID: " + schedule1.getId()
+                    + ", uid: " + schedule1.getUser_id()
+                    + ", sid: " + schedule1.getShift_id()
+                    + ", sname: " + schedule1.getShiftname()
+                    + ", date: " + schedule1.getDate());
         }
     }
 
