@@ -72,6 +72,20 @@ public class ZoneControl extends HttpServlet {
 
     private void handleDefault(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Add pagination support
+        int page = 1;
+        int pageSize = 10;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        
+        List<Zone> zoneList = zoneDAO.getAllZones(page, pageSize);
+        int totalZones = zoneDAO.getTotalZones();
+        int totalPages = (int) Math.ceil((double) totalZones / pageSize);
+        
+        // Debug output
+//        System.out.println("ZoneControl.handleDefault: page=" + page + ", totalZones=" + totalZones + ", totalPages=" + totalPages);
+
         User user = (User) request.getSession().getAttribute("acc");
         if (user != null) {
             request.setAttribute("roletype", user.getRoletype().toString());
@@ -79,26 +93,27 @@ public class ZoneControl extends HttpServlet {
             request.setAttribute("roletype", null);
         }
 
-        int page = 1;
-        int pageSize = 10;
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
-
-        List<Zone> zoneList = zoneDAO.getAllZones(page, pageSize);
-        int totalZones = zoneDAO.getTotalZones();
-        int totalPages = (int) Math.ceil((double) totalZones / pageSize);
-
         request.setAttribute("zoneList", zoneList);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("totalZones", totalZones);
         request.getRequestDispatcher("view/admin/zones.jsp").forward(request, response);
     }
 
     private void handleSearch(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String keyword = request.getParameter("keyword");
-        List<Zone> zoneList = zoneDAO.searchZones(keyword);
+        
+        // Add pagination support
+        int page = 1;
+        int pageSize = 10;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        
+        List<Zone> zoneList = zoneDAO.searchZones(keyword, page, pageSize);
+        int totalZones = zoneDAO.getTotalSearchResults(keyword);
+        int totalPages = (int) Math.ceil((double) totalZones / pageSize);
 
         User user = (User) request.getSession().getAttribute("acc");
         if (user != null) {
@@ -109,12 +124,25 @@ public class ZoneControl extends HttpServlet {
 
         request.setAttribute("zoneList", zoneList);
         request.setAttribute("keyword", keyword);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("view/admin/zones.jsp").forward(request, response);
     }
 
     private void handleFilter(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String isActive = request.getParameter("isActive");
+        
+        // Add pagination support
+        int page = 1;
+        int pageSize = 10;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        
+        List<Zone> zoneList = zoneDAO.filterZonesByActive(isActive, page, pageSize);
+        int totalZones = zoneDAO.getTotalFilterResults(isActive);
+        int totalPages = (int) Math.ceil((double) totalZones / pageSize);
 
         User user = (User) request.getSession().getAttribute("acc");
         if (user != null) {
@@ -123,8 +151,9 @@ public class ZoneControl extends HttpServlet {
             request.setAttribute("roletype", null);
         }
 
-        List<Zone> zoneList = zoneDAO.filterZonesByActive(isActive);
         request.setAttribute("zoneList", zoneList);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("view/admin/zones.jsp").forward(request, response);
     }
 

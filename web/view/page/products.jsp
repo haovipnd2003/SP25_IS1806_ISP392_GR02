@@ -162,6 +162,7 @@
                                     <th>Description</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
+                                    <th>Packaging(kg)</th>
                                     <th>Zone</th>
                                     <th>Active</th>
                                         <c:if test="${roletype == 2}">
@@ -190,6 +191,7 @@
                                                     ${formattedPrice.replace(',', '.')}<span>đ</span>
                                                 </td>
                                                 <td>${product.quantity}</td>
+                                                <td>${product.packaging}</td>
                                                 <td>
                                                     <c:if test="${not empty product.zoneIds}">
                                                         <c:forEach var="zoneId" items="${product.zoneIds}" varStatus="status">
@@ -211,7 +213,7 @@
                                         </c:forEach>
                                     </c:when>
                                     <c:otherwise>
-                                        <tr><td colspan="9" class="text-center">No products found.</td></tr>
+                                        <tr><td colspan="10" class="text-center">No products found.</td></tr>
                                     </c:otherwise>
 
                                 </c:choose>

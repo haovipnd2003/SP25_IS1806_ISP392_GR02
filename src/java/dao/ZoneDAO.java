@@ -42,23 +42,26 @@ public class ZoneDAO extends DBContext {
 
     public List<Zone> getAllZones(int page, int pageSize) {
         List<Zone> zoneList = new ArrayList<>();
-        String query = "SELECT * FROM zone ORDER BY id LIMIT ? OFFSET ?";
+        int offset = (page - 1) * pageSize;
+        
         try {
-            stm = cnn.prepareStatement(query);
+            String sql = "SELECT * FROM zone LIMIT ? OFFSET ?";
+            PreparedStatement stm = cnn.prepareStatement(sql);
             stm.setInt(1, pageSize);
-            stm.setInt(2, (page - 1) * pageSize);
-            rs = stm.executeQuery();
+            stm.setInt(2, offset);
+            ResultSet rs = stm.executeQuery();
+            
             while (rs.next()) {
-                Zone zone = new Zone(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getBoolean("isactive")
-                );
+                Zone zone = new Zone();
+                zone.setId(rs.getString("id"));
+                zone.setName(rs.getString("name"));
+                zone.setIsActive(rs.getBoolean("isactive"));
                 zoneList.add(zone);
             }
         } catch (SQLException e) {
             System.out.println("Get All Zones: " + e.getMessage());
         }
+        
         return zoneList;
     }
 
@@ -83,17 +86,21 @@ public class ZoneDAO extends DBContext {
     }
 
     public int getTotalZones() {
-        String query = "SELECT COUNT(*) FROM zone";
+        int count = 0;
+        
         try {
-            stm = cnn.prepareStatement(query);
-            rs = stm.executeQuery();
+            String sql = "SELECT COUNT(*) FROM zone";
+            PreparedStatement stm = cnn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            
             if (rs.next()) {
-                return rs.getInt(1);
+                count = rs.getInt(1);
             }
         } catch (SQLException e) {
             System.out.println("Get Total Zones: " + e.getMessage());
         }
-        return 0;
+        
+        return count;
     }
 
     public Zone getZoneById(String id) {
@@ -267,5 +274,117 @@ public class ZoneDAO extends DBContext {
             System.out.println("Get Zone By Name: " + e.getMessage());
         }
         return null;
+    }
+
+    public List<Zone> searchZones(String keyword, int page, int pageSize) {
+        List<Zone> zoneList = new ArrayList<>();
+        int offset = (page - 1) * pageSize;
+        
+        try {
+            String sql = "SELECT * FROM zone WHERE id LIKE ? OR name LIKE ? LIMIT ? OFFSET ?";
+            PreparedStatement stm = cnn.prepareStatement(sql);
+            stm.setString(1, "%" + keyword + "%");
+            stm.setString(2, "%" + keyword + "%");
+            stm.setInt(3, pageSize);
+            stm.setInt(4, offset);
+            ResultSet rs = stm.executeQuery();
+            
+            while (rs.next()) {
+                Zone zone = new Zone();
+                zone.setId(rs.getString("id"));
+                zone.setName(rs.getString("name"));
+                zone.setIsActive(rs.getBoolean("isactive"));
+                zoneList.add(zone);
+            }
+        } catch (SQLException e) {
+            System.out.println("Search Zones: " + e.getMessage());
+        }
+        
+        return zoneList;
+    }
+
+    public int getTotalSearchResults(String keyword) {
+        int count = 0;
+        
+        try {
+            String sql = "SELECT COUNT(*) FROM zone WHERE id LIKE ? OR name LIKE ?";
+            PreparedStatement stm = cnn.prepareStatement(sql);
+            stm.setString(1, "%" + keyword + "%");
+            stm.setString(2, "%" + keyword + "%");
+            ResultSet rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Total Search Results: " + e.getMessage());
+        }
+        
+        return count;
+    }
+
+    public List<Zone> filterZonesByActive(String isActive, int page, int pageSize) {
+        List<Zone> zoneList = new ArrayList<>();
+        int offset = (page - 1) * pageSize;
+        
+        try {
+            String sql;
+            PreparedStatement stm;
+            
+            if (isActive != null && !isActive.equals("default")) {
+                sql = "SELECT * FROM zone WHERE isactive = ? LIMIT ? OFFSET ?";
+                stm = cnn.prepareStatement(sql);
+                stm.setBoolean(1, Boolean.parseBoolean(isActive));
+                stm.setInt(2, pageSize);
+                stm.setInt(3, offset);
+            } else {
+                sql = "SELECT * FROM zone LIMIT ? OFFSET ?";
+                stm = cnn.prepareStatement(sql);
+                stm.setInt(1, pageSize);
+                stm.setInt(2, offset);
+            }
+            
+            ResultSet rs = stm.executeQuery();
+            
+            while (rs.next()) {
+                Zone zone = new Zone();
+                zone.setId(rs.getString("id"));
+                zone.setName(rs.getString("name"));
+                zone.setIsActive(rs.getBoolean("isactive"));
+                zoneList.add(zone);
+            }
+        } catch (SQLException e) {
+            System.out.println("Filter Zones: " + e.getMessage());
+        }
+        
+        return zoneList;
+    }
+
+    public int getTotalFilterResults(String isActive) {
+        int count = 0;
+        
+        try {
+            String sql;
+            PreparedStatement stm;
+            
+            if (isActive != null && !isActive.equals("default")) {
+                sql = "SELECT COUNT(*) FROM zone WHERE isactive = ?";
+                stm = cnn.prepareStatement(sql);
+                stm.setBoolean(1, Boolean.parseBoolean(isActive));
+            } else {
+                sql = "SELECT COUNT(*) FROM zone";
+                stm = cnn.prepareStatement(sql);
+            }
+            
+            ResultSet rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Total Filter Results: " + e.getMessage());
+        }
+        
+        return count;
     }
 }

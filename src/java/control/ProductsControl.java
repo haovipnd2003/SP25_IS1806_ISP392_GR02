@@ -176,6 +176,7 @@ public class ProductsControl extends HttpServlet {
             String[] zoneIds = request.getParameterValues("zoneIds");
             boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
             String image = request.getParameter("image");
+            String packaging = request.getParameter("packaging");
 
             Product product = new Product();
             product.setName(name);
@@ -185,6 +186,7 @@ public class ProductsControl extends HttpServlet {
             product.setZoneIds(zoneIds);
             product.setActive(isActive);
             product.setImage(image);
+            product.setPackaging(packaging);
             productDAO.insert(product);
             request.getSession().setAttribute("toastMessage", "Product added successfully!");
             request.getSession().setAttribute("toastType", "success");
@@ -206,6 +208,7 @@ public class ProductsControl extends HttpServlet {
             String[] zoneIds = request.getParameterValues("zoneIds");
             boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
             String image = request.getParameter("image");
+            String packaging = request.getParameter("packaging");
 
             Product product = new Product();
             product.setId(id);
@@ -216,6 +219,7 @@ public class ProductsControl extends HttpServlet {
             product.setZoneIds(zoneIds);
             product.setActive(isActive);
             product.setImage(image);
+            product.setPackaging(packaging);
             productDAO.update(product);
             request.getSession().setAttribute("toastMessage", "Product updated successfully!");
             request.getSession().setAttribute("toastType", "success");

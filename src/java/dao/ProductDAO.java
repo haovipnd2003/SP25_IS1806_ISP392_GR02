@@ -63,7 +63,7 @@ public class ProductDAO extends DBContext {
 
     public void insert(Product product) throws SQLException {
         // Insert the product without a primary zone
-        String sql = "INSERT INTO product (name, `describe`, price, quantity, isactive, image) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO product (name, `describe`, price, quantity, isactive, image, packaging) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stm = cnn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stm.setString(1, product.getName());
             stm.setString(2, product.getDescribe());
@@ -71,6 +71,7 @@ public class ProductDAO extends DBContext {
             stm.setDouble(4, product.getQuantity());
             stm.setBoolean(5, product.isActive());
             stm.setString(6, product.getImage());
+            stm.setString(7, product.getPackaging());
             stm.executeUpdate();
             
             // Get the generated product ID
@@ -113,7 +114,7 @@ public class ProductDAO extends DBContext {
 
     public void update(Product product) throws SQLException {
         // Update the main product record without zoneid
-        String sql = "UPDATE product SET name=?, `describe`=?, price=?, quantity=?, isactive=?, image=? WHERE id=?";
+        String sql = "UPDATE product SET name=?, `describe`=?, price=?, quantity=?, isactive=?, image=?, packaging=? WHERE id=?";
         try (PreparedStatement stm = cnn.prepareStatement(sql)) {
             stm.setString(1, product.getName());
             stm.setString(2, product.getDescribe());
@@ -121,7 +122,8 @@ public class ProductDAO extends DBContext {
             stm.setDouble(4, product.getQuantity());
             stm.setBoolean(5, product.isActive());
             stm.setString(6, product.getImage());
-            stm.setString(7, product.getId());
+            stm.setString(7, product.getPackaging());
+            stm.setString(8, product.getId());
             stm.executeUpdate();
             
             // Update the product_zone relationships
@@ -176,6 +178,9 @@ public class ProductDAO extends DBContext {
                     rs.getString("image")
                 );
                 
+                // Set packaging
+                product.setPackaging(rs.getString("packaging"));
+                
                 // Get all zones for this product
                 product.setZoneIds(getZonesForProduct(id));
             }
@@ -206,6 +211,9 @@ public class ProductDAO extends DBContext {
                     rs.getBoolean("isactive"),
                     rs.getString("image")
                 );
+                
+                // Set packaging
+                product.setPackaging(rs.getString("packaging"));
                 
                 // Get all zones for this product
                 product.setZoneIds(getZonesForProduct(product.getId()));
@@ -246,6 +254,10 @@ public class ProductDAO extends DBContext {
                         rs.getBoolean("isactive"),
                         rs.getString("image")
                 );
+                
+                // Set packaging
+                product.setPackaging(rs.getString("packaging"));
+                
                 // Get all zones for this product
                 product.setZoneIds(getZonesForProduct(product.getId()));
                 productList.add(product);
@@ -318,6 +330,9 @@ public class ProductDAO extends DBContext {
                     rs.getBoolean("isactive"),
                     rs.getString("image")
                 );
+                
+                // Set packaging
+                product.setPackaging(rs.getString("packaging"));
                 
                 // Get all zones for this product
                 product.setZoneIds(getZonesForProduct(product.getId()));

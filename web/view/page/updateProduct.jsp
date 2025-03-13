@@ -42,6 +42,13 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="packaging">Packaging Options:</label>
+                                <input type="text" class="form-control" id="packaging" name="packaging" 
+                                       value="${product.packaging}" placeholder="e.g., 10kg, 50kg, 100kg">
+                                <small class="form-text text-muted">Enter packaging sizes separated by commas</small>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="price">Price:</label>
                                 <input type="number" class="form-control" id="price" name="price" value="${product.price}" step="0.01" required>
                             </div>

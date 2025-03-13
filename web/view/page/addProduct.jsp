@@ -91,6 +91,12 @@
                                                         <textarea class="form-control" id="describe" name="describe" rows="3"></textarea>
                                                     </div>
                                                     <div class="form-group">
+                                                        <label for="packaging" class="form-label">Packaging Options:</label>
+                                                        <input type="text" class="form-control" id="packaging" name="packaging" 
+                                                               placeholder="e.g., 10kg, 50kg, 100kg">
+                                                        <small class="form-text text-muted">Enter packaging sizes separated by commas</small>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label class="form-label">Zones:</label>
                                                         <div class="zone-checkbox-container">
                                                             <c:forEach var="zone" items="${activeZones}">

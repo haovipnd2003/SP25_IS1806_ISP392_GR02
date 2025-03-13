@@ -16,6 +16,7 @@ public class Product {
     private boolean isActive;
     private String image;
     private String[] zoneIds;
+    private String packaging;
 
     public Product() {
     }
@@ -36,6 +37,14 @@ public class Product {
         this.quantity = quantity;
         this.isActive = isActive;
         this.image = image;
+    }
+
+    public String getPackaging() {
+        return packaging;
+    }
+
+    public void setPackaging(String packaging) {
+        this.packaging = packaging;
     }
 
     public boolean isIsActive() {
@@ -148,6 +157,7 @@ public class Product {
                 + ", price=" + price
                 + ", quantity=" + quantity
                 + ", isActive=" + isActive
+                + ", packaging='" + packaging + '\''
                 + '}';
     }
 }

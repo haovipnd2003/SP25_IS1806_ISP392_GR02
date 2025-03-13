@@ -213,9 +213,17 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
 
-                        <c:if test="${totalPages > 1}">
+                            <!-- Debug information -->
+<!--                            <div class="alert alert-info">
+                                <p>Debug Info:</p>
+                                <p>Current Page: ${currentPage}</p>
+                                <p>Total Pages: ${totalPages}</p>
+                                <p>Total Zones: ${totalZones}</p>
+                                <p>Page Size: 10</p>
+                            </div>-->
+
+                            <!-- Pagination - Always show, even with just one page -->
                             <nav aria-label="Page navigation" class="mt-4">
                                 <ul class="pagination justify-content-center">
                                     <c:if test="${currentPage > 1}">
@@ -226,7 +234,7 @@
                                         </li>
                                     </c:if>
 
-                                    <c:forEach begin="1" end="${totalPages}" var="i">
+                                    <c:forEach begin="1" end="${totalPages > 0 ? totalPages : 1}" var="i">
                                         <li class="page-item ${i == currentPage ? 'active' : ''}">
                                             <a class="page-link" href="zoneControl?page=${i}${not empty param.keyword ? '&action=search&keyword='.concat(param.keyword) : ''}${not empty param.isActive && param.isActive != 'default' ? '&action=filter&isActive='.concat(param.isActive) : ''}">${i}</a>
                                         </li>
@@ -241,7 +249,7 @@
                                     </c:if>
                                 </ul>
                             </nav>
-                        </c:if>
+                        </div>
                     </section>
                 </div>
             </div>
