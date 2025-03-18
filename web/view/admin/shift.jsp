@@ -53,7 +53,7 @@
                                     <table class="table table-bordered table-striped">
                                         <thead class="table-dark">
                                             <tr>
-                                                <th>No</th>
+                                           
                                                 <th>Shift</th>
                                                 <th>Time</th>   
                                                 <th>Total time</th>
@@ -64,7 +64,7 @@
                                         <tbody>
                                             <c:forEach var="shift" items="${shiftList}" varStatus="loop">
                                                 <tr>
-                                                    <td>${loop.index + 1}</td>
+                                                    
                                                     <td>${shift.name}</td>
                                                     <td>${shift.start_time} - ${shift.end_time}</td>
                                                     <td>${shift.total_time} hours</td>
@@ -93,6 +93,73 @@
                                             </c:forEach>
                                         </tbody>
                                     </table>
+                                    <div class="d-flex justify-content-center align-items-center mt-3">
+                                        <c:if test="${totalPages > 1}">
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination">
+                                                    <!-- Nút First -->
+                                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                        <c:choose>
+                                                            <c:when test="${isSearching == true}">
+                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=1">First</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a class="page-link" href="shift?page=1">First</a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </li>
+                                                    <!-- Nút Previous -->
+                                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                        <c:choose>
+                                                            <c:when test="${isSearching == true}">
+                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=${currentPage - 1}">Previous</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a class="page-link" href="shift?page=${currentPage - 1}">Previous</a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </li>
+                                                    <!-- Hiển thị số trang -->
+                                                    <c:forEach var="i" begin="1" end="${totalPages}">
+                                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                                            <c:choose>
+                                                                <c:when test="${isSearching == true}">
+                                                                    <a class="page-link" href="searchshift?keyword=${keywordS}&page=${i}">${i}</a>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <a class="page-link" href="shift?page=${i}">${i}</a>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </li>
+                                                    </c:forEach>
+                                                    <!-- Nút Next -->
+                                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                                        <c:choose>
+                                                            <c:when test="${isSearching == true}">
+                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=${currentPage + 1}">Next</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a class="page-link" href="shift?page=${currentPage + 1}">Next</a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </li>
+                                                    <!-- Nút Last -->
+                                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                                        <c:choose>
+                                                            <c:when test="${isSearching == true}">
+                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=${totalPages}">Last</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a class="page-link" href="shift?page=${totalPages}">Last</a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </c:if>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -182,6 +249,17 @@
         </div>
 
         <script>
+            // Get all existing shift names from the table
+            function getExistingShiftNames() {
+                const shiftNames = [];
+                document.querySelectorAll('table tbody tr').forEach(row => {
+                    const nameCell = row.querySelector('td:nth-child(2)');
+                    if (nameCell) {
+                        shiftNames.push(nameCell.textContent.trim().toLowerCase());
+                    }
+                });
+                return shiftNames;
+            }
             function calculateTotalTime() {
                 let startTimeInput = document.getElementById('startTime');
                 let endTimeInput = document.getElementById('endTime');
@@ -225,10 +303,29 @@
                     e.preventDefault(); // Ngăn form gửi đi
                     return;
                 }
+                // Check if name already exists
+                const existingNames = getExistingShiftNames();
+                if (existingNames.includes(shiftName.toLowerCase())) {
+                    toastr.error("Shift name already exists. Please use a different name.");
+                    e.preventDefault();
+                    return;
+                }
 
             });
         </script>
         <script>
+            // Lấy danh sách tên ca làm hiện có, bỏ qua ca đang chỉnh sửa
+            function getExistingShiftNames(excludeId) {
+                const shiftNames = [];
+                document.querySelectorAll('table tbody tr').forEach(row => {
+                    const nameCell = row.querySelector('td:nth-child(2)');
+                    const idCell = row.querySelector('.edit-btn').dataset.id;
+                    if (nameCell && idCell !== excludeId) {
+                        shiftNames.push(nameCell.textContent.trim().toLowerCase());
+                    }
+                });
+                return shiftNames;
+            }
             // Khi bấm vào icon Edit, điền dữ liệu vào form Edit Shift
             document.querySelectorAll('.edit-btn').forEach(button => {
                 button.addEventListener('click', function () {
@@ -274,19 +371,8 @@
 
         </script>
         <script>
-//            // Validation for Edit Shift Form
-//            document.querySelector("form[action='editShift']").addEventListener("submit", function (e) {
-//                let shiftName = document.getElementById("editShiftName").value.trim();
-//
-//                // Validate shift name
-//                if (shiftName === "") {
-//                    toastr.error("Please enter shift name.");
-//                    e.preventDefault(); // Prevent form submission
-//                    return;
-//                }
-//
-//            });
             document.querySelector("form[action='editShift']").addEventListener("submit", function (e) {
+                let shiftId = document.getElementById("editShiftId").value;
                 let shiftName = document.getElementById("editShiftName").value.trim();
                 let startTime = document.getElementById("editStartTime").value;
                 let endTime = document.getElementById("editEndTime").value;
@@ -294,6 +380,13 @@
                 // Validate shift name
                 if (shiftName === "") {
                     toastr.error("Please enter shift name.");
+                    e.preventDefault();
+                    return;
+                }
+                // Check if the shift name already exists (excluding the current shift being edited)
+                const existingNames = getExistingShiftNames(shiftId);
+                if (existingNames.includes(shiftName.toLowerCase())) {
+                    toastr.error("Shift name already exists. Please use a different name.");
                     e.preventDefault();
                     return;
                 }
@@ -310,7 +403,10 @@
                     e.preventDefault();
                     return;
                 }
+
             });
+
+
         </script>
 
         <script src="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.js"></script>

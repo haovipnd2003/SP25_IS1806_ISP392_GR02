@@ -33,10 +33,33 @@ public class ShiftControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+//        response.setContentType("text/html;charset=UTF-8");
+//        ShiftDao shiftDao = new ShiftDao();
+//        List<Shift> shiftList = shiftDao.getAllShifts();
+//        request.setAttribute("shiftList", shiftList);
+//        request.getRequestDispatcher("view/admin/shift.jsp").forward(request, response);
         response.setContentType("text/html;charset=UTF-8");
+
+        int page = 1; // Trang mặc định
+        int pageSize = 5; // Số lượng phần tử trên mỗi trang
+
+        // Lấy số trang từ request (nếu có)
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
         ShiftDao shiftDao = new ShiftDao();
-        List<Shift> shiftList = shiftDao.getAllShifts();
+        List<Shift> shiftList = shiftDao.getShiftsByPage(page, pageSize);
+        int totalShifts = shiftDao.getTotalShifts();
+        int totalPages = (int) Math.ceil((double) totalShifts / pageSize);
+        System.out.println("Current Page: " + page);
+        System.out.println("Total Pages: " + totalPages);
+        System.out.println("Shift List Size: " + shiftList.size());
+
         request.setAttribute("shiftList", shiftList);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
         request.getRequestDispatcher("view/admin/shift.jsp").forward(request, response);
     }
 

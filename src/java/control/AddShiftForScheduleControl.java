@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -31,20 +32,55 @@ public class AddShiftForScheduleControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+//        response.setContentType("text/html;charset=UTF-8");
+//        String userId = request.getParameter("userId");
+//        String date = request.getParameter("date");
+//        String[] shiftIds = request.getParameterValues("shiftIds");
+//
+//        if (userId != null && date != null && shiftIds != null) {
+//            ScheduleDAO scheduleDAO = new ScheduleDAO();
+//
+//            for (String shiftId : shiftIds) {
+//                scheduleDAO.addShiftToSchedule(userId, shiftId, date);
+//            }
+//        }
+//
+//        response.sendRedirect("schedule");
         response.setContentType("text/html;charset=UTF-8");
+
         String userId = request.getParameter("userId");
         String date = request.getParameter("date");
         String[] shiftIds = request.getParameterValues("shiftIds");
+        String week = request.getParameter("week");
+
+        HttpSession session = request.getSession();
 
         if (userId != null && date != null && shiftIds != null) {
-            ScheduleDAO scheduleDAO = new ScheduleDAO();
-
-            for (String shiftId : shiftIds) {
-                scheduleDAO.addShiftToSchedule(userId, shiftId, date);
+            try {
+                ScheduleDAO scheduleDAO = new ScheduleDAO();
+                for (String shiftId : shiftIds) {
+                    scheduleDAO.addShiftToSchedule(userId, shiftId, date);
+                }
+                // Set success message in session
+                session.setAttribute("toastMessage", "Thêm ca làm thành công");
+                session.setAttribute("toastType", "success");
+            } catch (Exception e) {
+                // Set error message in session
+                session.setAttribute("toastMessage", "Lỗi: " + e.getMessage());
+                session.setAttribute("toastType", "error");
             }
+        } else {
+            // Set error message in session
+            session.setAttribute("toastMessage", "Thiếu thông tin cần thiết");
+            session.setAttribute("toastType", "error");
         }
 
-        response.sendRedirect("schedule");
+        // Redirect back to schedule page with week parameter if provided
+        if (week != null && !week.isEmpty()) {
+            response.sendRedirect("schedule?week=" + week);
+        } else {
+            response.sendRedirect("schedule");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

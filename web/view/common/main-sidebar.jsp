@@ -34,7 +34,7 @@
                 </li>
 
                 <li>
-                    <a href="${pageContext.request.contextPath}/shift"><i class="ion ion-briefcase"></i><span>Staff Management</span></a>
+                    <a href="${pageContext.request.contextPath}/shift"><i class="ion ion-briefcase"></i><span>Shift Management</span></a>
                 </li>
 
                 <li>
@@ -51,7 +51,9 @@
                     <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
                 </li>
 
-
+                <li>
+                    <a href="${pageContext.request.contextPath}/schedule"><i class="ion ion-calendar"></i><span>Schedule View</span></a>
+                </li>
 
             </c:if>    
 

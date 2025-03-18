@@ -42,7 +42,7 @@ public class ScheduleDAO extends DBContext {
     // Lấy danh sách nhân viên có roletype = 3
     public List<User> getEmployees() {
         List<User> employees = new ArrayList<>();
-        String sql = "SELECT id, fullname FROM user WHERE roletype = 3";
+        String sql = "SELECT id, fullname FROM user WHERE roletype = 3 and isactive = 1";
         try {
             stm = cnn.prepareStatement(sql);
             rs = stm.executeQuery();
@@ -58,7 +58,7 @@ public class ScheduleDAO extends DBContext {
     // Lấy danh sách ca làm việc
     public List<Shift> getShifts() {
         List<Shift> shifts = new ArrayList<>();
-        String sql = "SELECT id, name, start_time, end_time FROM shift";
+        String sql = "SELECT id, name, start_time, end_time FROM shift WHERE isactive = 1";
         try {
             stm = cnn.prepareStatement(sql);
             rs = stm.executeQuery();
@@ -83,6 +83,35 @@ public class ScheduleDAO extends DBContext {
             stm = cnn.prepareStatement(sql);
             stm.setString(1, startDate);
             stm.setString(2, endDate);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                schedules.add(new Schedule(
+                        rs.getString("id"),
+                        rs.getString("user_id"),
+                        rs.getString("fullname"),
+                        rs.getString("shift_id"),
+                        rs.getString("shift_name"),
+                        rs.getString("date")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return schedules;
+    }
+
+    public List<Schedule> getScheduleByUserAndWeek(String userId, String startDate, String endDate) {
+        List<Schedule> schedules = new ArrayList<>();
+        String sql = "SELECT s.id, s.user_id, u.fullname, s.shift_id, sh.name AS shift_name, s.date "
+                + "FROM schedule s "
+                + "JOIN user u ON s.user_id = u.id "
+                + "JOIN shift sh ON s.shift_id = sh.id "
+                + "WHERE s.user_id = ? AND s.date BETWEEN ? AND ?";
+        try {
+            stm = cnn.prepareStatement(sql);
+            stm.setString(1, userId);
+            stm.setString(2, startDate);
+            stm.setString(3, endDate);
             rs = stm.executeQuery();
             while (rs.next()) {
                 schedules.add(new Schedule(
@@ -137,6 +166,27 @@ public class ScheduleDAO extends DBContext {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+    public boolean deleteShiftFromSchedule(String scheduleId) {
+        String sql = "DELETE FROM schedule WHERE id = ?";
+        try {
+            stm = cnn.prepareStatement(sql);
+            stm.setString(1, scheduleId);
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

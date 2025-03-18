@@ -47,6 +47,14 @@ public class Shift {
 
     }
 
+    public Shift(int id, String name, String start_time, String end_time, int isactive) {
+        this.id = id;
+        this.name = name;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.isactive = isactive;
+    }
+
     public int getId() {
         return id;
     }
