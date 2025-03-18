@@ -25,3 +25,9 @@ replay_pid*
 /dist/
 /build/
 /nbproject/private/
+nbproject/private/private.properties
+nbproject/private/private.xml
+src/java/context/DBContext.java
+nbproject/private/private.properties
+nbproject/private/private.xml
+src/java/context/DBContext.java
