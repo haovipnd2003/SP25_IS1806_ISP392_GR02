@@ -30,6 +30,7 @@
                             <form action="products" method="post">
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="id" value="${product.id}">
+                                <input type="hidden" name="zoneId" value="${param.zoneId}" />
 
                             <div class="form-group">
                                 <label for="name">Name:</label>
@@ -91,7 +92,8 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary">Update Product</button>
-                            <a href="products" class="btn btn-secondary">Cancel</a>
+                            <a href="products" class="btn btn-secondary">Back to product list</a>
+                            <a href="zoneControl?action=details&id=${param.zoneId}" class="btn btn-info">Back to Zone Details</a>
                         </form>
                     </div>
                 </div>
