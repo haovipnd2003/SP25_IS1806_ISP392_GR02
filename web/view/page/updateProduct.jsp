@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//modules/toastr/build/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/demo.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/style.css">
@@ -89,11 +89,15 @@
             <script src="${pageContext.request.contextPath}/modules/nicescroll/jquery.nicescroll.min.js"></script>
             <script src="${pageContext.request.contextPath}/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
             <script src="${pageContext.request.contextPath}/js/sa-functions.js"></script>
-
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
             <script src="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.js"></script>
             <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
             <script src="${pageContext.request.contextPath}/js/custom.js"></script>
             <script src="${pageContext.request.contextPath}/js/demo.js"></script>
+            <script>
+                // Xóa mã hiển thị thông báo toast
+                // ...
+            </script>
         </div>
     </body>
 </html>

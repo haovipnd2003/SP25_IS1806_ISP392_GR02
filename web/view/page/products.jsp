@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +13,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//modules/toastr/build/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/demo.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/style.css">
@@ -88,7 +89,7 @@
 
         <div id="app">
             <div class="main-wrapper">
-            
+
                 <!-- Sidebar -->
                 <!-- MAIN-SIDEBAR-JSP-INCLUDE -->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
@@ -103,13 +104,13 @@
                             <div class="section-header">
                                 <h1>Product List</h1>
                             </div>
-                            <c:if test="${roletype == 2}">
-                                <div class="text-right mb-3">
-                                    <a href="products?action=add" class="btn btn-primary btn-lg">
-                                        <i class="fas fa-plus"></i> Add Product
-                                    </a>
-                                </div>
-                            </c:if>
+                        <c:if test="${roletype == 2}">
+                            <div class="text-right mb-3">
+                                <a href="products?action=add" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-plus"></i> Add Product
+                                </a>
+                            </div>
+                        </c:if>
                         <!-- Search and Filter -->
                         <div class="d-flex align-items-center mb-3">
                             <div class="search-container mr-3">
@@ -161,7 +162,7 @@
                                     <th>Description</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
-                                    <th>Zone ID</th>
+                                    <th>Zone</th>
                                     <th>Active</th>
                                         <c:if test="${roletype == 2}">
                                         <th>Action</th>
@@ -183,9 +184,19 @@
                                                 <td class="description-cell" title="${fn:escapeXml(product.describe)}">
                                                     ${fn:escapeXml(product.describe)}
                                                 </td>
-                                                <td>${product.price}</td>
+                                                <td>
+                                                    <fmt:setLocale value="vi_VN"/>
+                                                    <fmt:formatNumber value="${product.price}" type="number" pattern="#,##0.##" var="formattedPrice" />
+                                                    ${formattedPrice.replace(',', '.')}<span>đ</span>
+                                                </td>
                                                 <td>${product.quantity}</td>
-                                                <td>${product.zoneId}</td>
+                                                <td>
+                                                    <c:forEach var="zone" items="${zones}">
+                                                        <c:if test="${zone.id == product.zoneId}">
+                                                            ${zone.name}
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </td>
                                                 <td style="color: ${product.active ? 'green' : 'red'}">${product.active ? 'Yes' : 'No'}</td>
                                                 <c:if test="${roletype == '2'}">
                                                     <td>
@@ -272,5 +283,42 @@
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/demo.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var toastMessage = "${sessionScope.toastMessage}";
+                var toastType = "${sessionScope.toastType}";
+                if (toastMessage) {
+                    iziToast.show({
+                        title: toastType === 'success' ? 'Success' : 'Error',
+                        message: toastMessage,
+                        position: 'topRight',
+                        color: toastType === 'success' ? 'green' : 'red',
+                        timeout: 5000,
+                        onClosing: function () {
+                            fetch('${pageContext.request.contextPath}/remove-toast', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                            }).then(response => {
+                                if (!response.ok) {
+                                    console.error('Failed to remove toast attributes');
+                                }
+                            }).catch(error => {
+                                console.error('Error:', error);
+                            });
+                        }
+                    });
+                    // Xóa thông báo khỏi session sau khi hiển thị
+                    fetch('${pageContext.request.contextPath}/remove-toast', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    });
+                }
+            });
+        </script>
     </body>
 </html>

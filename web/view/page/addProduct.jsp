@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//modules/toastr/build/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/demo.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}//css/style.css">
@@ -77,7 +77,7 @@
                                                         <input type="text" class="form-control" id="name" name="name" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="price" class="form-label">Price:</label>
+                                                        <label for="price" class="form-label">Price (VNĐ):</label>
                                                         <input type="number" class="form-control" id="price" name="price" step="0.01" required>
                                                     </div>
                                                     <div class="form-group">
@@ -93,60 +93,60 @@
                                                     <div class="form-group">
                                                         <label for="zoneId" class="form-label">Zone:</label>
                                                         <select class="form-select" id="zoneId" name="zoneId" required>
-                                                            <c:forEach var="zone" items="${activeZones}">
-                                                                <option value="${zone.id}">${zone.name}</option>
-                                                            </c:forEach>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="isActive" class="form-label">Active:</label>
-                                                        <select class="form-select" id="isActive" name="isActive" required>
-                                                            <option value="true">Yes</option>
-                                                            <option value="false">No</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="image" class="form-label">Image URL:</label>
-                                                        <input type="text" class="form-control" id="image" name="image" placeholder="Enter image URL">
-                                                    </div>
+                                                        <c:forEach var="zone" items="${activeZones}">
+                                                            <option value="${zone.id}">${zone.name}</option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="isActive" class="form-label">Active:</label>
+                                                    <select class="form-select" id="isActive" name="isActive" required>
+                                                        <option value="true">Yes</option>
+                                                        <option value="false">No</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="image" class="form-label">Image URL:</label>
+                                                    <input type="text" class="form-control" id="image" name="image" placeholder="Enter image URL">
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <div class="text-center mt-4">
-                                                <button type="submit" class="btn btn-primary btn-lg">Add Product</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                        <div class="text-center mt-4">
+                                            <button type="submit" class="btn btn-primary btn-lg">Add Product</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <script>
-                // Get existing product names from server
-                const existingProductNames = [
+        </div>
+        <script>
+            // Get existing product names from server
+            const existingProductNames = [
             <c:forEach var="product" items="${productList}" varStatus="loop">
-                "${fn:escapeXml(product.name)}"${!loop.last ? ',' : ''}
+            "${fn:escapeXml(product.name)}"${!loop.last ? ',' : ''}
             </c:forEach>
-                ];
+            ];
 
-                function validateForm() {
-                    const productName = document.getElementById('name').value.trim();
+            function validateForm() {
+                const productName = document.getElementById('name').value.trim();
 
-                    if (existingProductNames.includes(productName)) {
-                        alert('Product name already exists!');
-                        return false;
-                    }
-                    return true;
+                if (existingProductNames.includes(productName)) {
+                    alert('Product name already exists!');
+                    return false;
                 }
+                return true;
+            }
 
-                // Add event listener to form
-                document.querySelector('form').addEventListener('submit', function (event) {
-                    if (!validateForm()) {
-                        event.preventDefault();
-                    }
-                });
+            // Add event listener to form
+            document.querySelector('form').addEventListener('submit', function (event) {
+                if (!validateForm()) {
+                    event.preventDefault();
+                }
+            });
         </script>
         <!-- Bootstrap JS (optional) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -157,7 +157,7 @@
         <script src="${pageContext.request.contextPath}/modules/nicescroll/jquery.nicescroll.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sa-functions.js"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
