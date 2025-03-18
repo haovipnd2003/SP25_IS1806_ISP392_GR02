@@ -37,7 +37,6 @@ public class LoginControl extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-
         String username = request.getParameter("name");
         String password = request.getParameter("password");
         request.setAttribute("name", username);
@@ -46,8 +45,11 @@ public class LoginControl extends HttpServlet {
         password = hashpassword.toSHA1(password);
         LoginDAO dao = new LoginDAO();
         User a = dao.login(username);
-        if ( a == null || !a.getPassword().equals(password)) {
+        if (a == null || !a.getPassword().equals(password)) {
             request.setAttribute("mess", "Wrong User or Password");
+            request.getRequestDispatcher("view/page/login.jsp").forward(request, response);
+        } else if (Integer.parseInt(String.valueOf(a.getIsactive())) == 0) {  // Thêm kiểm tra này
+            request.setAttribute("mess", "This account has been banned.");
             request.getRequestDispatcher("view/page/login.jsp").forward(request, response);
         } else {
 

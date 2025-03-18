@@ -84,6 +84,7 @@ public class AddAccountControl extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String name = request.getParameter("name");
+        String fullname = request.getParameter("fullname");
         String pass = request.getParameter("password");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -94,7 +95,12 @@ public class AddAccountControl extends HttpServlet {
             response.getWriter().write("{\"status\":\"error\", \"message\":\"Username and password cannot be blank!\"}");
             return;
         }
-
+        
+        if (fullname.isEmpty()) {
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Name cannot be blank!\"}");
+            return;
+        }
+        
         if (!isValidEmail(email)) {
             response.getWriter().write("{\"status\":\"error\", \"message\":\"Invalid email format!\"}");
             return;
@@ -123,7 +129,7 @@ public class AddAccountControl extends HttpServlet {
         }
 
         pass = hashpassword.toSHA1(pass);
-        User newUser = new User(name, pass, email, phone, address, roletype);
+        User newUser = new User(name, pass, email, phone, address, roletype,fullname);
         dao.addUser(newUser);
 
         response.getWriter().write("{\"status\":\"success\", \"message\":\"Account has been created successfully!\"}");

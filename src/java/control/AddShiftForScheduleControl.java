@@ -4,8 +4,7 @@
  */
 package control;
 
-import dao.DAO;
-import entity.User;
+import dao.ScheduleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,13 +12,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "EditAccountControl", urlPatterns = {"/updateaccount"})
-public class EditAccountControl extends HttpServlet {
+@WebServlet(name = "AddShiftForScheduleControl", urlPatterns = {"/addshiftfs"})
+public class AddShiftForScheduleControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,18 +32,54 @@ public class EditAccountControl extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+//        response.setContentType("text/html;charset=UTF-8");
+//        String userId = request.getParameter("userId");
+//        String date = request.getParameter("date");
+//        String[] shiftIds = request.getParameterValues("shiftIds");
+//
+//        if (userId != null && date != null && shiftIds != null) {
+//            ScheduleDAO scheduleDAO = new ScheduleDAO();
+//
+//            for (String shiftId : shiftIds) {
+//                scheduleDAO.addShiftToSchedule(userId, shiftId, date);
+//            }
+//        }
+//
+//        response.sendRedirect("schedule");
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EditAccountControl</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EditAccountControl at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+
+        String userId = request.getParameter("userId");
+        String date = request.getParameter("date");
+        String[] shiftIds = request.getParameterValues("shiftIds");
+        String week = request.getParameter("week");
+
+        HttpSession session = request.getSession();
+
+        if (userId != null && date != null && shiftIds != null) {
+            try {
+                ScheduleDAO scheduleDAO = new ScheduleDAO();
+                for (String shiftId : shiftIds) {
+                    scheduleDAO.addShiftToSchedule(userId, shiftId, date);
+                }
+                // Set success message in session
+                session.setAttribute("toastMessage", "Thêm ca làm thành công");
+                session.setAttribute("toastType", "success");
+            } catch (Exception e) {
+                // Set error message in session
+                session.setAttribute("toastMessage", "Lỗi: " + e.getMessage());
+                session.setAttribute("toastType", "error");
+            }
+        } else {
+            // Set error message in session
+            session.setAttribute("toastMessage", "Thiếu thông tin cần thiết");
+            session.setAttribute("toastType", "error");
+        }
+
+        // Redirect back to schedule page with week parameter if provided
+        if (week != null && !week.isEmpty()) {
+            response.sendRedirect("schedule?week=" + week);
+        } else {
+            response.sendRedirect("schedule");
         }
     }
 
@@ -73,30 +109,7 @@ public class EditAccountControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAO dao = new DAO();
-
-        String id = request.getParameter("id");
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String roletype = request.getParameter("roletype");
-        String isactive = request.getParameter("isactive");
-        String fullname = request.getParameter("fullname");
-
-        // Lấy thông tin tài khoản hiện tại từ CSDL
-        User existingUser = dao.getUserById(id);
-
-        if (existingUser != null && "2".equals(existingUser.getRoletype())) {
-            // Nếu là Admin thì không cho thay đổi trạng thái
-            isactive = existingUser.getIsactive(); // Giữ nguyên trạng thái cũ
-        }
-       
-
-        dao.updateAccount(id, name, email, phone, address, roletype, isactive, fullname);
-
-        response.sendRedirect("manageaccount");
-
+        processRequest(request, response);
     }
 
     /**

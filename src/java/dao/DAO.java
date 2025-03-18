@@ -54,7 +54,7 @@ public class DAO extends DBContext {
     }
 
     public void addUser(User c) {
-        String sql = "INSERT INTO user (name, password, email, phone, address, roletype, isActive) VALUES (?, ?, ?, ?, ?, ?,1)";
+        String sql = "INSERT INTO user (name, password, email, phone, address, roletype, isActive, fullname) VALUES (?, ?, ?, ?, ?, ?,1,?)";
         try (PreparedStatement stm = cnn.prepareStatement(sql)) {
             stm.setString(1, c.getName());
             stm.setString(2, c.getPassword());
@@ -62,7 +62,7 @@ public class DAO extends DBContext {
             stm.setString(4, c.getPhone());
             stm.setString(5, c.getAddress());
             stm.setString(6, c.getRoletype());
-
+            stm.setString(7, c.getFullname());
             stm.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
@@ -83,7 +83,7 @@ public class DAO extends DBContext {
     }
 
     public ArrayList<User> getAccount() {
-        String sql = "SELECT id, name, email, password,phone,address, roletype,Isactive FROM User ORDER BY id DESC";
+        String sql = "SELECT id, name, email, password,phone,address, roletype,Isactive,fullname FROM User ORDER BY id DESC";
         ArrayList<User> list = new ArrayList<>();
         try {
             stm = cnn.prepareStatement(sql);
@@ -98,6 +98,7 @@ public class DAO extends DBContext {
                 c.setAddress(rs.getString(6));
                 c.setRoletype(rs.getString(7));
                 c.setIsactive(rs.getString(8));
+                c.setFullname(rs.getString(9));
                 list.add(c);
             }
         } catch (SQLException e) {
@@ -106,8 +107,8 @@ public class DAO extends DBContext {
         return list;
     }
 
-    public void updateAccount(String id, String name, String email, String phone, String address, String roletype, String isactive) {
-        String query = "UPDATE user SET name = ?, email = ?, phone = ?, address = ?, roletype = ?, isactive = ? WHERE id = ?";
+    public void updateAccount(String id, String name, String email, String phone, String address, String roletype, String isactive, String fullname) {
+        String query = "UPDATE user SET name = ?, email = ?, phone = ?, address = ?, roletype = ?, isactive = ?, fullname = ? WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, name);
@@ -116,7 +117,9 @@ public class DAO extends DBContext {
             ps.setString(4, address);
             ps.setInt(5, Integer.parseInt(roletype));
             ps.setInt(6, Integer.parseInt(isactive));
-            ps.setInt(7, Integer.parseInt(id));
+            ps.setString(7, fullname);
+            ps.setInt(8, Integer.parseInt(id));
+
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

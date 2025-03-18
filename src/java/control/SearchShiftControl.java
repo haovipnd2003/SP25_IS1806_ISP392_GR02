@@ -4,23 +4,25 @@
  */
 package control;
 
-import dao.CustomerDAO;
-import entity.Customer;
+import dao.DAO;
+import dao.ShiftDao;
+import entity.Shift;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
- * @author Viet Duc
+ * @author Admin
  */
-@WebServlet(name = "SearchCustomerServlet", urlPatterns = {"/searchcustomer"})
-public class SearchCustomerServlet extends HttpServlet {
+@WebServlet(name = "SearchShiftControl", urlPatterns = {"/searchshift"})
+public class SearchShiftControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,18 +36,35 @@ public class SearchCustomerServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SearchCustomerServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SearchCustomerServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        response.setContentType("text/html;charset=UTF-8");
+        String keyword = request.getParameter("keyword");
+
+        // Default to page 1 if not specified
+        int page = 1;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
         }
+
+        int pageSize = 5; // Same page size as in ShiftControl
+
+        ShiftDao dao = new ShiftDao();
+
+        // Get search results with pagination
+        List<Shift> shifts = dao.searchShiftWithPagination(keyword, page, pageSize);
+
+        // Get total results for calculating total pages
+        int totalResults = dao.getTotalSearchResults(keyword);
+        int totalPages = (int) Math.ceil((double) totalResults / pageSize);
+
+        // Set attributes for JSP
+        request.setAttribute("shiftList", shifts);
+        request.setAttribute("keywordS", keyword);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("isSearching", true); // Add this flag to indicate search mode in JSP
+
+        request.getRequestDispatcher("view/admin/shift.jsp").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -74,27 +93,7 @@ public class SearchCustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id") != null ? request.getParameter("id").trim() : "";
-        String name = request.getParameter("name") != null ? request.getParameter("name").trim() : "";
-        String phone = request.getParameter("phone") != null ? request.getParameter("phone").trim() : "";
-        String email = request.getParameter("email") != null ? request.getParameter("email").trim() : "";
-        String address = request.getParameter("address") != null ? request.getParameter("address").trim() : "";
-
-        CustomerDAO dao = new CustomerDAO();
-        ArrayList<Customer> listCus = dao.searchCustomers(id,name, phone, email, address);
-
-        request.setAttribute("listCus", listCus);
-        request.setAttribute("id", id);
-        request.setAttribute("name", name);
-        request.setAttribute("phone", phone);
-        request.setAttribute("email", email);
-        request.setAttribute("address", address);
-
-        if (listCus == null || listCus.isEmpty()) {
-            request.setAttribute("noCustomersMessage", "No matching customers");
-        }
-
-        request.getRequestDispatcher("view/page/customer.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
