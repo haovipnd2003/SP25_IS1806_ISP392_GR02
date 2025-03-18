@@ -170,9 +170,10 @@
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th width="15%">ID</th>
-                                            <th width="45%">Name</th>
+                                            <th width="10%">ID</th>
+                                            <th width="35%">Name</th>
                                             <th width="15%">Status</th>
+                                            <th width="15%">Products</th>
                                             <th width="25%">Actions</th>
                                         </tr>
                                     </thead>
@@ -187,8 +188,14 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <c:if test="${roletype == 2}">
-                                                        <div class="btn-action-container">
+                                                    <span class="badge bg-info">${zone.productCount} products</span>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-action-container">
+                                                        <a href="zoneControl?action=details&id=${zone.id}" class="btn btn-info btn-sm">
+                                                            <i class="fas fa-eye"></i> View Details
+                                                        </a>
+                                                        <c:if test="${roletype == 2}">
                                                             <a href="zoneControl?action=edit&id=${zone.id}" class="btn btn-primary btn-sm">
                                                                 <i class="fas fa-edit"></i> Edit
                                                             </a>
@@ -199,15 +206,15 @@
                                                                     <i class="fas fa-trash"></i> Delete
                                                                 </button>
                                                             </form>
-                                                        </div>
-                                                    </c:if>
+                                                        </c:if>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </c:forEach>
                                         
                                         <c:if test="${empty zoneList}">
                                             <tr>
-                                                <td colspan="4" class="text-center">No zones found</td>
+                                                <td colspan="5" class="text-center">No zones found</td>
                                             </tr>
                                         </c:if>
                                     </tbody>

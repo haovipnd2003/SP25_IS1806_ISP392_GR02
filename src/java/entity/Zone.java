@@ -13,6 +13,7 @@ public class Zone {
     private String id;
     private String name;
     private boolean isActive;
+    private int productCount;
 
     public Zone() {
     }
@@ -21,6 +22,13 @@ public class Zone {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
+    }
+
+    public Zone(String id, String name, boolean isActive, int productCount) {
+        this.id = id;
+        this.name = name;
+        this.isActive = isActive;
+        this.productCount = productCount;
     }
 
     public String getName() {
@@ -45,6 +53,14 @@ public class Zone {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public int getProductCount() {
+        return productCount;
+    }
+
+    public void setProductCount(int productCount) {
+        this.productCount = productCount;
     }
 
 }

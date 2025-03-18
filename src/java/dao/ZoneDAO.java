@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import context.DBContext;
+import entity.Product;
 
 /**
  *
@@ -386,5 +387,46 @@ public class ZoneDAO extends DBContext {
         }
         
         return count;
+    }
+
+    public int countProductsInZone(String zoneId) {
+        int count = 0;
+        String query = "SELECT COUNT(*) FROM product_zone WHERE zone_id = ?";
+        try {
+            stm = cnn.prepareStatement(query);
+            stm.setString(1, zoneId);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Count Products In Zone: " + e.getMessage());
+        }
+        return count;
+    }
+
+    public List<Product> getProductsInZone(String zoneId) {
+        List<Product> productList = new ArrayList<>();
+        String query = "SELECT p.* FROM product p JOIN product_zone pz ON p.id = pz.product_id WHERE pz.zone_id = ?";
+        try {
+            stm = cnn.prepareStatement(query);
+            stm.setString(1, zoneId);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getString("id"));
+                product.setName(rs.getString("name"));
+                product.setDescribe(rs.getString("describe"));
+                product.setPrice(rs.getDouble("price"));
+                product.setQuantity(rs.getDouble("quantity"));
+                product.setIsActive(rs.getBoolean("isactive"));
+                product.setImage(rs.getString("image"));
+                product.setPackaging(rs.getString("packaging"));
+                productList.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Products In Zone: " + e.getMessage());
+        }
+        return productList;
     }
 }

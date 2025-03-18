@@ -41,6 +41,9 @@ public class ZoneControl extends HttpServlet {
                 case "filter":
                     handleFilter(request, response);
                     break;
+                case "details":
+                    handleZoneDetails(request, response);
+                    break;
                 default:
                     handleDefault(request, response);
                     break;
@@ -80,11 +83,15 @@ public class ZoneControl extends HttpServlet {
         }
         
         List<Zone> zoneList = zoneDAO.getAllZones(page, pageSize);
+        
+        // Thêm số lượng sản phẩm cho mỗi zone
+        for (Zone zone : zoneList) {
+            int productCount = zoneDAO.countProductsInZone(zone.getId());
+            zone.setProductCount(productCount);
+        }
+        
         int totalZones = zoneDAO.getTotalZones();
         int totalPages = (int) Math.ceil((double) totalZones / pageSize);
-        
-        // Debug output
-//        System.out.println("ZoneControl.handleDefault: page=" + page + ", totalZones=" + totalZones + ", totalPages=" + totalPages);
 
         User user = (User) request.getSession().getAttribute("acc");
         if (user != null) {
@@ -112,6 +119,13 @@ public class ZoneControl extends HttpServlet {
         }
         
         List<Zone> zoneList = zoneDAO.searchZones(keyword, page, pageSize);
+        
+        // Thêm số lượng sản phẩm cho mỗi zone
+        for (Zone zone : zoneList) {
+            int productCount = zoneDAO.countProductsInZone(zone.getId());
+            zone.setProductCount(productCount);
+        }
+        
         int totalZones = zoneDAO.getTotalSearchResults(keyword);
         int totalPages = (int) Math.ceil((double) totalZones / pageSize);
 
@@ -141,6 +155,13 @@ public class ZoneControl extends HttpServlet {
         }
         
         List<Zone> zoneList = zoneDAO.filterZonesByActive(isActive, page, pageSize);
+        
+        // Thêm số lượng sản phẩm cho mỗi zone
+        for (Zone zone : zoneList) {
+            int productCount = zoneDAO.countProductsInZone(zone.getId());
+            zone.setProductCount(productCount);
+        }
+        
         int totalZones = zoneDAO.getTotalFilterResults(isActive);
         int totalPages = (int) Math.ceil((double) totalZones / pageSize);
 
@@ -155,6 +176,38 @@ public class ZoneControl extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("view/admin/zones.jsp").forward(request, response);
+    }
+
+    private void handleZoneDetails(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        
+        // Lấy thông tin zone
+        Zone zone = zoneDAO.getZoneById(id);
+        if (zone == null) {
+            request.getSession().setAttribute("toastMessage", "Không tìm thấy zone!");
+            request.getSession().setAttribute("toastType", "error");
+            response.sendRedirect("zoneControl");
+            return;
+        }
+        
+        // Đếm số lượng sản phẩm trong zone
+        int productCount = zoneDAO.countProductsInZone(id);
+        zone.setProductCount(productCount);
+        
+        // Lấy danh sách sản phẩm trong zone
+        List<entity.Product> products = zoneDAO.getProductsInZone(id);
+        
+        User user = (User) request.getSession().getAttribute("acc");
+        if (user != null) {
+            request.setAttribute("roletype", user.getRoletype().toString());
+        } else {
+            request.setAttribute("roletype", null);
+        }
+        
+        request.setAttribute("zone", zone);
+        request.setAttribute("products", products);
+        request.getRequestDispatcher("view/admin/zone-details.jsp").forward(request, response);
     }
 
     @Override
