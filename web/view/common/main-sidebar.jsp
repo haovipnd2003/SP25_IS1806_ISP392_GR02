@@ -30,7 +30,11 @@
                 </li>
 
                 <li>
-                    <a href="${pageContext.request.contextPath}/debt.do"><i class="ion ion-clipboard"></i><span>Debt Management</span></a>
+                    <a href="${pageContext.request.contextPath}/invoiceStatistic"><i class="ion ion-person-stalker"></i><span>Invoice Statistic</span></a>
+                </li>
+                
+                <li>
+                    <a href="${pageContext.request.contextPath}/debtor.do"><i class="ion ion-clipboard"></i><span>Debt Management</span></a>
                 </li>
 
                 <li>

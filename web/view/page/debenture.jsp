@@ -151,7 +151,7 @@
                                             <h2>Debenture</h2>
                                         </div>
                                         <div class="card-body">
-                                            <a href="debt.do?">Back</a>
+                                            <a href="debtor.do?">Back</a>
                                             <!-- Trigger/Open The Modal -->
                                             <table class="table-list-content" border="1" cellpadding="5" cellspacing="5"> 
                                                 <tr> 

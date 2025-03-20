@@ -140,4 +140,10 @@ public class User {
         this.isactive = isactive;
     }
 
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + ", phone=" + phone + ", address=" + address + ", roletype=" + roletype + ", isactive=" + isactive + ", code=" + code + '}';
+    }
+
+    
 }

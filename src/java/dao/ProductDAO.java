@@ -106,7 +106,7 @@ public class ProductDAO extends DBContext {
     public Product getProductById(String id) {
         Product product = null;
         try {
-            String sql = "SELECT * FROM product WHERE id = ?";
+            String sql = "SELECT * FROM product WHERE id = ? and isactive = 1";
             stm = cnn.prepareStatement(sql);
             stm.setString(1, id);
             rs = stm.executeQuery();
@@ -119,6 +119,32 @@ public class ProductDAO extends DBContext {
                     rs.getDouble("price"),
                     rs.getDouble("quantity"),
                     rs.getString("zoneId"),
+                    rs.getBoolean("isActive"),
+                    rs.getString("image")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Product By ID: " + e.getMessage());
+        }
+        return product;
+    }
+    
+        public Product getProductById2(String id) {
+        Product product = null;
+        try {
+            String sql = "SELECT * FROM product WHERE id = ? and isactive = 1";
+            stm = cnn.prepareStatement(sql);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+
+            if (rs.next()) {
+                product = new Product(
+                    rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getString("describe"),
+                    rs.getDouble("price"),
+                    rs.getDouble("quantity"),
+                    null,
                     rs.getBoolean("isActive"),
                     rs.getString("image")
                 );
@@ -257,13 +283,16 @@ public class ProductDAO extends DBContext {
 
     public static void main(String[] args) {
         ProductDAO productdao = new ProductDAO();
-        ArrayList<Product> list = productdao.searchProductByNameNDescribe("gạo", "gạo");
+//        ArrayList<Product> list = productdao.searchProductByNameNDescribe("gạo", "gạo");
+        
+//        System.out.println(productdao.getProductById("1"));
+//        //Kiểm tra danh sách không rỗng
+//        for (Product product : list) {
+//            System.out.println(product); // In từng sản phẩm
+//
+//        }
 
-        // Kiểm tra danh sách không rỗng
-        for (Product product : list) {
-            System.out.println(product); // In từng sản phẩm
-
-        }
-
+        System.out.println(productdao.getProductById2("1"));
     }
 }
+

@@ -4,8 +4,9 @@
  */
 package control;
 
+import control.resilient.QueueManager;
 import dao.DebentureDAO;
-import dao.DebtDAO;
+import dao.DebtorDAO;
 import entity.Debenture;
 import entity.User;
 import java.io.IOException;
@@ -66,7 +67,7 @@ public class DebentureServlet extends HttpServlet {
             request.setAttribute("currentPage", page); 
             request.getRequestDispatcher("/view/page/debenture.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("/view/page/debt.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/page/debtor.jsp").forward(request, response);
     }
 
     /**
@@ -98,12 +99,7 @@ public class DebentureServlet extends HttpServlet {
                 created = df.parse(request.getParameter("created"));
             }
             Debenture debenture = new Debenture(note, amount, Integer.parseInt(debtorId), created);
-            DebentureDAO debentureDAO = new DebentureDAO();
-            boolean insertSuccess = debentureDAO.insertDebenture(debenture);
-            if (insertSuccess) {
-                DebtDAO debtDAO = new DebtDAO();
-                debtDAO.updateTotalDebtById(debenture.getDebtorId(), debenture.getAmount());
-            }
+            QueueManager.getInstance().addRequest(debenture);
             request.getRequestDispatcher("/view/page/debenture.jsp").forward(request, response);
         }
         catch (Exception ex) {
