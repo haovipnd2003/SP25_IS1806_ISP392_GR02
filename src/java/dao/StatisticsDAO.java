@@ -264,6 +264,49 @@ public class StatisticsDAO extends DBContext {
     }
     
     /**
+     * Get order statistics by month
+     * 
+     * @return List of TimeStatistics
+     */
+    public List<TimeStatistics> getOrderStatisticsByMonth() {
+        List<TimeStatistics> statistics = new ArrayList<>();
+        
+        try {
+            String sql = "SELECT MONTH(STR_TO_DATE(o.createdAt, '%Y-%m-%d %H:%i:%s')) as month, " +
+                         "COUNT(o.id) as order_count, " +
+                         "SUM(CAST(o.totalAmount AS DECIMAL)) as total_revenue " +
+                         "FROM orders o " +
+                         "WHERE o.isactive = 1 " +
+                         "GROUP BY month " +
+                         "ORDER BY month";
+            
+            stm = cnn.prepareStatement(sql);
+            rs = stm.executeQuery();
+            
+            String[] monthNames = {"January", "February", "March", "April", "May", "June", 
+                                 "July", "August", "September", "October", "November", "December"};
+            
+            while (rs.next()) {
+                int monthIndex = rs.getInt("month") - 1;
+                String monthName = monthNames[monthIndex];
+                
+                TimeStatistics stat = new TimeStatistics(
+                    monthName,
+                    rs.getInt("order_count"),
+                    rs.getDouble("total_revenue")
+                );
+                statistics.add(stat);
+            }
+        } catch (SQLException e) {
+            System.out.println("getOrderStatisticsByMonth: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+        
+        return statistics;
+    }
+    
+    /**
      * Get frequently bought together product pairs
      * 
      * @param limit Number of pairs to return
@@ -372,6 +415,22 @@ public class StatisticsDAO extends DBContext {
         }
         
         return trending;
+    }
+    
+    private void closeResources() {
+        try {
+            if (rs != null && !rs.isClosed()) {
+                rs.close();
+            }
+            if (stm != null && !stm.isClosed()) {
+                stm.close();
+            }
+            if (cnn != null && !cnn.isClosed()) {
+                cnn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error closing resources: " + e.getMessage());
+        }
     }
     
     public static void main(String[] args) {

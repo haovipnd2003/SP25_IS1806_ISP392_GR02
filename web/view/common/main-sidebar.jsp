@@ -43,6 +43,9 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/zoneControl"><i class="ion ion-bag"></i><span>Zone Management</span></a>
                 </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/statistics"><i class="ion ion-bag"></i><span>Statistics</span></a>
+                </li>
             </c:if>
             <c:if test="${sessionScope.acc.roletype == 3}">
                 <li>
