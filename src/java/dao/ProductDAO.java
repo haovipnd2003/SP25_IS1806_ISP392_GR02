@@ -62,16 +62,40 @@ public class ProductDAO extends DBContext {
     }
 
     public void insert(Product product) throws SQLException {
-        String sql = "INSERT INTO product (name, `describe`, price, quantity, zoneId, isActive, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stm = cnn.prepareStatement(sql)) {
+        // Insert the product without a primary zone
+        String sql = "INSERT INTO product (name, `describe`, price, quantity, isactive, image, packaging) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stm = cnn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stm.setString(1, product.getName());
             stm.setString(2, product.getDescribe());
             stm.setDouble(3, product.getPrice());
             stm.setDouble(4, product.getQuantity());
-            stm.setString(5, product.getZoneId());
-            stm.setBoolean(6, product.isActive());
-            stm.setString(7, product.getImage());
+            stm.setBoolean(5, product.isActive());
+            stm.setString(6, product.getImage());
+            stm.setString(7, product.getPackaging());
             stm.executeUpdate();
+            
+            // Get the generated product ID
+            ResultSet generatedKeys = stm.getGeneratedKeys();
+            int productId = 0;
+            if (generatedKeys.next()) {
+                productId = generatedKeys.getInt(1);
+                product.setId(String.valueOf(productId));
+            }
+            
+            // Now insert all zones into product_zone table
+            if (product.getZoneIds() != null && product.getZoneIds().length > 0) {
+                insertProductZones(productId, product.getZoneIds());
+            }
+        }
+    }
+
+    // Update method to insert all product-zone relationships
+    private void insertProductZones(int productId, String[] zoneIds) throws SQLException {
+        if (zoneIds == null || zoneIds.length == 0) return;
+        
+        ProductZoneDAO productZoneDAO = new ProductZoneDAO();
+        for (String zoneId : zoneIds) {
+            productZoneDAO.addProductZone(productId, Integer.parseInt(zoneId));
         }
     }
 
@@ -89,26 +113,58 @@ public class ProductDAO extends DBContext {
     }
 
     public void update(Product product) throws SQLException {
-        String sql = "UPDATE product SET name=?, `describe`=?, price=?, quantity=?, zoneId=?, isActive=?, image=? WHERE id=?";
+        // Update the main product record without zoneid
+        String sql = "UPDATE product SET name=?, `describe`=?, price=?, quantity=?, isactive=?, image=?, packaging=? WHERE id=?";
         try (PreparedStatement stm = cnn.prepareStatement(sql)) {
             stm.setString(1, product.getName());
             stm.setString(2, product.getDescribe());
             stm.setDouble(3, product.getPrice());
             stm.setDouble(4, product.getQuantity());
-            stm.setString(5, product.getZoneId());
-            stm.setBoolean(6, product.isActive());
-            stm.setString(7, product.getImage());
+            stm.setBoolean(5, product.isActive());
+            stm.setString(6, product.getImage());
+            stm.setString(7, product.getPackaging());
             stm.setString(8, product.getId());
             stm.executeUpdate();
+            
+            // Update the product_zone relationships
+            if (product.getZoneIds() != null) {
+                // First delete existing relationships
+                ProductZoneDAO productZoneDAO = new ProductZoneDAO();
+                productZoneDAO.removeAllZonesForProduct(Integer.parseInt(product.getId()));
+                
+                // Then insert the new ones
+                for (String zoneId : product.getZoneIds()) {
+                    productZoneDAO.addProductZone(Integer.parseInt(product.getId()), Integer.parseInt(zoneId));
+                }
+            }
         }
     }
 
+    // Update method to get all zones for a product
+    public String[] getZonesForProduct(String productId) {
+        List<String> zoneIds = new ArrayList<>();
+        
+        try {
+            // Get zones from the product_zone table
+            ProductZoneDAO productZoneDAO = new ProductZoneDAO();
+            List<Integer> additionalZoneIds = productZoneDAO.getZoneIdsByProductId(Integer.parseInt(productId));
+            for (Integer zoneId : additionalZoneIds) {
+                zoneIds.add(String.valueOf(zoneId));
+            }
+        } catch (Exception e) {
+            System.out.println("Get Zones For Product: " + e.getMessage());
+        }
+        
+        return zoneIds.toArray(new String[0]);
+    }
+
+    // Modify getProductById to fetch zones from junction table
     public Product getProductById(String id) {
         Product product = null;
         try {
             String sql = "SELECT * FROM product WHERE id = ?";
             stm = cnn.prepareStatement(sql);
-            stm.setString(1, id);
+            stm.setInt(1, Integer.parseInt(id));
             rs = stm.executeQuery();
 
             if (rs.next()) {
@@ -118,10 +174,15 @@ public class ProductDAO extends DBContext {
                     rs.getString("describe"),
                     rs.getDouble("price"),
                     rs.getDouble("quantity"),
-                    rs.getString("zoneId"),
-                    rs.getBoolean("isActive"),
+                    rs.getBoolean("isactive"),
                     rs.getString("image")
                 );
+                
+                // Set packaging
+                product.setPackaging(rs.getString("packaging"));
+                
+                // Get all zones for this product
+                product.setZoneIds(getZonesForProduct(id));
             }
         } catch (SQLException e) {
             System.out.println("Get Product By ID: " + e.getMessage());
@@ -131,14 +192,13 @@ public class ProductDAO extends DBContext {
 
     public List<Product> searchProducts(String keyword) {
         List<Product> productList = new ArrayList<>();
-        String query = "SELECT * FROM product WHERE name LIKE ? OR `describe` LIKE ? OR id LIKE ? OR CAST(price AS CHAR) LIKE ? OR zoneId LIKE ?";
+        String query = "SELECT * FROM product WHERE name LIKE ? OR `describe` LIKE ? OR id LIKE ? OR CAST(price AS CHAR) LIKE ?";
         try {
             stm = cnn.prepareStatement(query);
             stm.setString(1, "%" + keyword + "%");
             stm.setString(2, "%" + keyword + "%");
             stm.setString(3, "%" + keyword + "%");
             stm.setString(4, "%" + keyword + "%");
-            stm.setString(5, "%" + keyword + "%");
             rs = stm.executeQuery();
 
             while (rs.next()) {
@@ -148,10 +208,15 @@ public class ProductDAO extends DBContext {
                     rs.getString("describe"),
                     rs.getDouble("price"),
                     rs.getDouble("quantity"),
-                    rs.getString("zoneId"),
-                    rs.getBoolean("isActive"),
+                    rs.getBoolean("isactive"),
                     rs.getString("image")
                 );
+                
+                // Set packaging
+                product.setPackaging(rs.getString("packaging"));
+                
+                // Get all zones for this product
+                product.setZoneIds(getZonesForProduct(product.getId()));
                 productList.add(product);
             }
         } catch (SQLException e) {
@@ -186,10 +251,15 @@ public class ProductDAO extends DBContext {
                         rs.getString("describe"),
                         rs.getDouble("price"),
                         rs.getDouble("quantity"),
-                        rs.getString("zoneId"),
-                        rs.getBoolean("isActive"),
+                        rs.getBoolean("isactive"),
                         rs.getString("image")
                 );
+                
+                // Set packaging
+                product.setPackaging(rs.getString("packaging"));
+                
+                // Get all zones for this product
+                product.setZoneIds(getZonesForProduct(product.getId()));
                 productList.add(product);
             }
         } catch (SQLException e) {
@@ -213,25 +283,39 @@ public class ProductDAO extends DBContext {
         return total;
     }
 
+    // Update filterProductsByActiveAndZone to use only the junction table
     public List<Product> filterProductsByActiveAndZone(Boolean isActive, String zoneId) {
         List<Product> productList = new ArrayList<>();
         try {
-            StringBuilder sql = new StringBuilder("SELECT * FROM product WHERE 1=1");
-            List<Object> params = new ArrayList<>();
-            
-            if (isActive != null) {
-                sql.append(" AND isActive = ?");
-                params.add(isActive);
-            }
+            StringBuilder sql = new StringBuilder();
             
             if (zoneId != null) {
-                sql.append(" AND zoneId = ?");
-                params.add(zoneId);
+                // If filtering by zone, use the junction table
+                sql.append("SELECT DISTINCT p.* FROM product p ");
+                sql.append("JOIN product_zone pz ON p.id = pz.product_id ");
+                sql.append("WHERE pz.zone_id = ? ");
+                
+                if (isActive != null) {
+                    sql.append("AND p.isactive = ? ");
+                }
+            } else {
+                // If not filtering by zone, use simpler query
+                sql.append("SELECT * FROM product WHERE 1=1 ");
+                
+                if (isActive != null) {
+                    sql.append("AND isactive = ? ");
+                }
             }
             
             PreparedStatement stm = cnn.prepareStatement(sql.toString());
-            for (int i = 0; i < params.size(); i++) {
-                stm.setObject(i + 1, params.get(i));
+            int paramIndex = 1;
+            
+            if (zoneId != null) {
+                stm.setInt(paramIndex++, Integer.parseInt(zoneId));
+            }
+            
+            if (isActive != null) {
+                stm.setBoolean(paramIndex++, isActive);
             }
             
             ResultSet rs = stm.executeQuery();
@@ -243,10 +327,16 @@ public class ProductDAO extends DBContext {
                     rs.getString("describe"),
                     rs.getDouble("price"),
                     rs.getDouble("quantity"),
-                    rs.getString("zoneId"),
-                    rs.getBoolean("isActive"),
+                    rs.getBoolean("isactive"),
                     rs.getString("image")
                 );
+                
+                // Set packaging
+                product.setPackaging(rs.getString("packaging"));
+                
+                // Get all zones for this product
+                product.setZoneIds(getZonesForProduct(product.getId()));
+                
                 productList.add(product);
             }
         } catch (SQLException e) {
