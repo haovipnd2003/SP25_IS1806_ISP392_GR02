@@ -57,9 +57,9 @@ public class StatisticsController extends HttpServlet {
         }
         
         switch (action) {
-            case "custom-date-range":
-                handleCustomDateRange(request, response);
-                break;
+//            case "custom-date-range":
+//                handleCustomDateRange(request, response);
+//                break;
             default:
                 doGet(request, response);
                 break;
@@ -77,10 +77,6 @@ public class StatisticsController extends HttpServlet {
         // Get top selling products for this month
         List<ProductStatistics> topMonthlyProducts = dao.getTopSellingProductsThisMonth(5);
         request.setAttribute("topMonthlyProducts", topMonthlyProducts);
-        
-        // Get order statistics by hour
-        List<TimeStatistics> hourlyStats = dao.getOrderStatisticsByHour();
-        request.setAttribute("hourlyStats", hourlyStats);
         
         // Get order statistics by day of week
         List<TimeStatistics> dailyStats = dao.getOrderStatisticsByDayOfWeek();
@@ -148,25 +144,4 @@ public class StatisticsController extends HttpServlet {
         request.getRequestDispatcher("/view/admin/statistics-trends.jsp").forward(request, response);
     }
     
-    private void handleCustomDateRange(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String startDate = request.getParameter("startDate");
-        String endDate = request.getParameter("endDate");
-        
-        if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
-            StatisticsDAO dao = new StatisticsDAO();
-            
-            // Get top selling products for custom date range
-            List<ProductStatistics> topProducts = dao.getTopSellingProducts(10, startDate, endDate);
-            request.setAttribute("topProducts", topProducts);
-            request.setAttribute("startDate", startDate);
-            request.setAttribute("endDate", endDate);
-            
-            // Forward to custom date range JSP
-            request.getRequestDispatcher("/view/admin/statistics-custom-range.jsp").forward(request, response);
-        } else {
-            // If dates are invalid, redirect back to dashboard
-            response.sendRedirect(request.getContextPath() + "/statistics");
-        }
-    }
 } 

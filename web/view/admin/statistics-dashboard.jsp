@@ -248,26 +248,6 @@
                                     </c:choose>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="stat-card">
-                                    <h5>Busiest Hour</h5>
-                                    <c:choose>
-                                        <c:when test="${not empty hourlyStats}">
-                                            <c:set var="busiestHour" value="${hourlyStats[0]}" />
-                                            <c:forEach var="hour" items="${hourlyStats}">
-                                                <c:if test="${hour.orderCount > busiestHour.orderCount}">
-                                                    <c:set var="busiestHour" value="${hour}" />
-                                                </c:if>
-                                            </c:forEach>
-                                            <div class="value">${busiestHour.timeSlot}</div>
-                                            <div class="text-muted">${busiestHour.orderCount} orders</div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="value">No data</div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="row">
@@ -361,19 +341,11 @@
                                     <div class="card-body">
                                         <ul class="nav nav-tabs" id="timeTabs" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" id="hourly-tab" data-toggle="tab" href="#hourly" role="tab">By Hour</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="daily-tab" data-toggle="tab" href="#daily" role="tab">By Day</a>
+                                                <a class="nav-link active" id="daily-tab" data-toggle="tab" href="#daily" role="tab">By Day</a>
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="timeTabsContent">
-                                            <div class="tab-pane fade show active" id="hourly" role="tabpanel">
-                                                <div class="chart-container">
-                                                    <canvas id="hourlyChart"></canvas>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="daily" role="tabpanel">
+                                            <div class="tab-pane fade show active" id="daily" role="tabpanel">
                                                 <div class="chart-container">
                                                     <canvas id="dailyChart"></canvas>
                                                 </div>
@@ -500,40 +472,6 @@
                         backgroundColor: 'rgba(75, 192, 192, 0.6)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-            
-            // Hourly Chart
-            const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
-            const hourlyChart = new Chart(hourlyCtx, {
-                type: 'line',
-                data: {
-                    labels: [
-                        <c:forEach var="hour" items="${hourlyStats}" varStatus="status">
-                            '${hour.timeSlot}'${!status.last ? ',' : ''}
-                        </c:forEach>
-                    ],
-                    datasets: [{
-                        label: 'Orders',
-                        data: [
-                            <c:forEach var="hour" items="${hourlyStats}" varStatus="status">
-                                ${hour.orderCount}${!status.last ? ',' : ''}
-                            </c:forEach>
-                        ],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 2,
-                        tension: 0.3
                     }]
                 },
                 options: {

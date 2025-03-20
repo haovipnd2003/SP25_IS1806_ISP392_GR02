@@ -4,24 +4,26 @@ package entity;
  * Entity class for product statistics
  */
 public class ProductStatistics {
+
     private String productId;
     private String productName;
     private int salesCount;
+    private int totalQuantity;
     private double totalRevenue;
     private String timeFrame;
     private String zoneId;
     private String zoneName;
-    
+
     public ProductStatistics() {
     }
-    
+
     public ProductStatistics(String productId, String productName, int salesCount, double totalRevenue) {
         this.productId = productId;
         this.productName = productName;
         this.salesCount = salesCount;
         this.totalRevenue = totalRevenue;
     }
-    
+
     public ProductStatistics(String productId, String productName, int salesCount, double totalRevenue, String timeFrame) {
         this.productId = productId;
         this.productName = productName;
@@ -29,7 +31,7 @@ public class ProductStatistics {
         this.totalRevenue = totalRevenue;
         this.timeFrame = timeFrame;
     }
-    
+
     public ProductStatistics(String productId, String productName, int salesCount, double totalRevenue, String zoneId, String zoneName) {
         this.productId = productId;
         this.productName = productName;
@@ -95,10 +97,18 @@ public class ProductStatistics {
         this.zoneName = zoneName;
     }
 
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
     @Override
     public String toString() {
-        return "ProductStatistics{" + "productId=" + productId + ", productName=" + productName + 
-                ", salesCount=" + salesCount + ", totalRevenue=" + totalRevenue + 
-                ", timeFrame=" + timeFrame + ", zoneId=" + zoneId + ", zoneName=" + zoneName + '}';
+        return "ProductStatistics{" + "productId=" + productId + ", productName=" + productName
+                + ", salesCount=" + salesCount + ", totalRevenue=" + totalRevenue
+                + ", timeFrame=" + timeFrame + ", zoneId=" + zoneId + ", zoneName=" + zoneName + '}';
     }
-} 
+}
