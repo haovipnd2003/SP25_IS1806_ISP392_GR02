@@ -206,7 +206,7 @@
                                     <c:choose>
                                         <c:when test="${not empty topWeeklyProducts}">
                                             <div class="value">${topWeeklyProducts[0].productName}</div>
-                                            <div class="text-muted">${topWeeklyProducts[0].salesCount} units sold</div>
+                                            <div class="text-muted">${topWeeklyProducts[0].salesCount} ${unit}</div>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="value">No data</div>
@@ -220,7 +220,7 @@
                                     <c:choose>
                                         <c:when test="${not empty topMonthlyProducts}">
                                             <div class="value">${topMonthlyProducts[0].productName}</div>
-                                            <div class="text-muted">${topMonthlyProducts[0].salesCount} units sold</div>
+                                            <div class="text-muted">${topMonthlyProducts[0].salesCount} ${unit}</div>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="value">No data</div>
@@ -276,7 +276,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>Product</th>
-                                                                <th>Units Sold</th>
+                                                                <th>Quantity (${unit})</th>
                                                                 <th>Revenue</th>
                                                             </tr>
                                                         </thead>
@@ -284,7 +284,7 @@
                                                             <c:forEach var="product" items="${topWeeklyProducts}">
                                                                 <tr>
                                                                     <td>${product.productName}</td>
-                                                                    <td>${product.salesCount}</td>
+                                                                    <td>${product.salesCount} ${unit}</td>
                                                                     <td><fmt:formatNumber value="${product.totalRevenue}" type="currency"/></td>
                                                                 </tr>
                                                             </c:forEach>
@@ -306,7 +306,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>Product</th>
-                                                                <th>Units Sold</th>
+                                                                <th>Quantity (${unit})</th>
                                                                 <th>Revenue</th>
                                                             </tr>
                                                         </thead>
@@ -314,7 +314,7 @@
                                                             <c:forEach var="product" items="${topMonthlyProducts}">
                                                                 <tr>
                                                                     <td>${product.productName}</td>
-                                                                    <td>${product.salesCount}</td>
+                                                                    <td>${product.salesCount} ${unit}</td>
                                                                     <td><fmt:formatNumber value="${product.totalRevenue}" type="currency"/></td>
                                                                 </tr>
                                                             </c:forEach>
@@ -430,7 +430,7 @@
                         </c:forEach>
                     ],
                     datasets: [{
-                        label: 'Units Sold',
+                        label: 'Quantity (${unit})',
                         data: [
                             <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
                                 ${product.salesCount}${!status.last ? ',' : ''}
@@ -463,7 +463,7 @@
                         </c:forEach>
                     ],
                     datasets: [{
-                        label: 'Units Sold',
+                        label: 'Quantity (${unit})',
                         data: [
                             <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
                                 ${product.salesCount}${!status.last ? ',' : ''}

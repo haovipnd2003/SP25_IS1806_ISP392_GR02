@@ -51,7 +51,8 @@ public class StatisticsDAO extends DBContext {
 
         try {
             connection = getConnection();
-            String sql = "SELECT p.id, p.name, SUM(oi.quantityInput) as total_quantity, "
+            String sql = "SELECT p.id, p.name, "
+                    + "SUM(oi.quantityInput * CAST(REPLACE(oi.packaging, 'kg', '') AS DECIMAL(10,2))) as total_quantity, "
                     + "SUM(oi.amountMoney) as total_revenue "
                     + "FROM orderitems oi "
                     + "JOIN product p ON oi.productid = p.id "
@@ -288,8 +289,8 @@ public class StatisticsDAO extends DBContext {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             String sql = "SELECT p.id, p.name, "
-                    + "SUM(CASE WHEN o.createdAt BETWEEN ? AND ? THEN CAST(oi.quantityInput AS DECIMAL) ELSE 0 END) as current_week_sales, "
-                    + "SUM(CASE WHEN o.createdAt BETWEEN ? AND ? THEN CAST(oi.quantityInput AS DECIMAL) ELSE 0 END) as previous_week_sales "
+                    + "SUM(CASE WHEN o.createdAt BETWEEN ? AND ? THEN oi.quantityInput * CAST(REPLACE(oi.packaging, 'kg', '') AS DECIMAL(10,2)) ELSE 0 END) as current_week_sales, "
+                    + "SUM(CASE WHEN o.createdAt BETWEEN ? AND ? THEN oi.quantityInput * CAST(REPLACE(oi.packaging, 'kg', '') AS DECIMAL(10,2)) ELSE 0 END) as previous_week_sales "
                     + "FROM product p "
                     + "LEFT JOIN orderitems oi ON p.id = oi.productid "
                     + "LEFT JOIN orders o ON oi.orderid = o.id AND o.isactive = 1 "

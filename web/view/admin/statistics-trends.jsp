@@ -124,7 +124,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="alert alert-info">
-                                            <i class="fa fa-info-circle"></i> This analysis shows products with significant growth in sales compared to the previous week. Use this information to identify emerging trends and adjust your inventory accordingly.
+                                            <i class="fa fa-info-circle"></i> This analysis shows products with significant growth in sales (measured in ${unit}) compared to the previous week. Use this information to identify emerging trends and adjust your inventory accordingly.
                                         </div>
                                         
                                         <div class="chart-container">
@@ -137,7 +137,7 @@
                                                     <div class="trend-card">
                                                         <div class="product-name">${product.productName}</div>
                                                         <div class="sales-count">
-                                                            <i class="fa fa-shopping-cart"></i> ${product.salesCount} units sold this week
+                                                            <i class="fa fa-shopping-cart"></i> ${product.salesCount} ${unit} sold this week
                                                         </div>
                                                         <div class="growth ${product.totalRevenue >= 0 ? 'growth-positive' : 'growth-negative'}">
                                                             <c:if test="${product.totalRevenue >= 0}">
@@ -170,7 +170,7 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Product</th>
-                                                        <th>Current Week Sales</th>
+                                                        <th>Quantity (${unit})</th>
                                                         <th>Growth Rate</th>
                                                     </tr>
                                                 </thead>
@@ -217,12 +217,12 @@
                                                 <c:if test="${not empty trendingProducts}">
                                                     <c:forEach var="product" items="${trendingProducts}" begin="0" end="2">
                                                         <c:if test="${product.totalRevenue > 20}">
-                                                            <li>Increase inventory for <strong>${product.productName}</strong> (growing at ${product.totalRevenue}%)</li>
+                                                            <li>Increase inventory for <strong>${product.productName}</strong> (growing at ${product.totalRevenue}%) - Current sales: ${product.salesCount} ${unit}</li>
                                                         </c:if>
                                                     </c:forEach>
                                                     <c:forEach var="product" items="${trendingProducts}">
                                                         <c:if test="${product.totalRevenue < -20}">
-                                                            <li>Consider reducing inventory for <strong>${product.productName}</strong> (declining at ${Math.abs(product.totalRevenue)}%)</li>
+                                                            <li>Consider reducing inventory for <strong>${product.productName}</strong> (declining at ${Math.abs(product.totalRevenue)}%) - Current sales: ${product.salesCount} ${unit}</li>
                                                         </c:if>
                                                     </c:forEach>
                                                     <li>Monitor these trends weekly to adjust inventory levels</li>

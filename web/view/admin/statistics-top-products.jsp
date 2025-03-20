@@ -112,7 +112,7 @@
                                                             <tr>
                                                                 <th>#</th>
                                                                 <th>Product</th>
-                                                                <th>Units Sold</th>
+                                                                <th>Quantity (${unit})</th>
                                                                 <th>Revenue</th>
                                                                 <th>% of Total Sales</th>
                                                             </tr>
@@ -127,7 +127,7 @@
                                                                 <tr>
                                                                     <td>${status.index + 1}</td>
                                                                     <td>${product.productName}</td>
-                                                                    <td>${product.salesCount}</td>
+                                                                    <td>${product.salesCount} ${unit}</td>
                                                                     <td><fmt:formatNumber value="${product.totalRevenue}" type="currency"/></td>
                                                                     <td>
                                                                         <c:if test="${totalWeeklySales > 0}">
@@ -158,7 +158,7 @@
                                                             <tr>
                                                                 <th>#</th>
                                                                 <th>Product</th>
-                                                                <th>Units Sold</th>
+                                                                <th>Quantity (${unit})</th>
                                                                 <th>Revenue</th>
                                                                 <th>% of Total Sales</th>
                                                             </tr>
@@ -173,7 +173,7 @@
                                                                 <tr>
                                                                     <td>${status.index + 1}</td>
                                                                     <td>${product.productName}</td>
-                                                                    <td>${product.salesCount}</td>
+                                                                    <td>${product.salesCount} ${unit}</td>
                                                                     <td><fmt:formatNumber value="${product.totalRevenue}" type="currency"/></td>
                                                                     <td>
                                                                         <c:if test="${totalMonthlySales > 0}">
@@ -302,7 +302,7 @@
                         </c:forEach>
                     ],
                     datasets: [{
-                        label: 'Units Sold',
+                        label: 'Quantity (${unit})',
                         data: [
                             <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
                                 ${product.salesCount}${!status.last ? ',' : ''}
@@ -344,7 +344,7 @@
                         </c:forEach>
                     ],
                     datasets: [{
-                        label: 'Units Sold',
+                        label: 'Quantity (${unit})',
                         data: [
                             <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
                                 ${product.salesCount}${!status.last ? ',' : ''}

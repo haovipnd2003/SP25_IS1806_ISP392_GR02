@@ -91,6 +91,9 @@ public class StatisticsController extends HttpServlet {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         request.setAttribute("currentDate", today.format(formatter));
         
+        // Thêm attribute mới cho đơn vị
+        request.setAttribute("unit", "kg");
+        
         // Forward to dashboard JSP
         request.getRequestDispatcher("/view/admin/statistics-dashboard.jsp").forward(request, response);
     }
@@ -112,6 +115,9 @@ public class StatisticsController extends HttpServlet {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         request.setAttribute("currentDate", today.format(formatter));
         
+        // Thêm attribute mới cho đơn vị
+        request.setAttribute("unit", "kg");
+        
         // Forward to top products JSP
         request.getRequestDispatcher("/view/admin/statistics-top-products.jsp").forward(request, response);
     }
@@ -127,6 +133,9 @@ public class StatisticsController extends HttpServlet {
         // Get order statistics by month
         List<TimeStatistics> monthlyStats = dao.getOrderStatisticsByMonth();
         request.setAttribute("monthlyStats", monthlyStats);
+        
+        // Thêm attribute mới cho đơn vị
+        request.setAttribute("unit", "kg");
         
         // Forward to time analysis JSP
         request.getRequestDispatcher("/view/admin/statistics-time-analysis.jsp").forward(request, response);
