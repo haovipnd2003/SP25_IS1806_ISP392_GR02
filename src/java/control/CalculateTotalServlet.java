@@ -4,23 +4,21 @@
  */
 package control;
 
-import dao.CustomerDAO;
-import entity.Customer;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author Viet Duc
+ * @author binh2
  */
-@WebServlet(name = "SearchCustomerServlet", urlPatterns = {"/searchcustomer"})
-public class SearchCustomerServlet extends HttpServlet {
+@WebServlet(name = "CalculateTotalServlet", urlPatterns = {"/calculateTotalServlet"})
+public class CalculateTotalServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +37,10 @@ public class SearchCustomerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchCustomerServlet</title>");
+            out.println("<title>Servlet CalculateTotalServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchCustomerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CalculateTotalServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -74,27 +72,41 @@ public class SearchCustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id") != null ? request.getParameter("id").trim() : "";
-        String name = request.getParameter("name") != null ? request.getParameter("name").trim() : "";
-        String phone = request.getParameter("phone") != null ? request.getParameter("phone").trim() : "";
-        String email = request.getParameter("email") != null ? request.getParameter("email").trim() : "";
-        String address = request.getParameter("address") != null ? request.getParameter("address").trim() : "";
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
 
-        CustomerDAO dao = new CustomerDAO();
-        ArrayList<Customer> listCus = dao.searchCustomers(id,name, phone, email, address);
+        try {
+            String productName = request.getParameter("productName");
+            double price = Double.parseDouble(request.getParameter("price"));
+            double quantity = Double.parseDouble(request.getParameter("quantity"));
+            double packaging = Double.parseDouble(request.getParameter("packaging"));
+            double discount = 0;
+            discount = Double.parseDouble(request.getParameter("discount"));
 
-        request.setAttribute("listCus", listCus);
-        request.setAttribute("id", id);
-        request.setAttribute("name", name);
-        request.setAttribute("phone", phone);
-        request.setAttribute("email", email);
-        request.setAttribute("address", address);
+            System.out.println("Received data: price=" + price + ", quantity=" + quantity
+                    + ", packaging=" + packaging + ", discount=" + discount);
 
-        if (listCus == null || listCus.isEmpty()) {
-            request.setAttribute("noCustomersMessage", "No matching customers");
+            long totalAmount = 0;
+
+// Tính tổng tiền
+            if ((price > 0 && quantity > 0) || discount > 0 || discount <= price) {
+                double priceHaveDiscount = price*1000 - discount;
+                if (priceHaveDiscount < 0) {
+                    priceHaveDiscount = 0; // Đảm bảo không bị giá âm
+                }
+
+                long totalMass = (long) (quantity * packaging);
+                totalAmount = (long) (priceHaveDiscount * totalMass);
+            }
+
+            // Trả về kết quả
+            response.getWriter().write(String.valueOf(totalAmount));
+
+        } catch (Exception e) {
+            System.out.println("Error in doPost: " + e.getMessage());
+            e.printStackTrace();
+            response.getWriter().write("0.00");
         }
-
-        request.getRequestDispatcher("view/page/customer.jsp").forward(request, response);
     }
 
     /**

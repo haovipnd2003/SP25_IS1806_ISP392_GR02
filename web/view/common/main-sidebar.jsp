@@ -28,9 +28,13 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-document-text"></i><span>Invoice</span></a>        
                 </li>
-
+                
                 <li>
-                    <a href="${pageContext.request.contextPath}/debt.do"><i class="ion ion-clipboard"></i><span>Debt Management</span></a>
+                    <a href="${pageContext.request.contextPath}/invoiceStatistic"><i class="ion ion-person-stalker"></i><span>Invoice Statistic</span></a>
+                </li>
+                
+                <li>
+                    <a href="${pageContext.request.contextPath}/debtor.do"><i class="ion ion-clipboard"></i><span>Debt Management</span></a>
                 </li>
 
                 <li>
@@ -41,13 +45,13 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/products"><i class="ion ion-bag"></i><span>Product</span></a>
                 </li>
-               
+
 
                 <li>
                     <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
                 </li>
 
-                
+
 
             </c:if>    
 

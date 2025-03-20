@@ -287,8 +287,43 @@ public class CustomerDAO extends DBContext {
         return list;
     }
 
+    public void addCustomerByNamenPhone(String name, String phone) {
+        try {
+            String query = "INSERT INTO customer (name, phone, isactive) VALUES (?, ?, 1)";
+            stm = cnn.prepareStatement(query);
+            stm.setString(1, name);
+            stm.setString(2, phone);
+            int rowsAffected = stm.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Error adding customer: " + e.getMessage());
+        }
+    }
+
+    public Customer getCustomerForInvoice(String name, String phone) {
+        try {
+            String query = "SELECT * FROM customer WHERE (name LIKE ? AND phone LIKE ?) and isactive = 1";
+            stm = cnn.prepareStatement(query);
+            stm.setString(1, "%" + name + "%");
+            stm.setString(2, "%" + phone + "%");
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return new Customer(
+                        String.valueOf(rs.getInt("id")),
+                        rs.getString("name"),
+                        String.valueOf(rs.getBigDecimal("phone")),
+                        rs.getString("address")
+                );
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting customer by ID: " + e.getMessage());
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         CustomerDAO DAO = new CustomerDAO();
-        DAO.banCustomer("15");
+        Customer cus = DAO.getCustomerForInvoice("hao12", "2331");
+        System.out.println(cus);
     }
 }

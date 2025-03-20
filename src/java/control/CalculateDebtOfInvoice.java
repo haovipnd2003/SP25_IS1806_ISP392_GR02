@@ -4,8 +4,6 @@
  */
 package control;
 
-import dao.CustomerDAO;
-import entity.Customer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +11,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author Viet Duc
+ * @author binh2
  */
-@WebServlet(name = "BanCustomerServlet", urlPatterns = {"/bancustomer"})
-public class BanCustomerServlet extends HttpServlet {
+@WebServlet(name = "CheckPaymentServlet", urlPatterns = {"/checkPaymentServlet"})
+public class CalculateDebtOfInvoice extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +37,10 @@ public class BanCustomerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BanCustomerServlet</title>");
+            out.println("<title>Servlet CheckPaymentServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet BanCustomerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CheckPaymentServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,14 +58,7 @@ public class BanCustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("banId");
-        CustomerDAO dao = new CustomerDAO();
-        dao.banCustomer(id);
-        ArrayList<Customer> newlistCus = dao.getAllCustomers();
-        request.setAttribute("listCus", newlistCus);
-        request.getSession().setAttribute("succMess", "Ban id " + id + " Successfull");
-        response.sendRedirect("customer?action=view");
-
+        processRequest(request, response);
     }
 
     /**
@@ -81,7 +72,21 @@ public class BanCustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            double totalAmount = Double.parseDouble(request.getParameter("totalAmount"));
+            long amountPaid = Long.parseLong(request.getParameter("amountPaid"));
+
+            if (amountPaid < 0 || amountPaid > totalAmount) {
+                response.getWriter().write("INVALID");
+            } else {
+                double debt = totalAmount - amountPaid;
+                response.getWriter().write(String.format("%.2f", debt)); // Gửi số tiền khách còn nợ về frontend
+                HttpSession session = request.getSession();
+                session.setAttribute("customerPay", String.valueOf(amountPaid));
+            }
+        } catch (Exception e) {
+            response.getWriter().write("ERROR");
+        }
     }
 
     /**
