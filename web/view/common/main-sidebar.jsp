@@ -44,6 +44,37 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/schedule"><i class="ion ion-calendar"></i><span>Schedule Management</span></a>
                 </li>
+                <li class="menu-dropdown">
+                    <a href="#">
+                        <i class="ion ion-stats-bars"></i>
+                        <span style="margin-left: 8px;">Statistical</span>
+                    </a>
+                    <ul class="treeview-menu" style="padding-left: 20px; display: none;">
+                        <li>
+                            <a href="${pageContext.request.contextPath}/revenuestatistics">
+                                <i class="ion ion-cash"></i>
+                                <span style="margin-left: 8px;">Revenue Statistics</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="${pageContext.request.contextPath}/riceproductionstatistics">
+                                <i class="ion ion-ios-nutrition"></i>
+                                <span style="margin-left: 8px;">Production Statistics</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        document.querySelector(".menu-dropdown > a").addEventListener("click", function (e) {
+                            e.preventDefault();
+                            let submenu = this.nextElementSibling;
+                            submenu.style.display = submenu.style.display === "none" ? "block" : "none";
+                        });
+                    });
+                </script>
+
             </c:if>
             <c:if test="${sessionScope.acc.roletype == 3}">
                 <li>
