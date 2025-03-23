@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import entity.User;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(name = "Zones", urlPatterns = {"/zoneControl"})
 public class ZoneControl extends HttpServlet {
@@ -232,18 +234,41 @@ public class ZoneControl extends HttpServlet {
 
     private void insertZone(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String name = request.getParameter("name");
-            boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
-
+            String name = request.getParameter("name").trim();
+            String isActiveParam = request.getParameter("isActive");
+            
+            Map<String, String> errors = new HashMap<>();
+            
+            // Validate required fields
+            if (name.isEmpty()) {
+                errors.put("nameError", "Zone name is required");
+            }
+            if (isActiveParam == null) {
+                errors.put("statusError", "Status is required");
+            }
+            
+            // Check duplicate name
+            if (zoneDAO.getZoneByName(name) != null) {
+                errors.put("nameError", "Zone name already exists");
+            }
+            
+            if (!errors.isEmpty()) {
+                errors.forEach(request.getSession()::setAttribute);
+                response.sendRedirect("zoneControl?action=add");
+                return;
+            }
+            
+            boolean isActive = Boolean.parseBoolean(isActiveParam);
             Zone zone = new Zone();
             zone.setName(name);
             zone.setIsActive(isActive);
+            
             zoneDAO.insert(zone);
             request.getSession().setAttribute("toastMessage", "Zone added successfully!");
             request.getSession().setAttribute("toastType", "success");
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("toastMessage", "Failed to add zone!");
+            request.getSession().setAttribute("toastMessage", "Error adding zone: " + e.getMessage());
             request.getSession().setAttribute("toastType", "error");
         }
         response.sendRedirect("zoneControl");
@@ -252,8 +277,30 @@ public class ZoneControl extends HttpServlet {
     private void updateZone(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String id = request.getParameter("id");
-            String name = request.getParameter("name");
-            boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
+            String name = request.getParameter("name").trim();
+            String isActiveParam = request.getParameter("isActive");
+            
+            Map<String, String> errors = new HashMap<>();
+            
+            // Validate required fields
+            if (name.isEmpty()) {
+                errors.put("nameError", "Zone name is required");
+            }
+            if (isActiveParam == null) {
+                errors.put("statusError", "Status is required");
+            }
+            
+            // Check duplicate name
+            Zone existingZone = zoneDAO.getZoneByName(name);
+            if (existingZone != null && !existingZone.getId().equals(id)) {
+                errors.put("nameError", "Zone name already exists");
+            }
+            
+            if (!errors.isEmpty()) {
+                errors.forEach(request.getSession()::setAttribute);
+                response.sendRedirect("zoneControl?action=edit&id=" + id);
+                return;
+            }
             
             // Kiểm tra id có tồn tại không
             Zone currentZone = zoneDAO.getZoneById(id);
@@ -265,7 +312,6 @@ public class ZoneControl extends HttpServlet {
             }
             
             // Kiểm tra xem tên zone mới có trùng với zone khác không
-            Zone existingZone = zoneDAO.getZoneByName(name);
             if (existingZone != null && !existingZone.getId().equals(id)) {
                 request.getSession().setAttribute("toastMessage", "Zone name already exists!");
                 request.getSession().setAttribute("toastType", "error");
@@ -274,7 +320,7 @@ public class ZoneControl extends HttpServlet {
             }
             
             // Nếu đang chuyển từ active sang inactive, kiểm tra xem có sản phẩm không
-            if (currentZone.isIsActive() && !isActive) {
+            if (currentZone.isIsActive() && !isActiveParam.equals("true")) {
                 boolean hasProducts = zoneDAO.isZoneUsedByProducts(id);
                 if (hasProducts && request.getParameter("confirmed") == null) {
                     // Nếu có sản phẩm và chưa xác nhận, chuyển về trang cập nhật với thông báo
@@ -289,10 +335,10 @@ public class ZoneControl extends HttpServlet {
             Zone zone = new Zone();
             zone.setId(id);
             zone.setName(name);
-            zone.setIsActive(isActive);
+            zone.setIsActive(Boolean.parseBoolean(isActiveParam));
             
             // Thêm debug log
-            System.out.println("Updating zone: ID=" + id + ", Name=" + name + ", isActive=" + isActive);
+            System.out.println("Updating zone: ID=" + id + ", Name=" + name + ", isActive=" + isActiveParam);
             
             boolean updated = zoneDAO.update(zone);
             if (updated) {
@@ -302,13 +348,9 @@ public class ZoneControl extends HttpServlet {
                 request.getSession().setAttribute("toastMessage", "Failed to update zone!");
                 request.getSession().setAttribute("toastType", "error");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            request.getSession().setAttribute("toastMessage", "Failed to update zone: " + e.getMessage());
-            request.getSession().setAttribute("toastType", "error");
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("toastMessage", "An unexpected error occurred: " + e.getMessage());
+            request.getSession().setAttribute("toastMessage", "Error updating zone: " + e.getMessage());
             request.getSession().setAttribute("toastType", "error");
         }
         response.sendRedirect("zoneControl");

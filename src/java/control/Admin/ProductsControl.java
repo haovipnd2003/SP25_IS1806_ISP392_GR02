@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import entity.User; // Add this import statement
 import dao.ZoneDAO;
 import entity.Zone;
+import java.util.Map;
+import java.util.HashMap;
 
 @WebServlet(name = "Products", urlPatterns = {"/products"})
 public class ProductsControl extends HttpServlet {
@@ -171,22 +173,52 @@ public class ProductsControl extends HttpServlet {
         try {
             String name = request.getParameter("name");
             String describe = request.getParameter("describe");
-            double price = Double.parseDouble(request.getParameter("price"));
-            double quantity = Double.parseDouble(request.getParameter("quantity"));
+            String priceParam = request.getParameter("price");
+            String quantityParam = request.getParameter("quantity");
             String[] zoneIds = request.getParameterValues("zoneIds");
-            boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
+            String isActiveParam = request.getParameter("isActive");
             String image = request.getParameter("image");
             String packaging = request.getParameter("packaging");
 
+            // Validate required fields
+            Map<String, String> errors = new HashMap<>();
+            if (name == null || name.trim().isEmpty()) {
+                errors.put("nameError", "Product name is required");
+            }
+            if (priceParam == null || priceParam.trim().isEmpty()) {
+                errors.put("priceError", "Price is required");
+            } else if (!priceParam.matches("^\\d+(\\.\\d{1,2})?$")) {
+                errors.put("priceError", "Invalid price format");
+            }
+            if (quantityParam == null || quantityParam.trim().isEmpty()) {
+                errors.put("quantityError", "Quantity is required");
+            } else if (!quantityParam.matches("^\\d+(\\.\\d{1,2})?$")) {
+                errors.put("quantityError", "Invalid quantity format");
+            }
+            if (zoneIds == null || zoneIds.length == 0) {
+                errors.put("zoneError", "At least one zone must be selected");
+            }
+
+            if (!errors.isEmpty()) {
+                errors.forEach(request.getSession()::setAttribute);
+                response.sendRedirect("products?action=add");
+                return;
+            }
+
+            // Continue with processing...
+            double price = Double.parseDouble(priceParam);
+            double quantity = Double.parseDouble(quantityParam);
+            boolean isActive = Boolean.parseBoolean(isActiveParam);
+
             Product product = new Product();
             product.setName(name);
-            product.setDescribe(describe);
+            product.setDescribe(describe != null ? describe : "");
             product.setPrice(price);
             product.setQuantity(quantity);
             product.setZoneIds(zoneIds);
             product.setActive(isActive);
-            product.setImage(image);
-            product.setPackaging(packaging);
+            product.setImage(image != null ? image : "");
+            product.setPackaging(packaging != null ? packaging : "");
             productDAO.insert(product);
             request.getSession().setAttribute("toastMessage", "Product added successfully!");
             request.getSession().setAttribute("toastType", "success");
@@ -203,23 +235,53 @@ public class ProductsControl extends HttpServlet {
             String id = request.getParameter("id");
             String name = request.getParameter("name");
             String describe = request.getParameter("describe");
-            double price = Double.parseDouble(request.getParameter("price"));
-            double quantity = Double.parseDouble(request.getParameter("quantity"));
+            String priceParam = request.getParameter("price");
+            String quantityParam = request.getParameter("quantity");
             String[] zoneIds = request.getParameterValues("zoneIds");
-            boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
+            String isActiveParam = request.getParameter("isActive");
             String image = request.getParameter("image");
             String packaging = request.getParameter("packaging");
+
+            // Validate required fields
+            Map<String, String> errors = new HashMap<>();
+            if (name == null || name.trim().isEmpty()) {
+                errors.put("nameError", "Product name is required");
+            }
+            if (priceParam == null || priceParam.trim().isEmpty()) {
+                errors.put("priceError", "Price is required");
+            } else if (!priceParam.matches("^\\d+(\\.\\d{1,2})?$")) {
+                errors.put("priceError", "Invalid price format");
+            }
+            if (quantityParam == null || quantityParam.trim().isEmpty()) {
+                errors.put("quantityError", "Quantity is required");
+            } else if (!quantityParam.matches("^\\d+(\\.\\d{1,2})?$")) {
+                errors.put("quantityError", "Invalid quantity format");
+            }
+            if (zoneIds == null || zoneIds.length == 0) {
+                errors.put("zoneError", "At least one zone must be selected");
+            }
+
+            if (!errors.isEmpty()) {
+                errors.forEach(request.getSession()::setAttribute);
+                response.sendRedirect("products?action=edit&id=" + id);
+                return;
+            }
+
+            // Continue with processing...
+            double price = Double.parseDouble(priceParam);
+            double quantity = Double.parseDouble(quantityParam);
+            boolean isActive = Boolean.parseBoolean(isActiveParam);
 
             Product product = new Product();
             product.setId(id);
             product.setName(name);
-            product.setDescribe(describe);
+            product.setDescribe(describe != null ? describe : "");
             product.setPrice(price);
             product.setQuantity(quantity);
             product.setZoneIds(zoneIds);
             product.setActive(isActive);
-            product.setImage(image);
-            product.setPackaging(packaging);
+            product.setImage(image != null ? image : "");
+            product.setPackaging(packaging != null ? packaging : "");
             productDAO.update(product);
             request.getSession().setAttribute("toastMessage", "Product updated successfully!");
             request.getSession().setAttribute("toastType", "success");

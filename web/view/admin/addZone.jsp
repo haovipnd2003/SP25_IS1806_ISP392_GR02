@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -67,14 +66,17 @@
                                     <h1 class="card-title text-center">Add New Zone</h1>
                                 </div>
                                 <div class="card-body">
-                                    <form action="zoneControl" method="post" onsubmit="return validateForm()">
+                                    <form action="zoneControl" method="post">
                                         <input type="hidden" name="action" value="insert">
 
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="name" class="form-label">Zone Name:</label>
-                                                    <input type="text" class="form-control" id="name" name="name" required>
+                                                    <input type="text" class="form-control" id="name" name="name" value="${param.name}">
+                                                    <c:if test="${not empty nameError}">
+                                                        <small class="text-danger">${nameError}</small>
+                                                    </c:if>
                                                 </div>
                                             </div>
                                         </div>
@@ -83,14 +85,19 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="form-label">Status:</label>
+                                                    <c:if test="${not empty statusError}">
+                                                        <small class="text-danger d-block">${statusError}</small>
+                                                    </c:if>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="isActive" id="activeYes" value="true" checked>
+                                                        <input class="form-check-input" type="radio" name="isActive" id="activeYes" value="true" 
+                                                               ${param.isActive == 'true' ? 'checked' : 'checked'}>
                                                         <label class="form-check-label" for="activeYes">
                                                             Active
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="isActive" id="activeNo" value="false">
+                                                        <input class="form-check-input" type="radio" name="isActive" id="activeNo" value="false"
+                                                               ${param.isActive == 'false' ? 'checked' : ''}>
                                                         <label class="form-check-label" for="activeNo">
                                                             Inactive
                                                         </label>

@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -123,7 +124,10 @@
                                             <div class="product-details">
                                                 <h5>${product.name}</h5>
                                                 <p class="text-truncate">${product.describe}</p>
-                                                <p><strong>Price:</strong> $${product.price}</p>
+                                                <p><strong>Price:</strong> 
+                                                    <fmt:formatNumber value="${product.price}" 
+                                                                     pattern="###,###₫" />
+                                                </p>
                                                 <p>
                                                     <span class="badge ${product.isActive ? 'bg-success' : 'bg-danger'}">
                                                         ${product.isActive ? 'Active' : 'Inactive'}

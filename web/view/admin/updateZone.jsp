@@ -104,7 +104,11 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="name" class="form-label">Zone Name:</label>
-                                                        <input type="text" class="form-control" id="name" name="name" value="${zone.name}" required>
+                                                        <input type="text" class="form-control" id="name" name="name" 
+                                                               value="${fn:escapeXml(not empty param.name ? param.name : zone.name)}">
+                                                        <c:if test="${not empty nameError}">
+                                                            <small class="text-danger">${nameError}</small>
+                                                        </c:if>
                                                     </div>
                                                 </div>
                                             </div>
@@ -113,14 +117,19 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label class="form-label">Status:</label>
+                                                        <c:if test="${not empty statusError}">
+                                                            <small class="text-danger d-block">${statusError}</small>
+                                                        </c:if>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="isActive" id="activeYes" value="true" ${zone.isActive ? 'checked' : ''}>
+                                                            <input class="form-check-input" type="radio" name="isActive" id="activeYes" value="true" 
+                                                                   ${(param.isActive == 'true' or zone.isActive) ? 'checked' : ''}>
                                                             <label class="form-check-label" for="activeYes">
                                                                 Active
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="isActive" id="activeNo" value="false" ${!zone.isActive ? 'checked' : ''}>
+                                                            <input class="form-check-input" type="radio" name="isActive" id="activeNo" value="false"
+                                                                   ${(param.isActive == 'false' or !zone.isActive) ? 'checked' : ''}>
                                                             <label class="form-check-label" for="activeNo">
                                                                 Inactive
                                                             </label>

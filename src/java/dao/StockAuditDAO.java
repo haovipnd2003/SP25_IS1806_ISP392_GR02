@@ -21,19 +21,15 @@ public class StockAuditDAO extends DBContext {
     private ResultSet rs;
 
     public StockAuditDAO() {
-        connect();
+        connectDB();
     }
 
-    private void connect() {
-        try {
-            cnn = super.connection;
-            if (cnn != null) {
-                System.out.println("StockAuditDAO: Connect success");
-            } else {
-                System.out.println("StockAuditDAO: Connect fail");
-            }
-        } catch (Exception e) {
-            System.out.println("StockAuditDAO Connect error: " + e.getMessage());
+      private void connectDB() {
+        cnn = connection;
+        if (cnn != null) {
+            System.out.println("StatisticsDAO: Connect Success");
+        } else {
+            System.out.println("StatisticsDAO: Connect Fail");
         }
     }
 
@@ -48,7 +44,7 @@ public class StockAuditDAO extends DBContext {
         audit.setActualQuantity(rs.getDouble("actual_quantity"));
         audit.setDifference(rs.getDouble("difference"));
         audit.setNote(rs.getString("note"));
-        audit.setCreatedAt(rs.getDate("created_at"));
+//        audit.setCreatedAt(rs.getDate("created_at"));
         
         // Thêm thông tin từ các bảng khác nếu có join
         try {
@@ -64,19 +60,20 @@ public class StockAuditDAO extends DBContext {
 
     public int insert(StockAudit audit) {
         String sql = "INSERT INTO stock_audit (audit_date, zone_id, staff_id, product_id, " +
-                "expected_quantity, actual_quantity, difference, note, created_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                "expected_quantity, actual_quantity, note) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
-            stm = cnn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            connection = getConnection();
+            stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setDate(1, audit.getAuditDate());
             stm.setString(2, audit.getZoneId());
             stm.setString(3, audit.getStaffId());
             stm.setString(4, audit.getProductId());
             stm.setDouble(5, audit.getExpectedQuantity());
             stm.setDouble(6, audit.getActualQuantity());
-            stm.setDouble(7, audit.getDifference());
-            stm.setString(8, audit.getNote());
+//            stm.setDouble(7, audit.getDifference());
+            stm.setString(7, audit.getNote());
 
             int affectedRows = stm.executeUpdate();
 
@@ -111,7 +108,8 @@ public class StockAuditDAO extends DBContext {
                      "LIMIT ? OFFSET ?";
 
         try {
-            stm = cnn.prepareStatement(sql);
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
             stm.setInt(1, pageSize);
             stm.setInt(2, offset);
             rs = stm.executeQuery();
@@ -133,7 +131,8 @@ public class StockAuditDAO extends DBContext {
         String sql = "SELECT COUNT(*) FROM stock_audit";
 
         try {
-            stm = cnn.prepareStatement(sql);
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
             rs = stm.executeQuery();
 
             if (rs.next()) {
@@ -162,7 +161,8 @@ public class StockAuditDAO extends DBContext {
                      "LIMIT ? OFFSET ?";
 
         try {
-            stm = cnn.prepareStatement(sql);
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
             stm.setString(1, zoneId);
             stm.setInt(2, pageSize);
             stm.setInt(3, offset);
@@ -185,7 +185,8 @@ public class StockAuditDAO extends DBContext {
         String sql = "SELECT COUNT(*) FROM stock_audit WHERE zone_id = ?";
 
         try {
-            stm = cnn.prepareStatement(sql);
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
             stm.setString(1, zoneId);
             rs = stm.executeQuery();
 
@@ -213,7 +214,8 @@ public class StockAuditDAO extends DBContext {
                      "ORDER BY sa.id";
 
         try {
-            stm = cnn.prepareStatement(sql);
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
             stm.setDate(1, date);
             rs = stm.executeQuery();
 
@@ -241,7 +243,8 @@ public class StockAuditDAO extends DBContext {
                      "ORDER BY sa.zone_id, sa.id";
 
         try {
-            stm = cnn.prepareStatement(sql);
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
             stm.setDate(1, date);
             rs = stm.executeQuery();
 
@@ -275,7 +278,8 @@ public class StockAuditDAO extends DBContext {
                      "WHERE sa.id = ?";
 
         try {
-            stm = cnn.prepareStatement(sql);
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
             stm.setInt(1, auditId);
             rs = stm.executeQuery();
 
@@ -297,7 +301,8 @@ public class StockAuditDAO extends DBContext {
         String sql = "SELECT DISTINCT audit_date FROM stock_audit ORDER BY audit_date DESC";
         
         try {
-            stm = cnn.prepareStatement(sql);
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
             rs = stm.executeQuery();
             
             while (rs.next()) {
@@ -322,6 +327,38 @@ public class StockAuditDAO extends DBContext {
             }
         } catch (SQLException ex) {
             System.out.println("Error closing resources: " + ex.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        StockAuditDAO dao = new StockAuditDAO();
+        
+        try {
+            // Test với ngày kiểm kho cụ thể (thay đổi theo dữ liệu của bạn)
+            java.sql.Date testDate = java.sql.Date.valueOf("2025-03-25");
+            
+            Map<String, List<StockAudit>> auditsByZone = dao.getAuditsByDateGroupedByZone(testDate);
+            
+            if (auditsByZone.isEmpty()) {
+                System.out.println("Không có dữ liệu kiểm kho cho ngày " + testDate);
+                return;
+            }
+            
+            System.out.println("=== KẾT QUẢ KIỂM KHO THEO KHU VỰC NGÀY " + testDate + " ===");
+            for (Map.Entry<String, List<StockAudit>> entry : auditsByZone.entrySet()) {
+                System.out.println("\n★ Khu vực: " + entry.getValue().get(0).getZoneName() + 
+                                 " (ID: " + entry.getKey() + ")");
+                
+                for (StockAudit audit : entry.getValue()) {
+                    System.out.println("├─ Sản phẩm: " + audit.getProductName() + 
+                                     " | Dự kiến: " + audit.getExpectedQuantity() + 
+                                     " | Thực tế: " + audit.getActualQuantity() + 
+                                     " | Chênh lệch: " + audit.getDifference() + 
+                                     " | NV kiểm tra: " + audit.getStaffName());
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Định dạng ngày không hợp lệ. Sử dụng định dạng yyyy-MM-dd");
         }
     }
 } 

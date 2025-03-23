@@ -34,7 +34,10 @@
 
                             <div class="form-group">
                                 <label for="name">Name:</label>
-                                <input type="text" class="form-control" id="name" name="name" value="${fn:escapeXml(product.name)}" required>
+                                <input type="text" class="form-control" id="name" name="name" value="${fn:escapeXml(not empty param.name ? param.name : product.name)}">
+                                <c:if test="${not empty nameError}">
+                                    <small class="text-danger">${nameError}</small>
+                                </c:if>
                             </div>
 
                             <div class="form-group">
@@ -51,16 +54,27 @@
 
                             <div class="form-group">
                                 <label for="price">Price:</label>
-                                <input type="number" class="form-control" id="price" name="price" value="${product.price}" step="0.01" required>
+                                <input type="number" class="form-control" id="price" name="price" 
+                                       value="${not empty param.price ? param.price : product.price}" step="0.01">
+                                <c:if test="${not empty priceError}">
+                                    <small class="text-danger">${priceError}</small>
+                                </c:if>
                             </div>
 
                             <div class="form-group">
                                 <label for="quantity">Quantity:</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity" value="${product.quantity}" step="1" min="1" required>
+                                <input type="number" class="form-control" id="quantity" name="quantity" 
+                                       value="${not empty param.quantity ? param.quantity : product.quantity}" step="1" min="1">
+                                <c:if test="${not empty quantityError}">
+                                    <small class="text-danger">${quantityError}</small>
+                                </c:if>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Zones:</label>
+                                <c:if test="${not empty zoneError}">
+                                    <small class="text-danger d-block">${zoneError}</small>
+                                </c:if>
                                 <div class="zone-checkbox-container">
                                     <c:forEach var="zone" items="${activeZones}">
                                         <div class="form-check">

@@ -33,51 +33,50 @@ public class StockAuditController extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("acc");
         
         if (user == null) {
             response.sendRedirect("login");
             return;
         }
         
-        // Kiểm tra quyền truy cập
-        String roleType = user.getRoletype();
+        String roleType = String.valueOf(user.getRoletype());
         
         switch (action) {
             case "list":
-                if ("1".equals(roleType)) { // Admin
+                if ("2".equals(roleType)) { // Admin
                     handleListAudits(request, response);
-                } else if ("2".equals(roleType)) { // Staff
+                } else if ("3".equals(roleType)) { // Staff
                     handleShowAuditForm(request, response);
                 } else {
                     response.sendRedirect("home");
                 }
                 break;
             case "form":
-                if ("2".equals(roleType)) { // Staff
+                if ("3".equals(roleType)) { // Staff
                     handleShowAuditForm(request, response);
                 } else {
                     response.sendRedirect("stock-audit");
                 }
                 break;
             case "details":
-                if ("1".equals(roleType)) { // Admin
+                if ("2".equals(roleType)) { // Admin
                     handleShowAuditDetails(request, response);
                 } else {
                     response.sendRedirect("stock-audit");
                 }
                 break;
             case "history":
-                if ("1".equals(roleType)) { // Admin
+                if ("2".equals(roleType)) { // Admin
                     handleShowAuditHistory(request, response);
                 } else {
                     response.sendRedirect("stock-audit");
                 }
                 break;
             default:
-                if ("1".equals(roleType)) { // Admin
+                if ("2".equals(roleType)) { // Admin
                     handleListAudits(request, response);
-                } else if ("2".equals(roleType)) { // Staff
+                } else if ("3".equals(roleType)) { // Staff
                     handleShowAuditForm(request, response);
                 } else {
                     response.sendRedirect("home");
@@ -95,19 +94,18 @@ public class StockAuditController extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("acc");
         
         if (user == null) {
             response.sendRedirect("login");
             return;
         }
         
-        // Kiểm tra quyền truy cập
-        String roleType = user.getRoletype();
+        String roleType = String.valueOf(user.getRoletype());
         
         switch (action) {
             case "submit-audit":
-                if ("2".equals(roleType)) { // Staff
+                if ("3".equals(roleType)) { // Staff
                     handleSubmitAudit(request, response);
                 } else {
                     response.sendRedirect("stock-audit");
@@ -178,7 +176,7 @@ public class StockAuditController extends HttpServlet {
     private void handleSubmitAudit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("acc");
         
         String zoneId = request.getParameter("zoneId");
         String[] productIds = request.getParameterValues("productId");

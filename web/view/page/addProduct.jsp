@@ -74,35 +74,47 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="name" class="form-label">Name:</label>
-                                                        <input type="text" class="form-control" id="name" name="name" required>
+                                                        <input type="text" class="form-control" id="name" name="name" value="${param.name}">
+                                                        <c:if test="${not empty nameError}">
+                                                            <small class="text-danger">${nameError}</small>
+                                                        </c:if>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="price" class="form-label">Price (VNĐ):</label>
-                                                        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                                                        <input type="number" class="form-control" id="price" name="price" step="0.01" value="${param.price}">
+                                                        <c:if test="${not empty priceError}">
+                                                            <small class="text-danger">${priceError}</small>
+                                                        </c:if>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="quantity" class="form-label">Quantity:</label>
-                                                        <input type="number" class="form-control" id="quantity" name="quantity" step="1" min="1" required>
+                                                        <input type="number" class="form-control" id="quantity" name="quantity" step="1" min="1" value="${param.quantity}">
+                                                        <c:if test="${not empty quantityError}">
+                                                            <small class="text-danger">${quantityError}</small>
+                                                        </c:if>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="describe" class="form-label">Description:</label>
-                                                        <textarea class="form-control" id="describe" name="describe" rows="3"></textarea>
+                                                        <textarea class="form-control" id="describe" name="describe" rows="3">${param.describe}</textarea>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="packaging" class="form-label">Packaging Options:</label>
                                                         <input type="text" class="form-control" id="packaging" name="packaging" 
-                                                               placeholder="e.g., 10kg, 50kg, 100kg">
+                                                               placeholder="e.g., 10kg, 50kg, 100kg" value="${param.packaging}">
                                                         <small class="form-text text-muted">Enter packaging sizes separated by commas</small>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="form-label">Zones:</label>
+                                                        <c:if test="${not empty zoneError}">
+                                                            <small class="text-danger d-block">${zoneError}</small>
+                                                        </c:if>
                                                         <div class="zone-checkbox-container">
                                                             <c:forEach var="zone" items="${activeZones}">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" name="zoneIds" 
-                                                                           id="zone${zone.id}" value="${zone.id}">
+                                                                           id="zone${zone.id}" value="${zone.id}" ${fn:contains(param.zoneIds, zone.id) ? 'checked' : ''}>
                                                                     <label class="form-check-label" for="zone${zone.id}">
                                                                         ${zone.name}
                                                                     </label>
@@ -114,13 +126,13 @@
                                                     <div class="form-group">
                                                         <label for="isActive" class="form-label">Active:</label>
                                                         <select class="form-select" id="isActive" name="isActive" required>
-                                                            <option value="true">Yes</option>
-                                                            <option value="false">No</option>
+                                                            <option value="true" ${param.isActive == 'true' ? 'selected' : ''}>Yes</option>
+                                                            <option value="false" ${param.isActive == 'false' ? 'selected' : ''}>No</option>
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="image" class="form-label">Image URL:</label>
-                                                        <input type="text" class="form-control" id="image" name="image" placeholder="Enter image URL">
+                                                        <input type="text" class="form-control" id="image" name="image" placeholder="Enter image URL" value="${param.image}">
                                                     </div>
                                                 </div>
                                             </div>
