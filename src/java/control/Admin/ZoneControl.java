@@ -250,7 +250,7 @@ public class ZoneControl extends HttpServlet {
         }
     }
 
-    private void insertZone(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void insertZone(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             String name = request.getParameter("name").trim();
             String description = request.getParameter("description");
@@ -272,8 +272,20 @@ public class ZoneControl extends HttpServlet {
             }
             
             if (!errors.isEmpty()) {
-                errors.forEach(request.getSession()::setAttribute);
-                response.sendRedirect("zoneControl?action=add");
+                // Store form data in request attributes to preserve it
+                request.setAttribute("zoneName", name);
+                request.setAttribute("zoneDescription", description);
+                request.setAttribute("zoneIsActive", isActiveParam);
+                
+                // Store errors in request attributes instead of session
+                for (Map.Entry<String, String> error : errors.entrySet()) {
+                    request.setAttribute(error.getKey(), error.getValue());
+                }
+                
+                // Forward back to the form instead of redirect
+                List<Zone> zoneList = zoneDAO.getAllZones(1, Integer.MAX_VALUE);
+                request.setAttribute("zoneList", zoneList);
+                request.getRequestDispatcher("view/admin/addZone.jsp").forward(request, response);
                 return;
             }
             
@@ -306,8 +318,15 @@ public class ZoneControl extends HttpServlet {
         response.sendRedirect("zoneControl");
     }
 
-    private void updateZone(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void updateZone(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
+            // Clear any previous error attributes
+            request.removeAttribute("nameError");
+            request.removeAttribute("statusError");
+            request.removeAttribute("zoneName");
+            request.removeAttribute("zoneDescription");
+            request.removeAttribute("zoneIsActive");
+            
             int id = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name").trim();
             String description = request.getParameter("description");
@@ -329,8 +348,22 @@ public class ZoneControl extends HttpServlet {
             }
             
             if (!errors.isEmpty()) {
-                errors.forEach(request.getSession()::setAttribute);
-                response.sendRedirect("zoneControl?action=edit&id=" + id);
+                // Store form data in request attributes to preserve it
+                request.setAttribute("zoneName", name);
+                request.setAttribute("zoneDescription", description);
+                request.setAttribute("zoneIsActive", isActiveParam);
+                
+                // Store errors in request attributes instead of session
+                for (Map.Entry<String, String> error : errors.entrySet()) {
+                    request.setAttribute(error.getKey(), error.getValue());
+                }
+                
+                // Forward back to the form instead of redirect
+                Zone zone = zoneDAO.getZoneById(id);
+                List<Zone> zoneList = zoneDAO.getAllZones(1, Integer.MAX_VALUE);
+                request.setAttribute("zone", zone);
+                request.setAttribute("zoneList", zoneList);
+                request.getRequestDispatcher("view/admin/updateZone.jsp").forward(request, response);
                 return;
             }
             

@@ -104,9 +104,10 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="name" class="form-label">Zone Name:</label>
-                                                        <input type="text" class="form-control" id="name" name="name" value="${zone.name}" required>
+                                                        <input type="text" class="form-control ${not empty nameError ? 'is-invalid' : ''}" 
+                                                               id="name" name="name" value="${not empty zoneName ? zoneName : zone.name}" required>
                                                         <c:if test="${not empty nameError}">
-                                                            <small class="text-danger">${nameError}</small>
+                                                            <div class="invalid-feedback">${nameError}</div>
                                                         </c:if>
                                                     </div>
                                                 </div>
@@ -116,7 +117,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="description" class="form-label">Description:</label>
-                                                        <textarea class="form-control" id="description" name="description" rows="4">${zone.description}</textarea>
+                                                        <textarea class="form-control" id="description" name="description" rows="4">${not empty zoneDescription ? zoneDescription : zone.description}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,16 +127,18 @@
                                                     <div class="form-group">
                                                         <label class="form-label">Status:</label>
                                                         <c:if test="${not empty statusError}">
-                                                            <small class="text-danger d-block">${statusError}</small>
+                                                            <div class="text-danger d-block mb-2">${statusError}</div>
                                                         </c:if>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="isActive" id="active" value="true" ${zone.isActive ? 'checked' : ''}>
+                                                            <input class="form-check-input" type="radio" name="isActive" id="active" value="true" 
+                                                                   ${not empty zoneIsActive ? (zoneIsActive == 'true' ? 'checked' : '') : (zone.isActive ? 'checked' : '')}>
                                                             <label class="form-check-label" for="active">
                                                                 Active
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="isActive" id="inactive" value="false" ${!zone.isActive ? 'checked' : ''}>
+                                                            <input class="form-check-input" type="radio" name="isActive" id="inactive" value="false" 
+                                                                   ${not empty zoneIsActive ? (zoneIsActive == 'false' ? 'checked' : '') : (!zone.isActive ? 'checked' : '')}>
                                                             <label class="form-check-label" for="inactive">
                                                                 Inactive
                                                             </label>
@@ -173,18 +176,57 @@
             ];
 
             function validateForm() {
+                let isValid = true;
                 const zoneName = document.getElementById('name').value.trim();
-
-                if (zoneName !== currentZoneName && existingZoneNames.includes(zoneName)) {
+                const activeRadio = document.getElementById('active');
+                const inactiveRadio = document.getElementById('inactive');
+                
+                // Clear ALL previous error messages
+                document.querySelectorAll('.validation-error, .invalid-feedback').forEach(el => el.remove());
+                document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                
+                // Validate zone name
+                if (zoneName === '') {
+                    displayError('name', 'Zone name is required');
+                    isValid = false;
+                } else if (zoneName !== currentZoneName && existingZoneNames.includes(zoneName)) {
+                    displayError('name', 'Zone name already exists!');
+                    isValid = false;
+                }
+                
+                // Validate status
+                if (!activeRadio.checked && !inactiveRadio.checked) {
+                    const statusContainer = document.querySelector('.form-group:has(#active)');
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'text-danger validation-error mb-2';
+                    errorDiv.textContent = 'Please select a status';
+                    statusContainer.insertBefore(errorDiv, statusContainer.firstChild.nextSibling);
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    // Prevent form submission if validation fails
                     iziToast.error({
                         title: 'Error',
-                        message: 'Zone name already exists!',
+                        message: 'Please fix the errors in the form',
                         position: 'topRight',
                         timeout: 5000
                     });
                     return false;
                 }
+                
                 return true;
+            }
+            
+            function displayError(fieldId, message) {
+                const field = document.getElementById(fieldId);
+                field.classList.add('is-invalid');
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'invalid-feedback validation-error';
+                errorDiv.textContent = message;
+                
+                field.parentNode.appendChild(errorDiv);
             }
 
             // Toggle sidebar

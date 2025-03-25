@@ -128,7 +128,7 @@
                                         <div class="form-group">
                                             <label for="name" class="form-label">Product Name <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control ${not empty nameError ? 'is-invalid' : ''}" 
-                                                   id="name" name="name" value="${param.name}" required>
+                                                   id="name" name="name" value="${not empty param.name ? param.name : productName}" required>
                                             <c:if test="${not empty nameError}">
                                                 <div class="invalid-feedback">${nameError}</div>
                                             </c:if>
@@ -137,7 +137,7 @@
                                         <div class="form-group">
                                             <label for="price" class="form-label">Price (VNĐ) <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control ${not empty priceError ? 'is-invalid' : ''}" 
-                                                   id="price" name="price" step="1000" min="0" value="${param.price}" required>
+                                                   id="price" name="price" step="1000" min="0" value="${not empty param.price ? param.price : productPrice}" required>
                                             <c:if test="${not empty priceError}">
                                                 <div class="invalid-feedback">${priceError}</div>
                                             </c:if>
@@ -146,7 +146,7 @@
                                         <div class="form-group">
                                             <label for="quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control ${not empty quantityError ? 'is-invalid' : ''}" 
-                                                   id="quantity" name="quantity" step="1" min="1" value="${param.quantity}" required>
+                                                   id="quantity" name="quantity" step="1" min="1" value="${not empty param.quantity ? param.quantity : productQuantity}" required>
                                             <c:if test="${not empty quantityError}">
                                                 <div class="invalid-feedback">${quantityError}</div>
                                             </c:if>
@@ -155,13 +155,13 @@
                                         <div class="form-group">
                                             <label for="describe" class="form-label">Description</label>
                                             <textarea class="form-control" id="describe" name="describe" 
-                                                      rows="4" placeholder="Enter product description">${param.describe}</textarea>
+                                                      rows="4" placeholder="Enter product description">${not empty param.describe ? param.describe : productDescribe}</textarea>
                                         </div>
                                         
                                         <div class="form-group">
                                             <label for="packaging" class="form-label">Packaging Options</label>
                                             <input type="text" class="form-control" id="packaging" name="packaging" 
-                                                   placeholder="e.g., 10kg, 50kg, 100kg" value="${param.packaging}">
+                                                   placeholder="e.g., 10kg, 50kg, 100kg" value="${not empty param.packaging ? param.packaging : productPackaging}">
                                             <small class="form-text text-muted">Enter packaging sizes separated by commas</small>
                                         </div>
                                     </div>
@@ -225,28 +225,74 @@
             ];
 
             function validateForm() {
+                let isValid = true;
                 const productName = document.getElementById('name').value.trim();
+                const price = document.getElementById('price').value.trim();
+                const quantity = document.getElementById('quantity').value.trim();
                 const zoneCheckboxes = document.querySelectorAll('input[name="zoneIds"]:checked');
-
-                if (existingProductNames.includes(productName)) {
-                    iziToast.error({
-                        title: 'Error',
-                        message: 'Product name already exists!',
-                        position: 'topCenter'
-                    });
-                    return false;
+                
+                // Clear previous error messages
+                document.querySelectorAll('.validation-error').forEach(el => el.remove());
+                
+                // Validate product name
+                if (productName === '') {
+                    displayError('name', 'Product name is required');
+                    isValid = false;
+                } else if (existingProductNames.includes(productName)) {
+                    displayError('name', 'Product name already exists!');
+                    isValid = false;
                 }
                 
+                // Validate price
+                if (price === '') {
+                    displayError('price', 'Price is required');
+                    isValid = false;
+                } else if (parseFloat(price) < 0) {
+                    displayError('price', 'Price cannot be negative');
+                    isValid = false;
+                }
+                
+                // Validate quantity
+                if (quantity === '') {
+                    displayError('quantity', 'Quantity is required');
+                    isValid = false;
+                } else if (parseInt(quantity) < 1) {
+                    displayError('quantity', 'Quantity must be at least 1');
+                    isValid = false;
+                }
+                
+                // Validate zones
                 if (zoneCheckboxes.length === 0) {
+                    const zonesContainer = document.querySelector('.zone-checkbox-container');
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'text-danger validation-error';
+                    errorDiv.textContent = 'Please select at least one zone!';
+                    zonesContainer.parentNode.insertBefore(errorDiv, zonesContainer.nextSibling);
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    // Prevent form submission if validation fails
                     iziToast.error({
                         title: 'Error',
-                        message: 'Please select at least one zone!',
+                        message: 'Please fix the errors in the form',
                         position: 'topCenter'
                     });
                     return false;
                 }
                 
                 return true;
+            }
+            
+            function displayError(fieldId, message) {
+                const field = document.getElementById(fieldId);
+                field.classList.add('is-invalid');
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'invalid-feedback validation-error';
+                errorDiv.textContent = message;
+                
+                field.parentNode.appendChild(errorDiv);
             }
             
             // Toggle sidebar
