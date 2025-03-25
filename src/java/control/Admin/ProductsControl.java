@@ -180,7 +180,6 @@ public class ProductsControl extends HttpServlet {
             String name = request.getParameter("name");
             String describe = request.getParameter("describe");
             String priceParam = request.getParameter("price");
-            String quantityParam = request.getParameter("quantity");
             String[] zoneIds = request.getParameterValues("zoneIds");
             String isActiveParam = request.getParameter("isActive");
             String image = request.getParameter("image");
@@ -196,11 +195,6 @@ public class ProductsControl extends HttpServlet {
             } else if (!priceParam.matches("^\\d+(\\.\\d{1,2})?$")) {
                 errors.put("priceError", "Invalid price format");
             }
-            if (quantityParam == null || quantityParam.trim().isEmpty()) {
-                errors.put("quantityError", "Quantity is required");
-            } else if (!quantityParam.matches("^\\d+(\\.\\d{1,2})?$")) {
-                errors.put("quantityError", "Invalid quantity format");
-            }
             if (zoneIds == null || zoneIds.length == 0) {
                 errors.put("zoneError", "At least one zone must be selected");
             }
@@ -213,7 +207,8 @@ public class ProductsControl extends HttpServlet {
 
             // Continue with processing...
             double price = Double.parseDouble(priceParam);
-            double quantity = Double.parseDouble(quantityParam);
+            // Set quantity to 0 by default for new products
+            double quantity = 0;
             boolean isActive = Boolean.parseBoolean(isActiveParam);
 
             Product product = new Product();

@@ -145,11 +145,9 @@
                                         
                                         <div class="form-group">
                                             <label for="quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control ${not empty quantityError ? 'is-invalid' : ''}" 
-                                                   id="quantity" name="quantity" step="1" min="1" value="${not empty param.quantity ? param.quantity : productQuantity}" required>
-                                            <c:if test="${not empty quantityError}">
-                                                <div class="invalid-feedback">${quantityError}</div>
-                                            </c:if>
+                                            <input type="number" class="form-control" 
+                                                   id="quantity" name="quantity" value="0" readonly>
+                                            <small class="form-text text-muted">Initial quantity is set to 0 by default</small>
                                         </div>
                                         
                                         <div class="form-group">
