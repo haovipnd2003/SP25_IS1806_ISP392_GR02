@@ -179,18 +179,68 @@
                                             <c:if test="${not empty zoneError}">
                                                 <div class="text-danger mb-2">${zoneError}</div>
                                             </c:if>
-                                            <div class="zone-checkbox-container">
-                                                <c:forEach var="zone" items="${activeZones}">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="zoneIds" 
-                                                               id="zone${zone.id}" value="${zone.id}" ${fn:contains(param.zoneIds, zone.id) ? 'checked' : ''}>
-                                                        <label class="form-check-label" for="zone${zone.id}">
-                                                            ${zone.name}
-                                                        </label>
-                                                    </div>
-                                                </c:forEach>
+                                            
+                                            <div class="d-flex flex-wrap mb-2" id="selectedZonesContainer">
+                                                <!-- Các zone đã chọn sẽ hiển thị ở đây dưới dạng badge -->
                                             </div>
-                                            <small class="form-text text-muted">Select all zones where this product should be available</small>
+                                            
+                                            <button type="button" class="btn btn-outline-primary" id="selectZonesBtn">
+                                                <i class="fas fa-map-marker-alt me-1"></i> Chọn Zones
+                                            </button>
+                                            
+                                            <!-- Input ẩn để lưu các zone ID đã chọn -->
+                                            <div id="zoneIdsContainer">
+                                                <!-- Các input hidden chứa zone ID sẽ được thêm vào đây -->
+                                            </div>
+                                            
+                                            <small class="form-text text-muted">Click vào nút để chọn các zone cho sản phẩm.</small>
+                                        </div>
+                                        
+                                        <!-- jQuery added before modal -->
+                                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                        
+                                        <!-- Modal chọn Zone -->
+                                        <div class="modal fade" id="zonesModal" tabindex="-1" aria-labelledby="zonesModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="zonesModalLabel">Chọn Zones</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" id="zoneSearchInput" placeholder="Tìm kiếm zone...">
+                                                                <button class="btn btn-outline-secondary" type="button" id="searchZoneBtn">
+                                                                    <i class="fas fa-search"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="mb-3">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="selectAllZones">
+                                                                <label class="form-check-label fw-bold" for="selectAllZones">
+                                                                    Chọn tất cả zones
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div id="zonesList" class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                                            <div class="text-center py-4">
+                                                                <div class="spinner-border text-primary" role="status">
+                                                                    <span class="visually-hidden">Loading...</span>
+                                                                </div>
+                                                                <p class="mt-2">Đang tải danh sách zones...</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="button" class="btn btn-primary" id="applyZoneSelection">Áp dụng</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         
                                         <div class="form-group">
@@ -224,90 +274,229 @@
             </c:forEach>
             ];
 
-            function validateForm() {
-                let isValid = true;
-                const productName = document.getElementById('name').value.trim();
-                const price = document.getElementById('price').value.trim();
-                const quantity = document.getElementById('quantity').value.trim();
-                const zoneCheckboxes = document.querySelectorAll('input[name="zoneIds"]:checked');
+            // Lưu trữ zones đã chọn
+            let selectedZones = [];
+            
+            // Lưu trữ tất cả zones được hiển thị trong modal
+            let availableZones = [];
+            
+            $(document).ready(function() {
+                console.log("DOM ready");
                 
-                // Clear previous error messages
-                document.querySelectorAll('.validation-error').forEach(el => el.remove());
+                // Xử lý sự kiện click cho nút sidebarToggle
+                $("#sidebarToggle").on("click", function() {
+                    console.log("Sidebar toggle clicked");
+                    $(".main-content").toggleClass("expanded");
+                    $(".main-sidebar").toggleClass("collapsed");
+                });
                 
-                // Validate product name
-                if (productName === '') {
-                    displayError('name', 'Product name is required');
-                    isValid = false;
-                } else if (existingProductNames.includes(productName)) {
-                    displayError('name', 'Product name already exists!');
-                    isValid = false;
+                // Xử lý sự kiện click cho nút chọn zone
+                $("#selectZonesBtn").on("click", function() {
+                    console.log("Select zones button clicked");
+                    loadAvailableZones();
+                    $("#zonesModal").modal("show");
+                });
+                
+                // Các xử lý sự kiện khác
+                $('#searchZoneBtn').on("click", function() {
+                    loadAvailableZones($('#zoneSearchInput').val());
+                });
+                
+                $('#zoneSearchInput').on("keypress", function(e) {
+                    if (e.which === 13) {
+                        loadAvailableZones($('#zoneSearchInput').val());
+                        return false;
+                    }
+                });
+                
+                $('#selectAllZones').on("change", function() {
+                    const isChecked = $(this).is(':checked');
+                    $('.zone-checkbox').prop('checked', isChecked);
+                    
+                    if (isChecked) {
+                        availableZones.forEach(zone => {
+                            if (!selectedZones.some(sz => sz.id === zone.id)) {
+                                selectedZones.push(zone);
+                            }
+                        });
+                    } else {
+                        selectedZones = selectedZones.filter(zone => 
+                            !availableZones.some(az => az.id === zone.id)
+                        );
+                    }
+                });
+                
+                $('#applyZoneSelection').on("click", function() {
+                    updateSelectedZonesDisplay();
+                    $('#zonesModal').modal('hide');
+                });
+                
+                // Kiểm tra zones đã chọn khi form được tải
+                checkSelectedZones();
+            });
+            
+            // Tải danh sách zone khả dụng
+            function loadAvailableZones(keyword = '') {
+                $('#zonesList').html(
+                    '<div class="text-center py-4">' +
+                    '<div class="spinner-border text-primary" role="status">' +
+                    '<span class="visually-hidden">Loading...</span>' +
+                    '</div>' +
+                    '<p class="mt-2">Đang tải danh sách zones...</p>' +
+                    '</div>'
+                );
+                
+                const productId = $('input[name="id"]').val() || 0;
+                
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/products',
+                    method: 'GET',
+                    data: {
+                        action: 'getAvailableZones',
+                        productId: productId,
+                        keyword: keyword
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        availableZones = data;
+                        
+                        if (data.length === 0) {
+                            $('#zonesList').html(
+                                '<div class="alert alert-info mb-0">' +
+                                'Không tìm thấy zone nào' + (keyword ? ' với từ khóa "' + keyword + '"' : '') +
+                                '</div>'
+                            );
+                            return;
+                        }
+                        
+                        let html = '';
+                        
+                        data.forEach(zone => {
+                            const isChecked = selectedZones.some(sz => sz.id === zone.id);
+                            
+                            html += 
+                                '<div class="form-check mb-2">' +
+                                '<input class="form-check-input zone-checkbox" type="checkbox" ' +
+                                'id="zone' + zone.id + '" value="' + zone.id + '" ' + (isChecked ? 'checked' : '') +
+                                ' onchange="handleZoneCheckboxChange(this, ' + zone.id + ', \'' + 
+                                zone.name.replace(/'/g, "\\'") + '\', \'' + 
+                                (zone.description ? zone.description.replace(/'/g, "\\'") : '') + '\')">' +
+                                '<label class="form-check-label" for="zone' + zone.id + '">' +
+                                '<strong>' + zone.name + '</strong>' +
+                                (zone.description ? '<br><small class="text-muted">' + zone.description + '</small>' : '') +
+                                '</label>' +
+                                '</div>';
+                        });
+                        
+                        $('#zonesList').html(html);
+                        
+                        // Cập nhật trạng thái của checkbox "Chọn tất cả"
+                        const allChecked = data.every(zone => selectedZones.some(sz => sz.id === zone.id));
+                        $('#selectAllZones').prop('checked', allChecked && data.length > 0);
+                    },
+                    error: function(xhr, status, error) {
+                        $('#zonesList').html(
+                            '<div class="alert alert-danger mb-0">' +
+                            'Lỗi khi tải danh sách zones: ' + error +
+                            '</div>'
+                        );
+                        console.error('Error loading available zones:', error);
+                    }
+                });
+            }
+            
+            // Xử lý khi người dùng chọn/bỏ chọn một zone
+            function handleZoneCheckboxChange(checkbox, zoneId, zoneName, zoneDescription) {
+                if (checkbox.checked) {
+                    // Tạo đối tượng zone từ các tham số
+                    const zone = {
+                        id: zoneId,
+                        name: zoneName,
+                        description: zoneDescription
+                    };
+                    
+                    // Thêm zone vào danh sách đã chọn nếu chưa có
+                    if (!selectedZones.some(sz => sz.id === zoneId)) {
+                        selectedZones.push(zone);
+                    }
+                } else {
+                    // Xóa zone khỏi danh sách đã chọn
+                    selectedZones = selectedZones.filter(sz => sz.id !== zoneId);
                 }
+            }
+            
+            // Cập nhật hiển thị các zone đã chọn
+            function updateSelectedZonesDisplay() {
+                const container = $('#selectedZonesContainer');
+                container.empty();
                 
-                // Validate price
-                if (price === '') {
-                    displayError('price', 'Price is required');
-                    isValid = false;
-                } else if (parseFloat(price) < 0) {
-                    displayError('price', 'Price cannot be negative');
-                    isValid = false;
+                $('#zoneIdsContainer').empty();
+                
+                // Thêm các badge và input hidden mới
+                selectedZones.forEach(zone => {
+                    container.append(
+                        '<span class="badge bg-primary me-2 mb-2">' +
+                        zone.name +
+                        '<i class="fas fa-times ms-1" ' +
+                        'onclick="removeZone(' + zone.id + ')" ' +
+                        'style="cursor: pointer;"></i>' +
+                        '</span>'
+                    );
+                    
+                    // Thêm input hidden
+                    $('#zoneIdsContainer').append(
+                        '<input type="hidden" name="zoneIds" value="' + zone.id + '">'
+                    );
+                });
+                
+                // Hiển thị thông báo nếu không có zone nào được chọn
+                if (selectedZones.length === 0) {
+                    container.append(
+                        '<span class="text-muted">Chưa có zone nào được chọn</span>'
+                    );
                 }
-                
-                // Validate quantity
-                if (quantity === '') {
-                    displayError('quantity', 'Quantity is required');
-                    isValid = false;
-                } else if (parseInt(quantity) < 1) {
-                    displayError('quantity', 'Quantity must be at least 1');
-                    isValid = false;
-                }
-                
-                // Validate zones
-                if (zoneCheckboxes.length === 0) {
-                    const zonesContainer = document.querySelector('.zone-checkbox-container');
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'text-danger validation-error';
-                    errorDiv.textContent = 'Please select at least one zone!';
-                    zonesContainer.parentNode.insertBefore(errorDiv, zonesContainer.nextSibling);
-                    isValid = false;
-                }
-                
-                if (!isValid) {
-                    // Prevent form submission if validation fails
-                    iziToast.error({
-                        title: 'Error',
-                        message: 'Please fix the errors in the form',
-                        position: 'topCenter'
+            }
+            
+            // Xóa zone khỏi danh sách đã chọn
+            function removeZone(zoneId) {
+                selectedZones = selectedZones.filter(z => z.id !== zoneId);
+                updateSelectedZonesDisplay();
+            }
+            
+            // Kiểm tra zones đã chọn khi form được tải
+            function checkSelectedZones() {
+                // Nếu là form chỉnh sửa, lấy danh sách zone đã chọn
+                const productId = $('input[name="id"]').val();
+                if (productId) {
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/products',
+                        method: 'GET',
+                        data: {
+                            action: 'getProductZones',
+                            productId: productId
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            selectedZones = data;
+                            updateSelectedZonesDisplay();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error loading product zones:', error);
+                        }
                     });
+                }
+            }
+            
+            // Validate form trước khi submit
+            function validateForm() {
+                // Kiểm tra xem đã chọn zone nào chưa
+                if (selectedZones.length === 0) {
+                    alert('Vui lòng chọn ít nhất một zone cho sản phẩm');
                     return false;
                 }
                 
                 return true;
             }
-            
-            function displayError(fieldId, message) {
-                const field = document.getElementById(fieldId);
-                field.classList.add('is-invalid');
-                
-                const errorDiv = document.createElement('div');
-                errorDiv.className = 'invalid-feedback validation-error';
-                errorDiv.textContent = message;
-                
-                field.parentNode.appendChild(errorDiv);
-            }
-            
-            // Toggle sidebar
-            document.getElementById('sidebarToggle').addEventListener('click', function () {
-                const sidebar = document.querySelector('.main-sidebar');
-                const mainContent = document.querySelector('.main-content');
-
-                if (sidebar.style.display === 'none') {
-                    sidebar.style.display = 'block';
-                    mainContent.style.marginLeft = '250px';
-                } else {
-                    sidebar.style.display = 'none';
-                    mainContent.style.marginLeft = '0';
-                }
-            });
         </script>
         
         <!-- Toast notification script -->
@@ -346,5 +535,7 @@
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/demo.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

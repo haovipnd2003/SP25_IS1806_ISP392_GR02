@@ -54,7 +54,9 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/products"><i class="ion ion-bag"></i><span>Product</span></a>
                 </li>
-
+                <li>
+                    <a href="${pageContext.request.contextPath}/zoneControl"><i class="ion ion-bag"></i><span>Zone Management</span></a>
+                </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>

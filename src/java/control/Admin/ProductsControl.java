@@ -47,6 +47,12 @@ public class ProductsControl extends HttpServlet {
                 case "filter":
                     handleFilter(request, response);
                     break;
+                case "getAvailableZones":
+                    handleGetAvailableZones(request, response);
+                    break;
+                case "getProductZones":
+                    handleGetProductZones(request, response);
+                    break;
                 default:
                     handleDefault(request, response);
                     break;
@@ -301,5 +307,121 @@ public class ProductsControl extends HttpServlet {
             request.getSession().setAttribute("toastType", "success");
         }
         response.sendRedirect("products");
+    }
+
+    private void handleGetAvailableZones(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        // Lấy tham số từ request
+        String productIdStr = request.getParameter("productId");
+        String keyword = request.getParameter("keyword");
+        
+        int productId = 0;
+        if (productIdStr != null && !productIdStr.isEmpty()) {
+            try {
+                productId = Integer.parseInt(productIdStr);
+            } catch (NumberFormatException e) {
+                // Nếu không phải số, giữ productId = 0
+            }
+        }
+        
+        // Lấy danh sách zone khả dụng
+        List<Zone> availableZones = zoneDAO.getAvailableZonesForProduct(productId, keyword);
+        
+        // Chuyển đổi danh sách thành JSON và gửi về client
+        String json = convertZonesToJson(availableZones);
+        response.getWriter().write(json);
+    }
+
+    private void handleGetProductZones(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        // Lấy tham số từ request
+        String productIdStr = request.getParameter("productId");
+        
+        if (productIdStr != null && !productIdStr.isEmpty()) {
+            try {
+                int productId = Integer.parseInt(productIdStr);
+                
+                // Lấy danh sách zone đã gán cho sản phẩm
+                List<Zone> productZones = zoneDAO.getZonesForProduct(productId);
+                
+                // Chuyển đổi danh sách thành JSON và gửi về client
+                String json = convertZonesToJson(productZones);
+                response.getWriter().write(json);
+            } catch (NumberFormatException e) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"error\": \"Invalid product ID\"}");
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Product ID is required\"}");
+        }
+    }
+
+    private String convertZonesToJson(List<Zone> zones) {
+        StringBuilder json = new StringBuilder("[");
+        
+        for (int i = 0; i < zones.size(); i++) {
+            Zone zone = zones.get(i);
+            json.append("{");
+            json.append("\"id\":").append(zone.getId()).append(",");
+            json.append("\"name\":\"").append(escapeJsonString(zone.getName())).append("\",");
+            json.append("\"description\":\"").append(zone.getDescription() != null ? escapeJsonString(zone.getDescription()) : "").append("\",");
+            json.append("\"isActive\":").append(zone.isIsActive());
+            json.append("}");
+            
+            if (i < zones.size() - 1) {
+                json.append(",");
+            }
+        }
+        
+        json.append("]");
+        return json.toString();
+    }
+
+    private String escapeJsonString(String input) {
+        if (input == null) {
+            return "";
+        }
+        
+        StringBuilder escaped = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            switch (c) {
+                case '\"':
+                    escaped.append("\\\"");
+                    break;
+                case '\\':
+                    escaped.append("\\\\");
+                    break;
+                case '/':
+                    escaped.append("\\/");
+                    break;
+                case '\b':
+                    escaped.append("\\b");
+                    break;
+                case '\f':
+                    escaped.append("\\f");
+                    break;
+                case '\n':
+                    escaped.append("\\n");
+                    break;
+                case '\r':
+                    escaped.append("\\r");
+                    break;
+                case '\t':
+                    escaped.append("\\t");
+                    break;
+                default:
+                    escaped.append(c);
+            }
+        }
+        
+        return escaped.toString();
     }
 }

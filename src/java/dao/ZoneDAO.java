@@ -385,4 +385,85 @@ public class ZoneDAO extends DBContext {
         }
         return productList;
     }
+
+    /**
+     * Lấy danh sách các zone khả dụng (chưa có sản phẩm hoặc đã được gán cho sản phẩm được chỉ định)
+     * 
+     * @param productId ID của sản phẩm (0 nếu là sản phẩm mới)
+     * @param keyword Từ khóa tìm kiếm (có thể null)
+     * @return Danh sách các zone khả dụng
+     */
+    public List<Zone> getAvailableZonesForProduct(int productId, String keyword) {
+        List<Zone> zoneList = new ArrayList<>();
+        
+        try {
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT z.* FROM zone z WHERE z.isactive = 1 AND ");
+            sql.append("(z.id NOT IN (SELECT pz.zone_id FROM product_zone pz) OR ");
+            sql.append("z.id IN (SELECT pz.zone_id FROM product_zone pz WHERE pz.product_id = ?)) ");
+            
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                sql.append("AND (z.name LIKE ? OR z.description LIKE ?) ");
+            }
+            
+            sql.append("ORDER BY z.name");
+            
+            PreparedStatement stm = cnn.prepareStatement(sql.toString());
+            stm.setInt(1, productId);
+            
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                stm.setString(2, "%" + keyword + "%");
+                stm.setString(3, "%" + keyword + "%");
+            }
+            
+            ResultSet rs = stm.executeQuery();
+            
+            while (rs.next()) {
+                Zone zone = new Zone();
+                zone.setId(rs.getInt("id"));
+                zone.setName(rs.getString("name"));
+                zone.setIsActive(rs.getInt("isactive") == 1);
+                zone.setDescription(rs.getString("description"));
+                zoneList.add(zone);
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Available Zones For Product: " + e.getMessage());
+        }
+        
+        return zoneList;
+    }
+
+    /**
+     * Lấy danh sách zone đã được gán cho sản phẩm
+     * 
+     * @param productId ID của sản phẩm
+     * @return Danh sách các zone đã gán
+     */
+    public List<Zone> getZonesForProduct(int productId) {
+        List<Zone> zoneList = new ArrayList<>();
+        
+        try {
+            String sql = "SELECT z.* FROM zone z " +
+                        "JOIN product_zone pz ON z.id = pz.zone_id " +
+                        "WHERE pz.product_id = ? AND z.isactive = 1 " +
+                        "ORDER BY z.name";
+            
+            PreparedStatement stm = cnn.prepareStatement(sql);
+            stm.setInt(1, productId);
+            ResultSet rs = stm.executeQuery();
+            
+            while (rs.next()) {
+                Zone zone = new Zone();
+                zone.setId(rs.getInt("id"));
+                zone.setName(rs.getString("name"));
+                zone.setIsActive(rs.getInt("isactive") == 1);
+                zone.setDescription(rs.getString("description"));
+                zoneList.add(zone);
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Zones For Product: " + e.getMessage());
+        }
+        
+        return zoneList;
+    }
 }
