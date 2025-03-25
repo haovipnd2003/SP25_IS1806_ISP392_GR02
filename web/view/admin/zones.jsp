@@ -131,7 +131,7 @@
                     <section class="section">
                         <div class="section-header">
                             <h1>Zone Management</h1>
-                            <c:if test="${roletype == 2}">
+                            <c:if test="${roletype == '2'}">
                                 <a href="zoneControl?action=add" class="btn btn-primary">
                                     <i class="fas fa-plus"></i> Add New Zone
                                 </a>
@@ -171,10 +171,11 @@
                                     <thead>
                                         <tr>
                                             <th width="10%">ID</th>
-                                            <th width="35%">Name</th>
-                                            <th width="15%">Status</th>
-                                            <th width="15%">Products</th>
-                                            <th width="25%">Actions</th>
+                                            <th width="25%">Name</th>
+                                            <th width="30%">Description</th>
+                                            <th width="10%">Status</th>
+                                            <th width="10%">Products</th>
+                                            <th width="15%">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -182,6 +183,17 @@
                                             <tr>
                                                 <td>${zone.id}</td>
                                                 <td>${zone.name}</td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${not empty zone.description}">
+                                                            <c:out value="${fn:substring(zone.description, 0, 100)}" />
+                                                            <c:if test="${fn:length(zone.description) > 100}">...</c:if>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="text-muted">No description</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
                                                 <td>
                                                     <span class="badge ${zone.isActive ? 'bg-success' : 'bg-danger'}">
                                                         ${zone.isActive ? 'Active' : 'Inactive'}
@@ -193,9 +205,9 @@
                                                 <td>
                                                     <div class="btn-action-container">
                                                         <a href="zoneControl?action=details&id=${zone.id}" class="btn btn-info btn-sm">
-                                                            <i class="fas fa-eye"></i> View Details
+                                                            <i class="fas fa-eye"></i> View
                                                         </a>
-                                                        <c:if test="${roletype == 2}">
+                                                        <c:if test="${roletype == '2'}">
                                                             <a href="zoneControl?action=edit&id=${zone.id}" class="btn btn-primary btn-sm">
                                                                 <i class="fas fa-edit"></i> Edit
                                                             </a>
@@ -203,7 +215,7 @@
                                                                 <input type="hidden" name="action" value="delete">
                                                                 <input type="hidden" name="id" value="${zone.id}">
                                                                 <button type="submit" class="btn btn-danger btn-sm">
-                                                                    <i class="fas fa-trash"></i> Delete
+                                                                    <i class="fas fa-trash"></i>
                                                                 </button>
                                                             </form>
                                                         </c:if>
@@ -214,7 +226,7 @@
                                         
                                         <c:if test="${empty zoneList}">
                                             <tr>
-                                                <td colspan="5" class="text-center">No zones found</td>
+                                                <td colspan="6" class="text-center">No zones found</td>
                                             </tr>
                                         </c:if>
                                     </tbody>
