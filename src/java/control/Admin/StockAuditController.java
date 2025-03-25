@@ -159,11 +159,12 @@ public class StockAuditController extends HttpServlet {
         request.setAttribute("zones", zones);
         
         // Nếu đã chọn zone, hiển thị danh sách sản phẩm trong zone đó
-        String zoneId = request.getParameter("zoneId");
-        if (zoneId != null && !zoneId.isEmpty()) {
+        String zoneIdParam = request.getParameter("zoneId");
+        if (zoneIdParam != null && !zoneIdParam.isEmpty()) {
+            int zoneId = Integer.parseInt(zoneIdParam);
             List<Product> products = zoneDAO.getProductsInZone(zoneId);
             request.setAttribute("products", products);
-            request.setAttribute("selectedZoneId", zoneId);
+            request.setAttribute("selectedZoneId", zoneIdParam);
             
             // Lấy thông tin zone đã chọn
             Zone selectedZone = zoneDAO.getZoneById(zoneId);
@@ -244,7 +245,7 @@ public class StockAuditController extends HttpServlet {
         ZoneDAO zoneDAO = new ZoneDAO();
         Map<String, Zone> zoneMap = new HashMap<>();
         for (String zoneId : auditsByZone.keySet()) {
-            Zone zone = zoneDAO.getZoneById(zoneId);
+            Zone zone = zoneDAO.getZoneById(Integer.parseInt(zoneId));
             if (zone != null) {
                 zoneMap.put(zoneId, zone);
             }

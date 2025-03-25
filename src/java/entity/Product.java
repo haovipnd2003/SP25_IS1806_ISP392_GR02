@@ -136,7 +136,7 @@ public class Product {
         for (int i = 0; i < zoneIds.length; i++) {
             String zoneId = zoneIds[i];
             for (Zone zone : allZones) {
-                if (zone.getId().equals(zoneId)) {
+                if (Integer.parseInt(zoneId) == zone.getId()) {
                     if (zoneNames.length() > 0) {
                         zoneNames.append(", ");
                     }

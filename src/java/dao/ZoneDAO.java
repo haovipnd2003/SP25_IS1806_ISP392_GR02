@@ -9,10 +9,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import context.DBContext;
 import entity.Product;
+import java.util.Date;
 
 /**
  *
@@ -46,7 +48,7 @@ public class ZoneDAO extends DBContext {
         int offset = (page - 1) * pageSize;
 
         try {
-            String sql = "SELECT * FROM zone LIMIT ? OFFSET ?";
+            String sql = "SELECT * FROM zone ORDER BY id DESC LIMIT ? OFFSET ?";
             PreparedStatement stm = cnn.prepareStatement(sql);
             stm.setInt(1, pageSize);
             stm.setInt(2, offset);
@@ -54,9 +56,20 @@ public class ZoneDAO extends DBContext {
 
             while (rs.next()) {
                 Zone zone = new Zone();
-                zone.setId(rs.getString("id"));
+                zone.setId(rs.getInt("id"));
                 zone.setName(rs.getString("name"));
-                zone.setIsActive(rs.getBoolean("isactive"));
+                zone.setIsActive(rs.getInt("isactive") == 1);
+                zone.setDescription(rs.getString("description"));
+                zone.setCreateBy(rs.getString("createBy"));
+                zone.setCreatedAt(rs.getTimestamp("createdAt"));
+                zone.setUpdateAt(rs.getTimestamp("updateAt"));
+                zone.setDeleteBy(rs.getString("deleteBy"));
+                zone.setDeleteAt(rs.getTimestamp("deleteAt"));
+                
+                // Count products in this zone
+                int productCount = countProductsInZone(zone.getId());
+                zone.setProductCount(productCount);
+                
                 zoneList.add(zone);
             }
         } catch (SQLException e) {
@@ -73,11 +86,11 @@ public class ZoneDAO extends DBContext {
             stm = cnn.prepareStatement(query);
             rs = stm.executeQuery();
             while (rs.next()) {
-                Zone zone = new Zone(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getBoolean("isactive")
-                );
+                Zone zone = new Zone();
+                zone.setId(rs.getInt("id"));
+                zone.setName(rs.getString("name"));
+                zone.setIsActive(rs.getInt("isactive") == 1);
+                zone.setDescription(rs.getString("description"));
                 zoneList.add(zone);
             }
         } catch (SQLException e) {
@@ -88,34 +101,42 @@ public class ZoneDAO extends DBContext {
 
     public int getTotalZones() {
         int count = 0;
-
+        String query = "SELECT COUNT(*) FROM zone";
         try {
-            String sql = "SELECT COUNT(*) FROM zone";
-            PreparedStatement stm = cnn.prepareStatement(sql);
-            ResultSet rs = stm.executeQuery();
-
+            stm = cnn.prepareStatement(query);
+            rs = stm.executeQuery();
             if (rs.next()) {
                 count = rs.getInt(1);
             }
         } catch (SQLException e) {
             System.out.println("Get Total Zones: " + e.getMessage());
         }
-
         return count;
     }
 
-    public Zone getZoneById(String id) {
+    public Zone getZoneById(int id) {
         String query = "SELECT * FROM zone WHERE id = ?";
         try {
             stm = cnn.prepareStatement(query);
-            stm.setString(1, id);
+            stm.setInt(1, id);
             rs = stm.executeQuery();
             if (rs.next()) {
-                return new Zone(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getBoolean("isactive")
-                );
+                Zone zone = new Zone();
+                zone.setId(rs.getInt("id"));
+                zone.setName(rs.getString("name"));
+                zone.setIsActive(rs.getInt("isactive") == 1);
+                zone.setDescription(rs.getString("description"));
+                zone.setCreateBy(rs.getString("createBy"));
+                zone.setCreatedAt(rs.getTimestamp("createdAt"));
+                zone.setUpdateAt(rs.getTimestamp("updateAt"));
+                zone.setDeleteBy(rs.getString("deleteBy"));
+                zone.setDeleteAt(rs.getTimestamp("deleteAt"));
+                
+                // Count products in this zone
+                int productCount = countProductsInZone(zone.getId());
+                zone.setProductCount(productCount);
+                
+                return zone;
             }
         } catch (SQLException e) {
             System.out.println("Get Zone By ID: " + e.getMessage());
@@ -123,138 +144,54 @@ public class ZoneDAO extends DBContext {
         return null;
     }
 
-    public void insert(Zone zone) throws SQLException {
-        String query = "INSERT INTO zone (name, isactive) VALUES (?, ?)";
+    public boolean insert(Zone zone) {
+        String query = "INSERT INTO zone (name, description, isactive, createBy, createdAt) VALUES (?, ?, ?, ?, ?)";
         try {
             stm = cnn.prepareStatement(query);
             stm.setString(1, zone.getName());
-            stm.setBoolean(2, zone.isIsActive());
-            stm.executeUpdate();
+            stm.setString(2, zone.getDescription());
+            stm.setInt(3, zone.isIsActive() ? 1 : 0);
+            stm.setString(4, zone.getCreateBy());
+            stm.setTimestamp(5, zone.getCreatedAt() != null ? zone.getCreatedAt() : new Timestamp(new Date().getTime()));
+            
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             System.out.println("Insert Zone: " + e.getMessage());
-            throw e;
+            return false;
         }
     }
 
-    public boolean update(Zone zone) throws SQLException {
-        String query = "UPDATE zone SET name = ?, isactive = ? WHERE id = ?";
+    public boolean update(Zone zone) {
+        String query = "UPDATE zone SET name = ?, isactive = ?, description = ?, updateAt = ? WHERE id = ?";
         try {
             stm = cnn.prepareStatement(query);
             stm.setString(1, zone.getName());
-            stm.setBoolean(2, zone.isIsActive());
-            stm.setString(3, zone.getId());
-
+            stm.setInt(2, zone.isIsActive() ? 1 : 0);
+            stm.setString(3, zone.getDescription());
+            stm.setTimestamp(4, new Timestamp(new Date().getTime()));
+            stm.setInt(5, zone.getId());
+            
             int rowsAffected = stm.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
             System.out.println("Update Zone: " + e.getMessage());
-            throw e;
+            return false;
         }
     }
 
-    public void delete(String id) {
-        String query = "DELETE FROM zone WHERE id = ?";
+    public boolean delete(int id) {
+        String query = "UPDATE zone SET isactive = 0, deleteAt = ? WHERE id = ?";
         try {
             stm = cnn.prepareStatement(query);
-            stm.setString(1, id);
-            stm.executeUpdate();
+            stm.setTimestamp(1, new Timestamp(new Date().getTime()));
+            stm.setInt(2, id);
+            
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             System.out.println("Delete Zone: " + e.getMessage());
-        }
-    }
-
-    public boolean isZoneUsedByProducts(String zoneId) {
-        String query = "SELECT COUNT(*) FROM product_zone WHERE zone_id = ?";
-        try {
-            stm = cnn.prepareStatement(query);
-            stm.setString(1, zoneId);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            System.out.println("Check Zone Used: " + e.getMessage());
-        }
-        return false;
-    }
-
-    public List<Zone> searchZones(String keyword) {
-        List<Zone> zoneList = new ArrayList<>();
-        String query = "SELECT * FROM zone WHERE name LIKE ? OR id LIKE ?";
-        try {
-            stm = cnn.prepareStatement(query);
-            stm.setString(1, "%" + keyword + "%");
-            stm.setString(2, "%" + keyword + "%");
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                Zone zone = new Zone(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getBoolean("isactive")
-                );
-                zoneList.add(zone);
-            }
-        } catch (SQLException e) {
-            System.out.println("Search Zones: " + e.getMessage());
-        }
-        return zoneList;
-    }
-
-    public List<Zone> filterZonesByActive(String isActive) {
-        List<Zone> zoneList = new ArrayList<>();
-        String query = "SELECT * FROM zone WHERE 1=1";
-
-        if (!isActive.equals("default")) {
-            query += " AND isactive = " + (isActive.equals("true") ? "1" : "0");
-        }
-
-        try {
-            stm = cnn.prepareStatement(query);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                Zone zone = new Zone(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getBoolean("isactive")
-                );
-                zoneList.add(zone);
-            }
-        } catch (SQLException e) {
-            System.out.println("Filter Zones: " + e.getMessage());
-        }
-        return zoneList;
-    }
-
-    private String generateZoneId() {
-        String query = "SELECT id FROM zone ORDER BY id DESC LIMIT 1";
-        try {
-            stm = cnn.prepareStatement(query);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                String lastId = rs.getString("id");
-                int number = Integer.parseInt(lastId.substring(1)) + 1;
-                return "Z" + String.format("%03d", number);
-            } else {
-                return "Z001";
-            }
-        } catch (SQLException e) {
-            System.out.println("Generate Zone ID: " + e.getMessage());
-            return "Z001";
-        }
-    }
-
-    public static void main(String[] args) {
-        ZoneDAO zoneDAO = new ZoneDAO();
-
-        // Test getAllZones()
-        List<Zone> zones = zoneDAO.getAllZones(1, 10);
-
-        // Hiển thị kết quả
-        System.out.println("Danh sách các Zone:");
-        for (Zone zone : zones) {
-            System.out.println("ID: " + zone.getId()
-                    + ", Name: " + zone.getName()
-                    + ", Active: " + zone.isIsActive());
+            return false;
         }
     }
 
@@ -265,11 +202,12 @@ public class ZoneDAO extends DBContext {
             stm.setString(1, name);
             rs = stm.executeQuery();
             if (rs.next()) {
-                return new Zone(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getBoolean("isactive")
-                );
+                Zone zone = new Zone();
+                zone.setId(rs.getInt("id"));
+                zone.setName(rs.getString("name"));
+                zone.setIsActive(rs.getInt("isactive") == 1);
+                zone.setDescription(rs.getString("description"));
+                return zone;
             }
         } catch (SQLException e) {
             System.out.println("Get Zone By Name: " + e.getMessage());
@@ -282,19 +220,26 @@ public class ZoneDAO extends DBContext {
         int offset = (page - 1) * pageSize;
 
         try {
-            String sql = "SELECT * FROM zone WHERE id LIKE ? OR name LIKE ? LIMIT ? OFFSET ?";
+            String sql = "SELECT * FROM zone WHERE id LIKE ? OR name LIKE ? OR description LIKE ? LIMIT ? OFFSET ?";
             PreparedStatement stm = cnn.prepareStatement(sql);
             stm.setString(1, "%" + keyword + "%");
             stm.setString(2, "%" + keyword + "%");
-            stm.setInt(3, pageSize);
-            stm.setInt(4, offset);
+            stm.setString(3, "%" + keyword + "%");
+            stm.setInt(4, pageSize);
+            stm.setInt(5, offset);
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
                 Zone zone = new Zone();
-                zone.setId(rs.getString("id"));
+                zone.setId(rs.getInt("id"));
                 zone.setName(rs.getString("name"));
-                zone.setIsActive(rs.getBoolean("isactive"));
+                zone.setIsActive(rs.getInt("isactive") == 1);
+                zone.setDescription(rs.getString("description"));
+                
+                // Count products in this zone
+                int productCount = countProductsInZone(zone.getId());
+                zone.setProductCount(productCount);
+                
                 zoneList.add(zone);
             }
         } catch (SQLException e) {
@@ -308,10 +253,11 @@ public class ZoneDAO extends DBContext {
         int count = 0;
 
         try {
-            String sql = "SELECT COUNT(*) FROM zone WHERE id LIKE ? OR name LIKE ?";
+            String sql = "SELECT COUNT(*) FROM zone WHERE id LIKE ? OR name LIKE ? OR description LIKE ?";
             PreparedStatement stm = cnn.prepareStatement(sql);
             stm.setString(1, "%" + keyword + "%");
             stm.setString(2, "%" + keyword + "%");
+            stm.setString(3, "%" + keyword + "%");
             ResultSet rs = stm.executeQuery();
 
             if (rs.next()) {
@@ -324,7 +270,7 @@ public class ZoneDAO extends DBContext {
         return count;
     }
 
-    public List<Zone> filterZonesByActive(String isActive, int page, int pageSize) {
+    public List<Zone> filterZones(String isActive, int page, int pageSize) {
         List<Zone> zoneList = new ArrayList<>();
         int offset = (page - 1) * pageSize;
 
@@ -335,7 +281,7 @@ public class ZoneDAO extends DBContext {
             if (isActive != null && !isActive.equals("default")) {
                 sql = "SELECT * FROM zone WHERE isactive = ? LIMIT ? OFFSET ?";
                 stm = cnn.prepareStatement(sql);
-                stm.setBoolean(1, Boolean.parseBoolean(isActive));
+                stm.setInt(1, Boolean.parseBoolean(isActive) ? 1 : 0);
                 stm.setInt(2, pageSize);
                 stm.setInt(3, offset);
             } else {
@@ -349,9 +295,15 @@ public class ZoneDAO extends DBContext {
 
             while (rs.next()) {
                 Zone zone = new Zone();
-                zone.setId(rs.getString("id"));
+                zone.setId(rs.getInt("id"));
                 zone.setName(rs.getString("name"));
-                zone.setIsActive(rs.getBoolean("isactive"));
+                zone.setIsActive(rs.getInt("isactive") == 1);
+                zone.setDescription(rs.getString("description"));
+                
+                // Count products in this zone
+                int productCount = countProductsInZone(zone.getId());
+                zone.setProductCount(productCount);
+                
                 zoneList.add(zone);
             }
         } catch (SQLException e) {
@@ -371,7 +323,7 @@ public class ZoneDAO extends DBContext {
             if (isActive != null && !isActive.equals("default")) {
                 sql = "SELECT COUNT(*) FROM zone WHERE isactive = ?";
                 stm = cnn.prepareStatement(sql);
-                stm.setBoolean(1, Boolean.parseBoolean(isActive));
+                stm.setInt(1, Boolean.parseBoolean(isActive) ? 1 : 0);
             } else {
                 sql = "SELECT COUNT(*) FROM zone";
                 stm = cnn.prepareStatement(sql);
@@ -389,12 +341,12 @@ public class ZoneDAO extends DBContext {
         return count;
     }
 
-    public int countProductsInZone(String zoneId) {
+    public int countProductsInZone(int zoneId) {
         int count = 0;
         String query = "SELECT COUNT(*) FROM product_zone WHERE zone_id = ?";
         try {
             stm = cnn.prepareStatement(query);
-            stm.setString(1, zoneId);
+            stm.setInt(1, zoneId);
             rs = stm.executeQuery();
             if (rs.next()) {
                 count = rs.getInt(1);
@@ -405,12 +357,16 @@ public class ZoneDAO extends DBContext {
         return count;
     }
 
-    public List<Product> getProductsInZone(String zoneId) {
+    public boolean isZoneUsedByProducts(int zoneId) {
+        return countProductsInZone(zoneId) > 0;
+    }
+
+    public List<Product> getProductsInZone(int zoneId) {
         List<Product> productList = new ArrayList<>();
         String query = "SELECT p.* FROM product p JOIN product_zone pz ON p.id = pz.product_id WHERE pz.zone_id = ?";
         try {
             stm = cnn.prepareStatement(query);
-            stm.setString(1, zoneId);
+            stm.setInt(1, zoneId);
             rs = stm.executeQuery();
             while (rs.next()) {
                 Product product = new Product();

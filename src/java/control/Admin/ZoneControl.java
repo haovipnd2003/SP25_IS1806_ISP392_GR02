@@ -11,6 +11,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import entity.User;
+import entity.Product;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +31,18 @@ public class ZoneControl extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+         User user = (User) request.getSession().getAttribute("acc");
+        int roleType = 0; // Default to lowest role
+        if (user != null) {
+            // Convert the String roletype to int
+            try {
+                roleType = Integer.parseInt(user.getRoletype());
+            } catch (NumberFormatException e) {
+                // If conversion fails, keep default value
+                System.out.println("Error parsing roletype: " + e.getMessage());
+            }
+        }
+        request.setAttribute("roletype", roleType);
 
         if (action != null) {
             switch (action) {
@@ -57,6 +72,18 @@ public class ZoneControl extends HttpServlet {
 
     private void handleAddZone(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+         User user = (User) request.getSession().getAttribute("acc");
+        int roleType = 0; // Default to lowest role
+        if (user != null) {
+            // Convert the String roletype to int
+            try {
+                roleType = Integer.parseInt(user.getRoletype());
+            } catch (NumberFormatException e) {
+                // If conversion fails, keep default value
+                System.out.println("Error parsing roletype: " + e.getMessage());
+            }
+        }
+        request.setAttribute("roletype", roleType);
         List<Zone> zoneList = zoneDAO.getAllZones(1, Integer.MAX_VALUE);
         request.setAttribute("zoneList", zoneList);
         request.getRequestDispatcher("view/admin/addZone.jsp").forward(request, response);
@@ -64,7 +91,7 @@ public class ZoneControl extends HttpServlet {
 
     private void handleEditZone(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
+        int id = Integer.parseInt(request.getParameter("id"));
         Zone zone = zoneDAO.getZoneById(id);
         
         // Thêm danh sách zone để kiểm tra trùng tên
@@ -75,16 +102,50 @@ public class ZoneControl extends HttpServlet {
         request.getRequestDispatcher("view/admin/updateZone.jsp").forward(request, response);
     }
 
+    private void handleZoneDetails(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Zone zone = zoneDAO.getZoneById(id);
+        List<Product> productList = zoneDAO.getProductsInZone(id);
+        
+        request.setAttribute("zone", zone);
+        request.setAttribute("products", productList);
+        request.getRequestDispatcher("view/admin/zone-details.jsp").forward(request, response);
+    }
+
     private void handleDefault(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Add pagination support
+        String pageParam = request.getParameter("page");
         int page = 1;
-        int pageSize = 10;
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+                if (page < 1) {
+                    page = 1;
+                }
+            } catch (NumberFormatException e) {
+                // Ignore and use default
+            }
         }
         
+        // Get user role type from session
+//        User user = (User) request.getSession().getAttribute("acc");
+//        int roleType = 0; // Default to lowest role
+//        if (user != null) {
+//            // Convert the String roletype to int
+//            try {
+//                roleType = Integer.parseInt(user.getRoletype());
+//            } catch (NumberFormatException e) {
+//                // If conversion fails, keep default value
+//                System.out.println("Error parsing roletype: " + e.getMessage());
+//            }
+//        }
+//        request.setAttribute("roletype", roleType);
+        
+        int pageSize = 10;
         List<Zone> zoneList = zoneDAO.getAllZones(page, pageSize);
+        int totalZones = zoneDAO.getTotalZones();
+        int totalPages = (int) Math.ceil((double) totalZones / pageSize);
         
         // Thêm số lượng sản phẩm cho mỗi zone
         for (Zone zone : zoneList) {
@@ -92,35 +153,32 @@ public class ZoneControl extends HttpServlet {
             zone.setProductCount(productCount);
         }
         
-        int totalZones = zoneDAO.getTotalZones();
-        int totalPages = (int) Math.ceil((double) totalZones / pageSize);
-
-        User user = (User) request.getSession().getAttribute("acc");
-        if (user != null) {
-            request.setAttribute("roletype", user.getRoletype().toString());
-        } else {
-            request.setAttribute("roletype", null);
-        }
-
         request.setAttribute("zoneList", zoneList);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
-        request.setAttribute("totalZones", totalZones);
         request.getRequestDispatcher("view/admin/zones.jsp").forward(request, response);
     }
 
     private void handleSearch(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String keyword = request.getParameter("keyword");
-        
-        // Add pagination support
+        String pageParam = request.getParameter("page");
         int page = 1;
-        int pageSize = 10;
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+                if (page < 1) {
+                    page = 1;
+                }
+            } catch (NumberFormatException e) {
+                // Ignore and use default
+            }
         }
         
+        int pageSize = 10;
         List<Zone> zoneList = zoneDAO.searchZones(keyword, page, pageSize);
+        int totalResults = zoneDAO.getTotalSearchResults(keyword);
+        int totalPages = (int) Math.ceil((double) totalResults / pageSize);
         
         // Thêm số lượng sản phẩm cho mỗi zone
         for (Zone zone : zoneList) {
@@ -128,35 +186,34 @@ public class ZoneControl extends HttpServlet {
             zone.setProductCount(productCount);
         }
         
-        int totalZones = zoneDAO.getTotalSearchResults(keyword);
-        int totalPages = (int) Math.ceil((double) totalZones / pageSize);
-
-        User user = (User) request.getSession().getAttribute("acc");
-        if (user != null) {
-            request.setAttribute("roletype", user.getRoletype().toString());
-        } else {
-            request.setAttribute("roletype", null);
-        }
-
         request.setAttribute("zoneList", zoneList);
-        request.setAttribute("keyword", keyword);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("keyword", keyword);
+        request.setAttribute("searchMode", true);
         request.getRequestDispatcher("view/admin/zones.jsp").forward(request, response);
     }
 
     private void handleFilter(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String isActive = request.getParameter("isActive");
-        
-        // Add pagination support
+        String pageParam = request.getParameter("page");
         int page = 1;
-        int pageSize = 10;
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+                if (page < 1) {
+                    page = 1;
+                }
+            } catch (NumberFormatException e) {
+                // Ignore and use default
+            }
         }
         
-        List<Zone> zoneList = zoneDAO.filterZonesByActive(isActive, page, pageSize);
+        int pageSize = 10;
+        List<Zone> zoneList = zoneDAO.filterZones(isActive, page, pageSize);
+        int totalResults = zoneDAO.getTotalFilterResults(isActive);
+        int totalPages = (int) Math.ceil((double) totalResults / pageSize);
         
         // Thêm số lượng sản phẩm cho mỗi zone
         for (Zone zone : zoneList) {
@@ -164,77 +221,39 @@ public class ZoneControl extends HttpServlet {
             zone.setProductCount(productCount);
         }
         
-        int totalZones = zoneDAO.getTotalFilterResults(isActive);
-        int totalPages = (int) Math.ceil((double) totalZones / pageSize);
-
-        User user = (User) request.getSession().getAttribute("acc");
-        if (user != null) {
-            request.setAttribute("roletype", user.getRoletype().toString());
-        } else {
-            request.setAttribute("roletype", null);
-        }
-
         request.setAttribute("zoneList", zoneList);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("isActive", isActive);
+        request.setAttribute("filterMode", true);
         request.getRequestDispatcher("view/admin/zones.jsp").forward(request, response);
-    }
-
-    private void handleZoneDetails(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String id = request.getParameter("id");
-        
-        // Lấy thông tin zone
-        Zone zone = zoneDAO.getZoneById(id);
-        if (zone == null) {
-            request.getSession().setAttribute("toastMessage", "Không tìm thấy zone!");
-            request.getSession().setAttribute("toastType", "error");
-            response.sendRedirect("zoneControl");
-            return;
-        }
-        
-        // Đếm số lượng sản phẩm trong zone
-        int productCount = zoneDAO.countProductsInZone(id);
-        zone.setProductCount(productCount);
-        
-        // Lấy danh sách sản phẩm trong zone
-        List<entity.Product> products = zoneDAO.getProductsInZone(id);
-        
-        User user = (User) request.getSession().getAttribute("acc");
-        if (user != null) {
-            request.setAttribute("roletype", user.getRoletype().toString());
-        } else {
-            request.setAttribute("roletype", null);
-        }
-        
-        request.setAttribute("zone", zone);
-        request.setAttribute("products", products);
-        request.getRequestDispatcher("view/admin/zone-details.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-
-        if (action != null) {
-            switch (action) {
-                case "insert":
-                    insertZone(request, response);
-                    break;
-                case "update":
-                    updateZone(request, response);
-                    break;
-                case "delete":
-                    deleteZone(request, response);
-                    break;
-            }
+        
+        switch (action) {
+            case "insert":
+                insertZone(request, response);
+                break;
+            case "update":
+                updateZone(request, response);
+                break;
+            case "delete":
+                deleteZone(request, response);
+                break;
+            default:
+                response.sendRedirect("zoneControl");
+                break;
         }
     }
 
     private void insertZone(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String name = request.getParameter("name").trim();
+            String description = request.getParameter("description");
             String isActiveParam = request.getParameter("isActive");
             
             Map<String, String> errors = new HashMap<>();
@@ -262,10 +281,23 @@ public class ZoneControl extends HttpServlet {
             Zone zone = new Zone();
             zone.setName(name);
             zone.setIsActive(isActive);
+            zone.setDescription(description);
             
-            zoneDAO.insert(zone);
-            request.getSession().setAttribute("toastMessage", "Zone added successfully!");
-            request.getSession().setAttribute("toastType", "success");
+            // Set creation info
+            User user = (User) request.getSession().getAttribute("acc");
+            if (user != null) {
+                zone.setCreateBy(user.getName());
+            }
+            zone.setCreatedAt(new Timestamp(new Date().getTime()));
+            
+            boolean inserted = zoneDAO.insert(zone);
+            if (inserted) {
+                request.getSession().setAttribute("toastMessage", "Zone added successfully!");
+                request.getSession().setAttribute("toastType", "success");
+            } else {
+                request.getSession().setAttribute("toastMessage", "Failed to add zone!");
+                request.getSession().setAttribute("toastType", "error");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             request.getSession().setAttribute("toastMessage", "Error adding zone: " + e.getMessage());
@@ -276,8 +308,9 @@ public class ZoneControl extends HttpServlet {
 
     private void updateZone(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String id = request.getParameter("id");
+            int id = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name").trim();
+            String description = request.getParameter("description");
             String isActiveParam = request.getParameter("isActive");
             
             Map<String, String> errors = new HashMap<>();
@@ -290,9 +323,8 @@ public class ZoneControl extends HttpServlet {
                 errors.put("statusError", "Status is required");
             }
             
-            // Check duplicate name
             Zone existingZone = zoneDAO.getZoneByName(name);
-            if (existingZone != null && !existingZone.getId().equals(id)) {
+            if (existingZone != null && existingZone.getId() != id) {
                 errors.put("nameError", "Zone name already exists");
             }
             
@@ -308,14 +340,6 @@ public class ZoneControl extends HttpServlet {
                 request.getSession().setAttribute("toastMessage", "Zone not found!");
                 request.getSession().setAttribute("toastType", "error");
                 response.sendRedirect("zoneControl");
-                return;
-            }
-            
-            // Kiểm tra xem tên zone mới có trùng với zone khác không
-            if (existingZone != null && !existingZone.getId().equals(id)) {
-                request.getSession().setAttribute("toastMessage", "Zone name already exists!");
-                request.getSession().setAttribute("toastType", "error");
-                response.sendRedirect("zoneControl?action=edit&id=" + id);
                 return;
             }
             
@@ -336,9 +360,16 @@ public class ZoneControl extends HttpServlet {
             zone.setId(id);
             zone.setName(name);
             zone.setIsActive(Boolean.parseBoolean(isActiveParam));
+            zone.setDescription(description);
+            
+            // Set update info
+            User user = (User) request.getSession().getAttribute("acc");
+            if (user != null) {
+                // We could set an updateBy field here if needed
+            }
             
             // Thêm debug log
-            System.out.println("Updating zone: ID=" + id + ", Name=" + name + ", isActive=" + isActiveParam);
+            System.out.println("Updating zone: ID=" + id + ", Name=" + name + ", isActive=" + isActiveParam + ", Description=" + description);
             
             boolean updated = zoneDAO.update(zone);
             if (updated) {
@@ -357,16 +388,28 @@ public class ZoneControl extends HttpServlet {
     }
 
     private void deleteZone(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id");
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
 
-        // Kiểm tra xem zone có đang được sử dụng bởi sản phẩm nào không
-        if (zoneDAO.isZoneUsedByProducts(id)) {
-            request.getSession().setAttribute("toastMessage", "Cannot delete zone because it is being used by products!");
+            // Kiểm tra xem zone có đang được sử dụng bởi sản phẩm nào không
+            if (zoneDAO.isZoneUsedByProducts(id)) {
+                request.getSession().setAttribute("toastMessage", "Cannot delete zone because it is being used by products!");
+                request.getSession().setAttribute("toastType", "error");
+            } else {
+                // Get current user for deleteBy field
+                User user = (User) request.getSession().getAttribute("acc");
+                if (user != null) {
+                    // We could set the deleteBy field here if we modified the delete method
+                }
+                
+                zoneDAO.delete(id);
+                request.getSession().setAttribute("toastMessage", "Zone deleted successfully!");
+                request.getSession().setAttribute("toastType", "success");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getSession().setAttribute("toastMessage", "Error deleting zone: " + e.getMessage());
             request.getSession().setAttribute("toastType", "error");
-        } else {
-            zoneDAO.delete(id);
-            request.getSession().setAttribute("toastMessage", "Zone deleted successfully!");
-            request.getSession().setAttribute("toastType", "success");
         }
         response.sendRedirect("zoneControl");
     }

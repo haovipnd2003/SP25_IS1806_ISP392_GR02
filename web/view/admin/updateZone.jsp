@@ -104,8 +104,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="name" class="form-label">Zone Name:</label>
-                                                        <input type="text" class="form-control" id="name" name="name" 
-                                                               value="${fn:escapeXml(not empty param.name ? param.name : zone.name)}">
+                                                        <input type="text" class="form-control" id="name" name="name" value="${zone.name}" required>
                                                         <c:if test="${not empty nameError}">
                                                             <small class="text-danger">${nameError}</small>
                                                         </c:if>
@@ -113,7 +112,16 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row">
+                                            <div class="row mt-3">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="description" class="form-label">Description:</label>
+                                                        <textarea class="form-control" id="description" name="description" rows="4">${zone.description}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-3">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label class="form-label">Status:</label>
@@ -121,16 +129,14 @@
                                                             <small class="text-danger d-block">${statusError}</small>
                                                         </c:if>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="isActive" id="activeYes" value="true" 
-                                                                   ${(param.isActive == 'true' or zone.isActive) ? 'checked' : ''}>
-                                                            <label class="form-check-label" for="activeYes">
+                                                            <input class="form-check-input" type="radio" name="isActive" id="active" value="true" ${zone.isActive ? 'checked' : ''}>
+                                                            <label class="form-check-label" for="active">
                                                                 Active
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="isActive" id="activeNo" value="false"
-                                                                   ${(param.isActive == 'false' or !zone.isActive) ? 'checked' : ''}>
-                                                            <label class="form-check-label" for="activeNo">
+                                                            <input class="form-check-input" type="radio" name="isActive" id="inactive" value="false" ${!zone.isActive ? 'checked' : ''}>
+                                                            <label class="form-check-label" for="inactive">
                                                                 Inactive
                                                             </label>
                                                         </div>
@@ -138,7 +144,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row">
+                                            <div class="row mt-4">
                                                 <div class="col-md-12 text-center">
                                                     <button type="submit" class="btn btn-primary">Update Zone</button>
                                                     <a href="zoneControl" class="btn btn-secondary">Cancel</a>
@@ -156,7 +162,7 @@
 
         <script>
             // Danh sách tên zone đã tồn tại (trừ zone hiện tại)
-            const currentZoneId = "${zone.id}";
+            const currentZoneId = ${zone.id};
             const currentZoneName = "${zone.name}";
             const existingZoneNames = [
             <c:forEach var="z" items="${zoneList}" varStatus="status">
@@ -209,7 +215,7 @@
                         color: toastType === 'success' ? 'green' : 'red',
                         timeout: 5000
                     });
-
+                    
                     // Clear toast messages from session immediately after showing
                     <% 
                         session.removeAttribute("toastMessage");
