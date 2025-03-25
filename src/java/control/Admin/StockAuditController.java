@@ -47,14 +47,21 @@ public class StockAuditController extends HttpServlet {
                 if ("2".equals(roleType)) { // Admin
                     handleListAudits(request, response);
                 } else if ("3".equals(roleType)) { // Staff
-                    handleShowAuditForm(request, response);
+                    handleShowProductList(request, response);
                 } else {
                     response.sendRedirect("home");
                 }
                 break;
             case "form":
                 if ("3".equals(roleType)) { // Staff
-                    handleShowAuditForm(request, response);
+                    handleShowProductList(request, response);
+                } else {
+                    response.sendRedirect("stock-audit");
+                }
+                break;
+            case "audit-product":
+                if ("3".equals(roleType)) { // Staff
+                    handleShowProductAuditForm(request, response);
                 } else {
                     response.sendRedirect("stock-audit");
                 }
@@ -77,7 +84,7 @@ public class StockAuditController extends HttpServlet {
                 if ("2".equals(roleType)) { // Admin
                     handleListAudits(request, response);
                 } else if ("3".equals(roleType)) { // Staff
-                    handleShowAuditForm(request, response);
+                    handleShowProductList(request, response);
                 } else {
                     response.sendRedirect("home");
                 }
@@ -106,7 +113,7 @@ public class StockAuditController extends HttpServlet {
         switch (action) {
             case "submit-audit":
                 if ("3".equals(roleType)) { // Staff
-                    handleSubmitAudit(request, response);
+                    handleSubmitProductAudit(request, response);
                 } else {
                     response.sendRedirect("stock-audit");
                 }
@@ -151,77 +158,174 @@ public class StockAuditController extends HttpServlet {
         request.getRequestDispatcher("view/admin/stock-audit-list.jsp").forward(request, response);
     }
 
-    private void handleShowAuditForm(HttpServletRequest request, HttpServletResponse response)
+    private void handleShowProductList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy danh sách zone
-        ZoneDAO zoneDAO = new ZoneDAO();
-        List<Zone> zones = zoneDAO.getActiveZones();
-        request.setAttribute("zones", zones);
+        // Lấy tham số tìm kiếm
+        String keyword = request.getParameter("keyword");
         
-        // Nếu đã chọn zone, hiển thị danh sách sản phẩm trong zone đó
-        String zoneIdParam = request.getParameter("zoneId");
-        if (zoneIdParam != null && !zoneIdParam.isEmpty()) {
-            int zoneId = Integer.parseInt(zoneIdParam);
-            List<Product> products = zoneDAO.getProductsInZone(zoneId);
-            request.setAttribute("products", products);
-            request.setAttribute("selectedZoneId", zoneIdParam);
-            
-            // Lấy thông tin zone đã chọn
-            Zone selectedZone = zoneDAO.getZoneById(zoneId);
-            request.setAttribute("selectedZone", selectedZone);
+        // Lấy tham số phân trang
+        int page = 1;
+        int pageSize = 10; // Hoặc số lượng phù hợp với giao diện của bạn
+        String pageStr = request.getParameter("page");
+        if (pageStr != null && !pageStr.isEmpty()) {
+            try {
+                page = Integer.parseInt(pageStr);
+                if (page < 1) page = 1;
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
         }
         
-        request.getRequestDispatcher("view/staff/stock-audit-form.jsp").forward(request, response);
+        // Lấy danh sách sản phẩm
+        ProductDAO productDAO = new ProductDAO();
+        List<Product> products;
+        
+        if (keyword != null && !keyword.isEmpty()) {
+            products = productDAO.searchProducts(keyword);
+        } else {
+            products = productDAO.getAllProducts(page, pageSize);
+        }
+        
+        // Lấy thông tin kiểm kho gần nhất cho mỗi sản phẩm
+        StockAuditDAO auditDAO = new StockAuditDAO();
+        Map<String, Date> lastAuditDates = new HashMap<>();
+        
+        for (Product product : products) {
+            Date lastAuditDate = auditDAO.getLastAuditDateForProduct(product.getId());
+            lastAuditDates.put(product.getId(), lastAuditDate);
+        }
+        
+        request.setAttribute("products", products);
+        request.setAttribute("lastAuditDates", lastAuditDates);
+        request.setAttribute("keyword", keyword);
+        request.setAttribute("currentPage", page);
+        
+        // Tính tổng số trang nếu cần phân trang
+        if (keyword == null || keyword.isEmpty()) {
+            int totalProducts = productDAO.getTotalProducts();
+            int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+            request.setAttribute("totalPages", totalPages);
+        }
+        
+        request.getRequestDispatcher("view/staff/stock-audit-product-list.jsp").forward(request, response);
     }
-
-    private void handleSubmitAudit(HttpServletRequest request, HttpServletResponse response)
+    
+    private void handleShowProductAuditForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String productId = request.getParameter("productId");
+        
+        if (productId == null || productId.isEmpty()) {
+            setToastMessage(request, "Sản phẩm không hợp lệ", "error");
+            response.sendRedirect("stock-audit?action=form");
+            return;
+        }
+        
+        // Lấy thông tin sản phẩm
+        ProductDAO productDAO = new ProductDAO();
+        Product product = productDAO.getProductById(productId);
+        
+        if (product == null) {
+            setToastMessage(request, "Không tìm thấy sản phẩm", "error");
+            response.sendRedirect("stock-audit?action=form");
+            return;
+        }
+        
+        // Lấy danh sách zone chứa sản phẩm này
+        ZoneDAO zoneDAO = new ZoneDAO();
+        List<Zone> zones = zoneDAO.getZonesContainingProduct(productId);
+        
+        // Tạo map để lưu số lượng sản phẩm trong mỗi zone
+        Map<Integer, Double> quantityByZone = new HashMap<>();
+        double totalQuantity = 0;
+        
+        for (Zone zone : zones) {
+            double quantity = zoneDAO.getProductQuantityInZone(productId, zone.getId());
+            quantityByZone.put(zone.getId(), quantity);
+            totalQuantity += quantity;
+        }
+        
+        request.setAttribute("product", product);
+        request.setAttribute("zones", zones);
+        request.setAttribute("quantityByZone", quantityByZone);
+        request.setAttribute("totalQuantity", totalQuantity);
+        
+        request.getRequestDispatcher("view/staff/stock-audit-product-form.jsp").forward(request, response);
+    }
+    
+    private void handleSubmitProductAudit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("acc");
         
-        String zoneId = request.getParameter("zoneId");
-        String[] productIds = request.getParameterValues("productId");
-        String[] expectedQuantities = request.getParameterValues("expectedQuantity");
-        String[] actualQuantities = request.getParameterValues("actualQuantity");
-        String[] notes = request.getParameterValues("note");
+        String productId = request.getParameter("productId");
+        String expectedQuantityStr = request.getParameter("expectedQuantity");
+        String actualQuantityStr = request.getParameter("actualQuantity");
+        String note = request.getParameter("note");
         
-        if (zoneId == null || productIds == null || expectedQuantities == null || actualQuantities == null) {
+        if (productId == null || expectedQuantityStr == null || actualQuantityStr == null) {
             setToastMessage(request, "Dữ liệu kiểm kho không hợp lệ", "error");
             response.sendRedirect("stock-audit?action=form");
             return;
         }
         
-        StockAuditDAO auditDAO = new StockAuditDAO();
-        Date auditDate = Date.valueOf(LocalDate.now());
-        boolean success = true;
-        
-        for (int i = 0; i < productIds.length; i++) {
-            String productId = productIds[i];
-            double expectedQuantity = Double.parseDouble(expectedQuantities[i]);
-            double actualQuantity = Double.parseDouble(actualQuantities[i]);
+        try {
+            double expectedQuantity = Double.parseDouble(expectedQuantityStr);
+            double actualQuantity = Double.parseDouble(actualQuantityStr);
             double difference = actualQuantity - expectedQuantity;
-            String note = (notes != null && i < notes.length) ? notes[i] : "";
             
-            StockAudit audit = new StockAudit();
-            audit.setAuditDate(auditDate);
-            audit.setZoneId(zoneId);
-            audit.setStaffId(user.getId());
-            audit.setProductId(productId);
-            audit.setExpectedQuantity(expectedQuantity);
-            audit.setActualQuantity(actualQuantity);
-            audit.setDifference(difference);
-            audit.setNote(note);
+            StockAuditDAO auditDAO = new StockAuditDAO();
+            Date auditDate = Date.valueOf(LocalDate.now());
             
-            int result = auditDAO.insert(audit);
-            if (result == -1) {
-                success = false;
+            // Lấy danh sách zone chứa sản phẩm này
+            ZoneDAO zoneDAO = new ZoneDAO();
+            List<Zone> zones = zoneDAO.getZonesContainingProduct(productId);
+            
+            if (zones.isEmpty()) {
+                // Nếu không có zone nào chứa sản phẩm, tạo một bản ghi kiểm kho với zoneId = null
+                StockAudit audit = new StockAudit();
+                audit.setAuditDate(auditDate);
+                audit.setZoneId(null);
+                audit.setStaffId(user.getId());
+                audit.setProductId(productId);
+                audit.setExpectedQuantity(expectedQuantity);
+                audit.setActualQuantity(actualQuantity);
+                audit.setDifference(difference);
+                audit.setNote(note);
+                
+                int result = auditDAO.insert(audit);
+                if (result != -1) {
+                    setToastMessage(request, "Kiểm kho thành công", "success");
+                } else {
+                    setToastMessage(request, "Có lỗi xảy ra khi lưu dữ liệu kiểm kho", "error");
+                }
+            } else {
+                // Nếu có zone chứa sản phẩm, tạo một bản ghi kiểm kho cho mỗi zone
+                boolean success = true;
+                for (Zone zone : zones) {
+                    StockAudit audit = new StockAudit();
+                    audit.setAuditDate(auditDate);
+                    audit.setZoneId(String.valueOf(zone.getId()));
+                    audit.setStaffId(user.getId());
+                    audit.setProductId(productId);
+                    audit.setExpectedQuantity(expectedQuantity);
+                    audit.setActualQuantity(actualQuantity);
+                    audit.setDifference(difference);
+                    audit.setNote(note);
+                    
+                    int result = auditDAO.insert(audit);
+                    if (result == -1) {
+                        success = false;
+                    }
+                }
+                
+                if (success) {
+                    setToastMessage(request, "Kiểm kho thành công", "success");
+                } else {
+                    setToastMessage(request, "Có lỗi xảy ra khi lưu dữ liệu kiểm kho", "error");
+                }
             }
-        }
-        
-        if (success) {
-            setToastMessage(request, "Kiểm kho thành công", "success");
-        } else {
-            setToastMessage(request, "Có lỗi xảy ra khi lưu dữ liệu kiểm kho", "error");
+        } catch (NumberFormatException e) {
+            setToastMessage(request, "Dữ liệu số lượng không hợp lệ", "error");
         }
         
         response.sendRedirect("stock-audit?action=form");

@@ -361,4 +361,81 @@ public class StockAuditDAO extends DBContext {
             System.out.println("Định dạng ngày không hợp lệ. Sử dụng định dạng yyyy-MM-dd");
         }
     }
+
+    public java.sql.Date getLastAuditDateForProduct(String productId) {
+        java.sql.Date lastAuditDate = null;
+        String sql = "SELECT MAX(audit_date) as last_audit_date FROM stock_audit WHERE product_id = ?";
+        
+        try {
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, productId);
+            rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                lastAuditDate = rs.getDate("last_audit_date");
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Last Audit Date For Product: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+        
+        return lastAuditDate;
+    }
+
+    public List<StockAudit> getAuditsByProduct(String productId, int page, int pageSize) {
+        List<StockAudit> auditList = new ArrayList<>();
+        int offset = (page - 1) * pageSize;
+
+        String sql = "SELECT sa.*, z.name as zone_name, u.fullname as staff_name, p.name as product_name " +
+                     "FROM stock_audit sa " +
+                     "JOIN zone z ON sa.zone_id = z.id " +
+                     "JOIN user u ON sa.staff_id = u.id " +
+                     "JOIN product p ON sa.product_id = p.id " +
+                     "WHERE sa.product_id = ? " +
+                     "ORDER BY sa.audit_date DESC, sa.id DESC " +
+                     "LIMIT ? OFFSET ?";
+
+        try {
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, productId);
+            stm.setInt(2, pageSize);
+            stm.setInt(3, offset);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                auditList.add(getFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Audits By Product: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+
+        return auditList;
+    }
+
+    public int getTotalAuditsByProduct(String productId) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM stock_audit WHERE product_id = ?";
+
+        try {
+            connection = getConnection();
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, productId);
+            rs = stm.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Total Audits By Product: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+
+        return count;
+    }
 } 

@@ -466,4 +466,61 @@ public class ZoneDAO extends DBContext {
         
         return zoneList;
     }
+
+    public List<Zone> getZonesContainingProduct(String productId) {
+        List<Zone> zoneList = new ArrayList<>();
+        String query = "SELECT z.* FROM zone z JOIN product_zone pz ON z.id = pz.zone_id WHERE pz.product_id = ? AND z.isactive = 1";
+        try {
+            stm = cnn.prepareStatement(query);
+            stm.setString(1, productId);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Zone zone = new Zone();
+                zone.setId(rs.getInt("id"));
+                zone.setName(rs.getString("name"));
+                zone.setDescription(rs.getString("description"));
+                zone.setIsActive(rs.getBoolean("isactive"));
+                zoneList.add(zone);
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Zones Containing Product: " + e.getMessage());
+        }
+        return zoneList;
+    }
+
+    public double getProductQuantity(String productId) {
+        double quantity = 0;
+        String query = "SELECT quantity FROM product WHERE id = ?";
+        try {
+            stm = cnn.prepareStatement(query);
+            stm.setString(1, productId);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                quantity = rs.getDouble("quantity");
+            }
+        } catch (SQLException e) {
+            System.out.println("Get Product Quantity: " + e.getMessage());
+        }
+        return quantity;
+    }
+
+    // Phương thức này không còn cần thiết nếu không lưu số lượng theo zone
+    // Nhưng giữ lại để tương thích với code hiện tại, trả về 0 hoặc số lượng từ bảng product
+    public double getProductQuantityInZone(String productId, int zoneId) {
+        // Kiểm tra xem sản phẩm có trong zone không
+        String checkQuery = "SELECT 1 FROM product_zone WHERE product_id = ? AND zone_id = ?";
+        try {
+            stm = cnn.prepareStatement(checkQuery);
+            stm.setString(1, productId);
+            stm.setInt(2, zoneId);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                // Sản phẩm có trong zone, lấy số lượng từ bảng product
+                return getProductQuantity(productId);
+            }
+        } catch (SQLException e) {
+            System.out.println("Check Product In Zone: " + e.getMessage());
+        }
+        return 0; // Sản phẩm không có trong zone
+    }
 }
