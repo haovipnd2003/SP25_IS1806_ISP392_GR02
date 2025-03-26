@@ -179,11 +179,14 @@ public class StockAuditController extends HttpServlet {
         // Lấy danh sách sản phẩm
         ProductDAO productDAO = new ProductDAO();
         List<Product> products;
+        int totalProducts;
         
         if (keyword != null && !keyword.isEmpty()) {
             products = productDAO.searchProducts(keyword);
+            totalProducts = products.size(); // Hoặc có thể gọi phương thức đếm riêng nếu có
         } else {
             products = productDAO.getAllProducts(page, pageSize);
+            totalProducts = productDAO.getTotalProducts();
         }
         
         // Lấy thông tin kiểm kho gần nhất cho mỗi sản phẩm
@@ -195,17 +198,15 @@ public class StockAuditController extends HttpServlet {
             lastAuditDates.put(product.getId(), lastAuditDate);
         }
         
+        // Tính tổng số trang
+        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+        
         request.setAttribute("products", products);
         request.setAttribute("lastAuditDates", lastAuditDates);
         request.setAttribute("keyword", keyword);
         request.setAttribute("currentPage", page);
-        
-        // Tính tổng số trang nếu cần phân trang
-        if (keyword == null || keyword.isEmpty()) {
-            int totalProducts = productDAO.getTotalProducts();
-            int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
-            request.setAttribute("totalPages", totalPages);
-        }
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("totalProducts", totalProducts);
         
         request.getRequestDispatcher("view/staff/stock-audit-product-list.jsp").forward(request, response);
     }

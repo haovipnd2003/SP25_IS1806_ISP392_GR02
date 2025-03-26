@@ -169,6 +169,37 @@
                                     </div>
                                 </c:if>
                             </div>
+
+                            <!-- Thêm phân trang sau danh sách sản phẩm -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center">
+                                            <c:if test="${currentPage > 1}">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="stock-audit?action=form&page=${currentPage - 1}${not empty keyword ? '&keyword='.concat(keyword) : ''}" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                            </c:if>
+
+                                            <c:forEach begin="1" end="${totalPages}" var="i">
+                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                    <a class="page-link" href="stock-audit?action=form&page=${i}${not empty keyword ? '&keyword='.concat(keyword) : ''}">${i}</a>
+                                                </li>
+                                            </c:forEach>
+
+                                            <c:if test="${currentPage < totalPages}">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="stock-audit?action=form&page=${currentPage + 1}${not empty keyword ? '&keyword='.concat(keyword) : ''}" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </c:if>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
                         </div>
                     </section>
                 </div>
