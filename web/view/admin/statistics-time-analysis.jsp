@@ -118,36 +118,53 @@
         <div id="app">
             <div class="main-wrapper">
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
-                    <div class="main-content">
-                        <section class="section">
-                            <h1 class="section-header">
-                                <div>Phân Tích Thời Gian</div>
-                                <button id="sidebarToggle" class="btn btn-primary d-md-none">
-                                    <i class="fa fa-bars"></i>
-                                </button>
-                            </h1>
+                    <div style="position: absolute; top: 15px; right: 20px; z-index: 1000;">
+                    <c:if test="${sessionScope.acc != null}">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> ${sessionScope.acc.name}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a href="${pageContext.request.contextPath}/profile" class="dropdown-item">
+                                    <i class="ion ion-android-person"></i> Hồ sơ
+                                </a>
+                                <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
+                                    <i class="ion ion-log-out"></i> Đăng xuất
+                                </a>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
+                <div class="main-content">
+                    <section class="section">
+                        <h1 class="section-header">
+                            <div>Phân Tích Thời Gian</div>
+                            <button id="sidebarToggle" class="btn btn-primary d-md-none">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                        </h1>
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Đơn Hàng Theo Ngày Trong Tuần</h5>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Đơn Hàng Theo Ngày Trong Tuần</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <canvas id="dailyChart"></canvas>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="chart-container">
-                                                <canvas id="dailyChart"></canvas>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Ngày</th>
-                                                            <th>Số Đơn Hàng</th>
-                                                            <th>Doanh Thu</th>
-                                                            <th>% Tổng Đơn Hàng</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Ngày</th>
+                                                        <th>Số Đơn Hàng</th>
+                                                        <th>Doanh Thu</th>
+                                                        <th>% Tổng Đơn Hàng</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
                                                     <c:set var="totalOrders" value="0" />
                                                     <c:forEach var="day" items="${dailyStats}">
                                                         <c:set var="totalOrders" value="${totalOrders + day.orderCount}" />

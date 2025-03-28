@@ -94,16 +94,32 @@
                 <!-- MAIN-SIDEBAR-JSP-INCLUDE -->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
                     <!-- MAIN-SIDEBAR-JSP-INCLUDE -->
-
-                    <!-- Main Content -->
-                    <div class="main-content" style="margin-left: 250px; padding: 20px;">
-                        <button id="sidebarToggle" class="btn btn-secondary mb-3">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                        <section class="section">
-                            <div class="section-header">
-                                <h1>Danh Sách Sản Phẩm</h1>
+                    <div style="position: absolute; top: 15px; right: 20px; z-index: 1000;">
+                    <c:if test="${sessionScope.acc != null}">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> ${sessionScope.acc.name}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a href="${pageContext.request.contextPath}/profile" class="dropdown-item">
+                                    <i class="ion ion-android-person"></i> Hồ sơ
+                                </a>
+                                <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
+                                    <i class="ion ion-log-out"></i> Đăng xuất
+                                </a>
                             </div>
+                        </div>
+                    </c:if>
+                </div>
+                <!-- Main Content -->
+                <div class="main-content" style="margin-left: 250px; padding: 20px;">
+                    <button id="sidebarToggle" class="btn btn-secondary mb-3">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <section class="section">
+                        <div class="section-header">
+                            <h1>Danh Sách Sản Phẩm</h1>
+                        </div>
                         <c:if test="${roletype == 2}">
                             <div class="text-right mb-3">
                                 <a href="products?action=add" class="btn btn-primary btn-lg">
@@ -300,12 +316,12 @@
                         color: toastType === 'success' ? 'green' : 'red',
                         timeout: 5000
                     });
-                    
+
                     // Clear toast messages from session immediately after showing
-                    <% 
+            <% 
                         session.removeAttribute("toastMessage");
                         session.removeAttribute("toastType");
-                    %>
+            %>
                 }
             });
         </script>

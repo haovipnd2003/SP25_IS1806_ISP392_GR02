@@ -39,73 +39,73 @@
             .main-content {
                 transition: margin-left 0.3s ease;
             }
-            
+
             .section-header {
                 margin-bottom: 20px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-            
+
             .section-header h1 {
                 margin: 0;
                 font-size: 24px;
                 font-weight: 600;
             }
-            
+
             .product-info {
                 background-color: #f8f9fa;
                 padding: 15px;
                 border-radius: 5px;
                 margin-bottom: 20px;
             }
-            
+
             .product-name {
                 font-size: 24px;
                 font-weight: bold;
                 margin-bottom: 5px;
             }
-            
+
             .product-id {
                 font-size: 16px;
                 color: #666;
                 margin-bottom: 10px;
             }
-            
+
             .total-quantity {
                 font-size: 18px;
                 color: #007bff;
                 font-weight: bold;
                 margin-bottom: 10px;
             }
-            
+
             .audit-form {
                 margin-top: 20px;
             }
-            
+
             .quantity-input {
                 width: 100px;
             }
-            
+
             .note-input {
                 width: 200px;
             }
-            
+
             .difference-positive {
                 color: green;
                 font-weight: bold;
             }
-            
+
             .difference-negative {
                 color: red;
                 font-weight: bold;
             }
-            
+
             .difference-zero {
                 color: #007bff;
                 font-weight: bold;
             }
-            
+
             .zone-badge {
                 display: inline-block;
                 background-color: #e9ecef;
@@ -123,7 +123,23 @@
 
                 <!-- Sidebar -->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
-
+                    <div style="position: absolute; top: 15px; right: 20px; z-index: 1000;">
+                    <c:if test="${sessionScope.acc != null}">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> ${sessionScope.acc.name}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a href="${pageContext.request.contextPath}/profile" class="dropdown-item">
+                                    <i class="ion ion-android-person"></i> Hồ sơ
+                                </a>
+                                <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
+                                    <i class="ion ion-log-out"></i> Đăng xuất
+                                </a>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
                 <!-- Main Content -->
                 <div class="main-content" style="margin-left: 250px; padding: 20px;">
                     <button id="sidebarToggle" class="btn btn-secondary mb-3">
@@ -151,7 +167,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Kiểm Kho Sản Phẩm</h4>
@@ -160,7 +176,7 @@
                                     <form action="stock-audit" method="post" id="auditForm" class="audit-form">
                                         <input type="hidden" name="action" value="submit-audit">
                                         <input type="hidden" name="productId" value="${product.id}">
-                                        
+
                                         <div class="table-responsive">
                                             <table class="table table-striped table-bordered">
                                                 <thead>
@@ -188,12 +204,12 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
+
                                         <div class="form-group mt-4">
                                             <label for="note">Ghi Chú:</label>
                                             <textarea name="note" id="note" class="form-control" rows="3" placeholder="Nhập ghi chú kiểm kho (nếu có)"></textarea>
                                         </div>
-                                        
+
                                         <div class="form-group mt-4 text-center">
                                             <button type="submit" class="btn btn-primary btn-lg">
                                                 <i class="fas fa-save"></i> Lưu Kiểm Kho
@@ -221,7 +237,7 @@
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/demo.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
-        
+
         <script>
             // Toggle sidebar
             document.getElementById('sidebarToggle').addEventListener('click', function () {
@@ -236,18 +252,18 @@
                     mainContent.style.marginLeft = '0';
                 }
             });
-            
+
             // Calculate difference when actual quantity changes
-            document.querySelectorAll('.actual-quantity').forEach(function(input) {
-                input.addEventListener('input', function() {
+            document.querySelectorAll('.actual-quantity').forEach(function (input) {
+                input.addEventListener('input', function () {
                     const row = this.closest('tr');
                     const expectedQuantity = parseFloat(row.querySelector('.expected-quantity').value);
                     const actualQuantity = parseFloat(this.value) || 0;
                     const difference = actualQuantity - expectedQuantity;
                     const differenceElement = row.querySelector('.difference');
-                    
+
                     differenceElement.textContent = difference.toFixed(2);
-                    
+
                     // Add color based on difference
                     differenceElement.className = 'difference';
                     if (difference > 0) {
@@ -259,18 +275,18 @@
                     }
                 });
             });
-            
+
             // Form validation
-            document.getElementById('auditForm').addEventListener('submit', function(event) {
+            document.getElementById('auditForm').addEventListener('submit', function (event) {
                 const actualQuantities = document.querySelectorAll('.actual-quantity');
                 let valid = true;
-                
-                actualQuantities.forEach(function(input) {
+
+                actualQuantities.forEach(function (input) {
                     if (input.value === '' || isNaN(parseFloat(input.value))) {
                         valid = false;
                     }
                 });
-                
+
                 if (!valid) {
                     event.preventDefault();
                     iziToast.error({
@@ -281,7 +297,7 @@
                     });
                 }
             });
-            
+
             // Toast message display
             document.addEventListener('DOMContentLoaded', function () {
                 var toastMessage = "${sessionScope.toastMessage}";
@@ -294,12 +310,12 @@
                         color: toastType === 'success' ? 'green' : 'red',
                         timeout: 5000
                     });
-                    
+
                     // Clear toast messages from session
-                    <% 
+            <% 
                         session.removeAttribute("toastMessage");
                         session.removeAttribute("toastType");
-                    %>
+            %>
                 }
             });
         </script>

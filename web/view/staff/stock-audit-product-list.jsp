@@ -39,27 +39,27 @@
             .main-content {
                 transition: margin-left 0.3s ease;
             }
-            
+
             .section-header {
                 margin-bottom: 20px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-            
+
             .section-header h1 {
                 margin: 0;
                 font-size: 24px;
                 font-weight: 600;
             }
-            
+
             .search-container {
                 background-color: #f8f9fa;
                 padding: 15px;
                 border-radius: 5px;
                 margin-bottom: 20px;
             }
-            
+
             .product-card {
                 border: 1px solid #ddd;
                 border-radius: 5px;
@@ -67,35 +67,35 @@
                 padding: 15px;
                 transition: all 0.3s ease;
             }
-            
+
             .product-card:hover {
                 box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             }
-            
+
             .product-name {
                 font-weight: bold;
                 font-size: 18px;
                 margin-bottom: 5px;
             }
-            
+
             .product-id {
                 color: #666;
                 font-size: 14px;
                 margin-bottom: 10px;
             }
-            
+
             .product-quantity {
                 font-size: 16px;
                 color: #007bff;
                 margin-bottom: 10px;
             }
-            
+
             .last-audit {
                 font-size: 14px;
                 color: #666;
                 margin-bottom: 15px;
             }
-            
+
             .audit-button {
                 text-align: right;
             }
@@ -107,7 +107,23 @@
 
                 <!-- Sidebar -->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
-
+                    <div style="position: absolute; top: 15px; right: 20px; z-index: 1000;">
+                    <c:if test="${sessionScope.acc != null}">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> ${sessionScope.acc.name}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a href="${pageContext.request.contextPath}/profile" class="dropdown-item">
+                                    <i class="ion ion-android-person"></i> Hồ sơ
+                                </a>
+                                <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
+                                    <i class="ion ion-log-out"></i> Đăng xuất
+                                </a>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
                 <!-- Main Content -->
                 <div class="main-content" style="margin-left: 250px; padding: 20px;">
                     <button id="sidebarToggle" class="btn btn-secondary mb-3">
@@ -160,7 +176,7 @@
                                         </div>
                                     </div>
                                 </c:forEach>
-                                
+
                                 <c:if test="${empty products}">
                                     <div class="col-12">
                                         <div class="alert alert-info">
@@ -219,7 +235,7 @@
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/demo.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
-        
+
         <script>
             // Toggle sidebar
             document.getElementById('sidebarToggle').addEventListener('click', function () {
@@ -234,7 +250,7 @@
                     mainContent.style.marginLeft = '0';
                 }
             });
-            
+
             // Toast message display
             document.addEventListener('DOMContentLoaded', function () {
                 var toastMessage = "${sessionScope.toastMessage}";
@@ -247,12 +263,12 @@
                         color: toastType === 'success' ? 'green' : 'red',
                         timeout: 5000
                     });
-                    
+
                     // Clear toast messages from session
-                    <% 
+            <% 
                         session.removeAttribute("toastMessage");
                         session.removeAttribute("toastType");
-                    %>
+            %>
                 }
             });
         </script>

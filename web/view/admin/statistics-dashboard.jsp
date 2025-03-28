@@ -17,33 +17,33 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/demo.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-        
+
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        
+
         <style>
             .main-content {
                 margin-left: 250px;
                 padding: 20px;
             }
-            
+
             .card {
                 margin-bottom: 20px;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                 border-radius: 8px;
             }
-            
+
             .card-header {
                 background-color: #f8f9fa;
                 border-bottom: 1px solid #e9ecef;
                 padding: 15px 20px;
                 font-weight: 600;
             }
-            
+
             .card-body {
                 padding: 20px;
             }
-            
+
             .stat-card {
                 background-color: #fff;
                 border-radius: 8px;
@@ -52,57 +52,57 @@
                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                 transition: transform 0.3s ease;
             }
-            
+
             .stat-card:hover {
                 transform: translateY(-5px);
             }
-            
+
             .stat-card h5 {
                 margin-bottom: 15px;
                 color: #333;
             }
-            
+
             .stat-card .value {
                 font-size: 24px;
                 font-weight: 600;
                 color: #007bff;
             }
-            
+
             .trend-up {
                 color: #28a745;
             }
-            
+
             .trend-down {
                 color: #dc3545;
             }
-            
+
             .chart-container {
                 position: relative;
                 height: 300px;
                 width: 100%;
             }
-            
+
             .table-responsive {
                 margin-top: 15px;
             }
-            
+
             .nav-tabs .nav-link {
                 border: none;
                 color: #495057;
                 font-weight: 500;
                 padding: 10px 15px;
             }
-            
+
             .nav-tabs .nav-link.active {
                 color: #007bff;
                 background-color: transparent;
                 border-bottom: 2px solid #007bff;
             }
-            
+
             .tab-content {
                 padding: 20px 0;
             }
-            
+
             .badge-zone {
                 background-color: #17a2b8;
                 color: white;
@@ -111,7 +111,7 @@
                 font-size: 12px;
                 margin-right: 5px;
             }
-            
+
             .product-pair {
                 background-color: #f8f9fa;
                 border-radius: 8px;
@@ -119,12 +119,12 @@
                 margin-bottom: 15px;
                 border-left: 4px solid #007bff;
             }
-            
+
             .product-pair .frequency {
                 font-weight: 600;
                 color: #007bff;
             }
-            
+
             .trending-product {
                 display: flex;
                 align-items: center;
@@ -133,42 +133,42 @@
                 border-radius: 8px;
                 background-color: #f8f9fa;
             }
-            
+
             .trending-product .product-name {
                 flex-grow: 1;
                 font-weight: 500;
             }
-            
+
             .trending-product .growth {
                 padding: 5px 10px;
                 border-radius: 20px;
                 font-size: 12px;
                 font-weight: 600;
             }
-            
+
             .growth-positive {
                 background-color: #d4edda;
                 color: #155724;
             }
-            
+
             .growth-negative {
                 background-color: #f8d7da;
                 color: #721c24;
             }
-            
+
             .section-header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 20px;
             }
-            
+
             .section-header h1 {
                 margin: 0;
                 font-size: 24px;
                 font-weight: 600;
             }
-            
+
             .section-header .btn-group {
                 margin-left: auto;
             }
@@ -179,6 +179,24 @@
             <div class="main-wrapper">
                 <!-- Sidebar -->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
+
+                    <div style="position: absolute; top: 15px; right: 20px; z-index: 1000;">
+                    <c:if test="${sessionScope.acc != null}">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> ${sessionScope.acc.name}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a href="${pageContext.request.contextPath}/profile" class="dropdown-item">
+                                    <i class="ion ion-android-person"></i> Hồ sơ
+                                </a>
+                                <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
+                                    <i class="ion ion-log-out"></i> Đăng xuất
+                                </a>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
 
                 <!-- Main Content -->
                 <div class="main-content" style="margin-left: 250px; padding: 20px;">
@@ -331,7 +349,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Time Analysis -->
                             <div class="col-md-6">
                                 <div class="card">
@@ -403,119 +421,115 @@
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/demo.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
-        
+
         <script>
             // Toggle sidebar
             document.getElementById('sidebarToggle').addEventListener('click', function () {
-                const sidebar = document.querySelector('.main-sidebar');
-                const mainContent = document.querySelector('.main-content');
-
-                if (sidebar.style.display === 'none') {
-                    sidebar.style.display = 'block';
-                    mainContent.style.marginLeft = '250px';
-                } else {
-                    sidebar.style.display = 'none';
-                    mainContent.style.marginLeft = '0';
-                }
+            const sidebar = document.querySelector('.main-sidebar');
+            const mainContent = document.querySelector('.main-content');
+            if (sidebar.style.display === 'none') {
+            sidebar.style.display = 'block';
+            mainContent.style.marginLeft = '250px';
+            } else {
+            sidebar.style.display = 'none';
+            mainContent.style.marginLeft = '0';
+            }
             });
-            
             // Weekly Products Chart
             const weeklyProductsCtx = document.getElementById('weeklyProductsChart').getContext('2d');
             const weeklyProductsChart = new Chart(weeklyProductsCtx, {
-                type: 'bar',
-                data: {
+            type: 'bar',
+                    data: {
                     labels: [
-                        <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
-                            '${product.productName}'${!status.last ? ',' : ''}
-                        </c:forEach>
+            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
+                    '${product.productName}'${!status.last ? ',' : ''}
+            </c:forEach>
                     ],
-                    datasets: [{
-                        label: 'Số Lượng (${unit})',
-                        data: [
-                            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
-                                ${product.salesCount}${!status.last ? ',' : ''}
-                            </c:forEach>
-                        ],
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
+                            datasets: [{
+                            label: 'Số Lượng (${unit})',
+                                    data: [
+            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
+                ${product.salesCount}${!status.last ? ',' : ''}
+            </c:forEach>
+                                    ],
+                                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1
+                            }]
+                    },
+                    options: {
                     responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
+                            maintainAspectRatio: false,
+                            scales: {
+                            y: {
                             beginAtZero: true
-                        }
+                            }
+                            }
                     }
-                }
             });
-            
             // Monthly Products Chart
             const monthlyProductsCtx = document.getElementById('monthlyProductsChart').getContext('2d');
             const monthlyProductsChart = new Chart(monthlyProductsCtx, {
-                type: 'bar',
-                data: {
+            type: 'bar',
+                    data: {
                     labels: [
-                        <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
-                            '${product.productName}'${!status.last ? ',' : ''}
-                        </c:forEach>
+            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
+                    '${product.productName}'${!status.last ? ',' : ''}
+            </c:forEach>
                     ],
-                    datasets: [{
-                        label: 'Số Lượng (${unit})',
-                        data: [
-                            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
-                                ${product.salesCount}${!status.last ? ',' : ''}
-                            </c:forEach>
-                        ],
-                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
+                            datasets: [{
+                            label: 'Số Lượng (${unit})',
+                                    data: [
+            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
+                ${product.salesCount}${!status.last ? ',' : ''}
+            </c:forEach>
+                                    ],
+                                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                            }]
+                    },
+                    options: {
                     responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
+                            maintainAspectRatio: false,
+                            scales: {
+                            y: {
                             beginAtZero: true
-                        }
+                            }
+                            }
                     }
-                }
             });
-            
             // Daily Chart
             const dailyCtx = document.getElementById('dailyChart').getContext('2d');
             const dailyChart = new Chart(dailyCtx, {
-                type: 'bar',
-                data: {
+            type: 'bar',
+                    data: {
                     labels: [
-                        <c:forEach var="day" items="${dailyStats}" varStatus="status">
-                            '${day.timeSlot}'${!status.last ? ',' : ''}
-                        </c:forEach>
+            <c:forEach var="day" items="${dailyStats}" varStatus="status">
+                    '${day.timeSlot}'${!status.last ? ',' : ''}
+            </c:forEach>
                     ],
-                    datasets: [{
-                        label: 'Đơn Hàng',
-                        data: [
-                            <c:forEach var="day" items="${dailyStats}" varStatus="status">
-                                ${day.orderCount}${!status.last ? ',' : ''}
-                            </c:forEach>
-                        ],
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
+                            datasets: [{
+                            label: 'Đơn Hàng',
+                                    data: [
+            <c:forEach var="day" items="${dailyStats}" varStatus="status">
+                ${day.orderCount}${!status.last ? ',' : ''}
+            </c:forEach>
+                                    ],
+                                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1
+                            }]
+                    },
+                    options: {
                     responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
+                            maintainAspectRatio: false,
+                            scales: {
+                            y: {
                             beginAtZero: true
-                        }
+                            }
+                            }
                     }
-                }
             });
         </script>
     </body>

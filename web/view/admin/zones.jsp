@@ -119,22 +119,40 @@
             <!-- Before update -->
         <div id="app">
             <div class="main-wrapper">
-
-                <!-- Sidebar -->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
-
-                <!-- Main Content -->
-                <div class="main-content" style="margin-left: 250px; padding: 20px;">
-                    <button id="sidebarToggle" class="btn btn-secondary mb-3">
-                        <i class="fas fa-bars"></i>
-                    </button>
+                
+                <!-- Thêm dropdown menu ở góc trên bên phải -->
+                <div style="position: absolute; top: 15px; right: 20px; z-index: 1000;">
+                    <c:if test="${sessionScope.acc != null}">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> ${sessionScope.acc.name}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a href="${pageContext.request.contextPath}/profile" class="dropdown-item">
+                                    <i class="ion ion-android-person"></i> Hồ sơ
+                                </a>
+                                <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
+                                    <i class="ion ion-log-out"></i> Đăng xuất
+                                </a>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
+                
+                <div class="main-content">
                     <section class="section">
                         <div class="section-header">
                             <h1>Quản Lý Khu Vực</h1>
+                            <button id="sidebarToggle" class="btn btn-primary d-md-none">
+                                <i class="fa fa-bars"></i>
+                            </button>
                             <c:if test="${roletype == '2'}">
-                                <a href="zoneControl?action=add" class="btn btn-primary">
-                                    <i class="fas fa-plus"></i> Thêm Khu Vực Mới
-                                </a>
+                                <div class="ml-auto">
+                                    <a href="zoneControl?action=add" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Thêm Khu Vực Mới
+                                    </a>
+                                </div>
                             </c:if>
                         </div>
 
