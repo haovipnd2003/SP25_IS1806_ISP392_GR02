@@ -46,10 +46,10 @@ public class LoginControl extends HttpServlet {
         LoginDAO dao = new LoginDAO();
         User a = dao.login(username);
         if (a == null || !a.getPassword().equals(password)) {
-            request.setAttribute("mess", "Wrong User or Password");
+            request.setAttribute("mess", "Tài khoản hoặc mật khẩu không chính xác");
             request.getRequestDispatcher("view/page/login.jsp").forward(request, response);
         } else if (Integer.parseInt(String.valueOf(a.getIsactive())) == 0) {  // Thêm kiểm tra này
-            request.setAttribute("mess", "This account has been banned.");
+            request.setAttribute("mess", "Tài khoản này đã bị vô hiệu hoá.");
             request.getRequestDispatcher("view/page/login.jsp").forward(request, response);
         } else {
 
@@ -58,13 +58,13 @@ public class LoginControl extends HttpServlet {
             if (returnUrl != null && returnUrl.equals("order")) {
                 session.removeAttribute("returnUrl");
                 String script = "<script>"
-                        + "alert('Logged in successfully.');"
+                        + "alert('Đăng nhập thành công.');"
                         + "window.location='print';"
                         + "</script>";
                 response.getWriter().println(script);
             } else {
                 String script = "<script>"
-                        + "alert('Logged in successfully.');"
+                        + "alert('Đăng nhập thành công.');"
                         + "window.location='view/page/dashboard.jsp';"
                         + "</script>";
                 response.getWriter().println(script);
@@ -95,7 +95,7 @@ public class LoginControl extends HttpServlet {
         User acc = (User) session.getAttribute("acc");
 
         if (acc != null) {
-            response.sendRedirect("home");
+            response.sendRedirect("login");
             return;
         }
         String successMessage = (String) session.getAttribute("successMessage");

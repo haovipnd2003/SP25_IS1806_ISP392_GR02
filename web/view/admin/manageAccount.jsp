@@ -120,14 +120,14 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h2>Manage Account</h2>
+                                        <h2>Quản Lý Tài Khoản</h2>
                                     </div>
                                     <div class="card-body">
                                         <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addAccountModal">+
-                                            Add Account</button>
+                                            Thêm tài khoản</button>
                                         <form action="searchaccount" method="post">
                                             <div class="mb-3">
-                                                <input type="text" value="${keywordS}" name="keyword" id="search-input" class="form-control" placeholder="Search by name, email, address, phone, or role...">
+                                                <input type="text" value="${keywordS}" name="keyword" id="search-input" class="form-control" placeholder="tìm kiếm theo tên, email, địa chỉ, số điện thoại, or role...">
                                         </div>
 
                                     </form>
@@ -137,14 +137,14 @@
                                     <table class="table table-bordered table-striped">
                                         <thead class="table-dark">
                                             <tr>
-                                                <th>Account</th>
-                                                <th>Name</th>
+                                                <th>Tài khoản</th>
+                                                <th>Tên</th>
                                                 <th>Email</th>
-                                                <th>Address</th>
-                                                <th>Phone</th>
-                                                <th>Role</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
+                                                <th>Địa chỉ</th>
+                                                <th>SĐT</th>
+                                                <th>Chức vụ</th>
+                                                <th>Trạng thái</th>
+                                                <th>Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -157,20 +157,20 @@
                                                     <td>${account.phone}</td>
                                                     <td>
                                                         <c:choose>
-                                                            <c:when test="${account.roletype == '2'}">Owner</c:when>
-                                                            <c:when test="${account.roletype == '3'}">Staff</c:when>
+                                                            <c:when test="${account.roletype == '2'}">Chủ cửa hàng</c:when>
+                                                            <c:when test="${account.roletype == '3'}">Nhân Viên</c:when>
                                                             <c:otherwise>Unknown</c:otherwise>
                                                         </c:choose>
                                                     </td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${account.isactive == '1'}">
-                                                                <span class="badge bg-success">Active</span>
+                                                                <span class="badge bg-success">Hoạt động</span>
                                                             </c:when>
                                                             <c:when test="${account.isactive == '0'}">
-                                                                <span class="badge bg-danger">Inactive</span>
+                                                                <span class="badge bg-danger">Không hoạt động</span>
                                                             </c:when>
-                                                            <c:otherwise>Unknown</c:otherwise>
+                                                            <c:otherwise>Không biết</c:otherwise>
                                                         </c:choose>
                                                     </td>
                                                     <td>
@@ -205,7 +205,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add Account</h5>
+                        <h5 class="modal-title">Thêm tài khoản</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -215,33 +215,33 @@
                                 <input type="email" class="form-control" name="email" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Username</label>
+                                <label class="form-label">Tên đăng nhập</label>
                                 <input type="text" class="form-control" name="name" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Password</label>
+                                <label class="form-label">Mật khẩu</label>
                                 <input type="password" class="form-control" name="password" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Tên</label>
                                 <input type="text" class="form-control" name="fullname" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Phone</label>
+                                <label class="form-label">SĐT</label>
                                 <input type="text" class="form-control" name="phone">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Address</label>
+                                <label class="form-label">Địa chỉ</label>
                                 <input type="text" class="form-control" name="address">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Role</label>
-                                <select class="form-control" name="roletype">
-                                    <option value="2">Owner</option>
-                                    <option value="3" selected>Staff</option>
+                                <label class="form-label">Chức vụ</label>
+                                <select class="form-control" name="roletype" >
+                                    <option value="2">Chủ cửa hàng</option>
+                                    <option value="3" selected>Nhân viên</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Add</button>
+                            <button type="submit" class="btn btn-primary w-100">Thêm</button>
                         </form>
                     </div>
                 </div>
@@ -253,7 +253,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editAccountModalLabel">Edit Account</h5>
+                        <h5 class="modal-title" id="editAccountModalLabel">Chỉnh sửa tài khoản</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -261,11 +261,11 @@
                             <input type="hidden" id="edit-id" name="id" /> 
 
                             <div class="mb-3">
-                                <label class="form-label">Username</label>
+                                <label class="form-label">Tên đăng nhập</label>
                                 <input type="text" class="form-control" id="edit-name" name="name" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Tên</label>
                                 <input type="text" class="form-control" id="edit-fullname" name="fullname" >
                             </div>
                             <div class="mb-3">
@@ -273,28 +273,28 @@
                                 <input type="email" class="form-control" id="edit-email" name="email" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Phone</label>
+                                <label class="form-label">SĐT</label>
                                 <input type="text" class="form-control" id="edit-phone" name="phone" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Address</label>
+                                <label class="form-label">Địa chỉ</label>
                                 <input type="text" class="form-control" id="edit-address" name="address" >
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Role</label>
+                                <label class="form-label">Chức vụ</label>
                                 <select class="form-control" id="edit-roletype" name="roletype">
-                                    <option value="2">Owner</option>
-                                    <option value="3">Staff</option>
+                                    <option value="2">Chủ cửa hàng</option>
+                                    <option value="3">Nhân viên</option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" id="status-group">Status</label>
+                                <label class="form-label" id="status-group">Trạng thái</label>
                                 <select class="form-control" id="edit-isactive" name="isactive">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
+                                    <option value="1">Hoạt động</option>
+                                    <option value="0">Không hoạt động</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-warning w-100">Save Changes</button>
+                            <button type="submit" class="btn btn-warning w-100">Lưu thay đổi</button>
                         </form>
                     </div>
                 </div>
@@ -336,12 +336,12 @@
                     let nameField2 = document.getElementById("edit-fullname");
                     if (nameField.value.trim() === "") {
                         event.preventDefault(); // Ngăn form gửi đi
-                        alert("User name not allow blank!"); // Hiển thị popup cảnh báo
+                        alert("Tên tài khoản không được để trống!"); // Hiển thị popup cảnh báo
                         nameField.focus(); // Đưa con trỏ vào ô nhập
                     }
                     if (nameField2.value.trim() === "") {
                         event.preventDefault(); // Ngăn form gửi đi
-                        alert("Name not allow blank!"); // Hiển thị popup cảnh báo
+                        alert("Tên không được để trống!"); // Hiển thị popup cảnh báo
                         nameField2.focus(); // Đưa con trỏ vào ô nhập
                     }
                 });
