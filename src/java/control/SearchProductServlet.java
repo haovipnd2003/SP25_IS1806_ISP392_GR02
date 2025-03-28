@@ -90,7 +90,7 @@ public class SearchProductServlet extends HttpServlet {
                     + "<input type='hidden' id='pDescribe_" + product.getId() + "' value='" + product.getDescribe() + "' />"
                     + "<input type='hidden' id='pPrice_" + product.getId()+ "' value='" + product.getPrice()+ "' />"
                     + "<input type='hidden' id='pStock_" + product.getId() + "' value='" + product.getQuantity() + "' />"
-                    + "<button class=\"tab-button\" onclick=\"choosePro('" + product.getId() + "')\">Choose</button>"
+                    + "<button class=\"tab-button\" onclick=\"choosePro('" + product.getId() + "')\">Chọn</button>"
                     + "</td>\n"
                     + "</tr>");
         }

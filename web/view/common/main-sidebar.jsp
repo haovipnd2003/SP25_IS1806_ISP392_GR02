@@ -26,11 +26,19 @@
                 </li>
 
                 <li>
-                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-document-text"></i><span>Invoice</span></a>        
+                    <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-document-text"></i><span>Export Invoice</span></a>        
                 </li>
 
                 <li>
-                    <a href="${pageContext.request.contextPath}/invoiceStatistic"><i class="ion ion-person-stalker"></i><span>Invoice Statistic</span></a>
+                    <a href="${pageContext.request.contextPath}/importInvoice"><i class="ion ion-document-text"></i><span>Import Invoice</span></a>
+                </li>
+                
+                <li>
+                    <a href="${pageContext.request.contextPath}/invoiceStatistic"><i class="ion ion-document-text"></i><span>Export Statistics</span></a>
+                </li>
+                
+                <li>
+                    <a href="${pageContext.request.contextPath}/invoiceImportStatistic"><i class="ion ion-document-text"></i><span>Import Statistics</span></a>
                 </li>
                 
                 <li>
