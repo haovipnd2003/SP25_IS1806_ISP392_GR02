@@ -3,7 +3,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html>
     <head>
-        <title>Update Zone</title>
+        <title>Cập Nhật Khu Vực</title>
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
@@ -68,13 +68,13 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header bg-primary text-white">
-                                        <h1 class="card-title text-center">Update Zone</h1>
+                                        <h1 class="card-title text-center">Cập Nhật Khu Vực</h1>
                                     </div>
                                     <div class="card-body">
                                         <!-- Confirmation Alert -->
                                         <c:if test="${not empty sessionScope.confirmMessage}">
                                             <div class="alert alert-warning" role="alert">
-                                                <h4 class="alert-heading">Warning!</h4>
+                                                <h4 class="alert-heading">Cảnh Báo!</h4>
                                                 <p>${sessionScope.confirmMessage}</p>
                                                 <hr>
                                                 <div class="d-flex justify-content-end">
@@ -84,8 +84,8 @@
                                                         <input type="hidden" name="name" value="${sessionScope.zoneName}">
                                                         <input type="hidden" name="isActive" value="false">
                                                         <input type="hidden" name="confirmed" value="true">
-                                                        <button type="submit" class="btn btn-danger me-2">Yes, Deactivate</button>
-                                                        <a href="zoneControl" class="btn btn-secondary">Cancel</a>
+                                                        <button type="submit" class="btn btn-danger me-2">Đồng Ý, Vô Hiệu Hóa</button>
+                                                        <a href="zoneControl" class="btn btn-secondary">Hủy</a>
                                                     </form>
                                                 </div>
                                             </div>
@@ -103,7 +103,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="name" class="form-label">Zone Name:</label>
+                                                        <label for="name" class="form-label">Tên Khu Vực:</label>
                                                         <input type="text" class="form-control ${not empty nameError ? 'is-invalid' : ''}" 
                                                                id="name" name="name" value="${not empty zoneName ? zoneName : zone.name}" required>
                                                         <c:if test="${not empty nameError}">
@@ -116,7 +116,7 @@
                                             <div class="row mt-3">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="description" class="form-label">Description:</label>
+                                                        <label for="description" class="form-label">Mô Tả:</label>
                                                         <textarea class="form-control" id="description" name="description" rows="4">${not empty zoneDescription ? zoneDescription : zone.description}</textarea>
                                                     </div>
                                                 </div>
@@ -125,7 +125,7 @@
                                             <div class="row mt-3">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label class="form-label">Status:</label>
+                                                        <label class="form-label">Trạng Thái:</label>
                                                         <c:if test="${not empty statusError}">
                                                             <div class="text-danger d-block mb-2">${statusError}</div>
                                                         </c:if>
@@ -133,14 +133,14 @@
                                                             <input class="form-check-input" type="radio" name="isActive" id="active" value="true" 
                                                                    ${not empty zoneIsActive ? (zoneIsActive == 'true' ? 'checked' : '') : (zone.isActive ? 'checked' : '')}>
                                                             <label class="form-check-label" for="active">
-                                                                Active
+                                                                Hoạt Động
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="isActive" id="inactive" value="false" 
                                                                    ${not empty zoneIsActive ? (zoneIsActive == 'false' ? 'checked' : '') : (!zone.isActive ? 'checked' : '')}>
                                                             <label class="form-check-label" for="inactive">
-                                                                Inactive
+                                                                Không Hoạt Động
                                                             </label>
                                                         </div>
                                                     </div>
@@ -149,8 +149,8 @@
 
                                             <div class="row mt-4">
                                                 <div class="col-md-12 text-center">
-                                                    <button type="submit" class="btn btn-primary">Update Zone</button>
-                                                    <a href="zoneControl" class="btn btn-secondary">Cancel</a>
+                                                    <button type="submit" class="btn btn-primary">Cập Nhật Khu Vực</button>
+                                                    <a href="zoneControl" class="btn btn-secondary">Hủy</a>
                                                 </div>
                                             </div>
                                         </form>
@@ -187,10 +187,10 @@
                 
                 // Validate zone name
                 if (zoneName === '') {
-                    displayError('name', 'Zone name is required');
+                    displayError('name', 'Tên khu vực là bắt buộc');
                     isValid = false;
                 } else if (zoneName !== currentZoneName && existingZoneNames.includes(zoneName)) {
-                    displayError('name', 'Zone name already exists!');
+                    displayError('name', 'Tên khu vực đã tồn tại!');
                     isValid = false;
                 }
                 
@@ -199,7 +199,7 @@
                     const statusContainer = document.querySelector('.form-group:has(#active)');
                     const errorDiv = document.createElement('div');
                     errorDiv.className = 'text-danger validation-error mb-2';
-                    errorDiv.textContent = 'Please select a status';
+                    errorDiv.textContent = 'Vui lòng chọn trạng thái';
                     statusContainer.insertBefore(errorDiv, statusContainer.firstChild.nextSibling);
                     isValid = false;
                 }
@@ -207,8 +207,8 @@
                 if (!isValid) {
                     // Prevent form submission if validation fails
                     iziToast.error({
-                        title: 'Error',
-                        message: 'Please fix the errors in the form',
+                        title: 'Lỗi',
+                        message: 'Vui lòng sửa các lỗi trong biểu mẫu',
                         position: 'topRight',
                         timeout: 5000
                     });
@@ -251,7 +251,7 @@
                 var toastType = "${sessionScope.toastType}";
                 if (toastMessage) {
                     iziToast.show({
-                        title: toastType === 'success' ? 'Success' : 'Error',
+                        title: toastType === 'success' ? 'Thành Công' : 'Lỗi',
                         message: toastMessage,
                         position: 'topRight',
                         color: toastType === 'success' ? 'green' : 'red',

@@ -132,7 +132,7 @@ public class ProductsControl extends HttpServlet {
     private void handleFilter(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Boolean isActive = null;
-        String zoneId = null;
+        Integer selectedZoneId = null;
 
         // Lấy tham số lọc với kiểm tra null và giá trị mặc định
         String isActiveParam = request.getParameter("isActive");
@@ -142,16 +142,21 @@ public class ProductsControl extends HttpServlet {
 
         String zoneIdParam = request.getParameter("zoneId");
         if (zoneIdParam != null && !zoneIdParam.equals("default")) {
-            zoneId = zoneIdParam;
+            try {
+                selectedZoneId = Integer.parseInt(zoneIdParam);
+            } catch (NumberFormatException e) {
+                // Xử lý lỗi nếu cần
+            }
         }
 
         // Gọi DAO để lọc
-        List<Product> productList = productDAO.filterProductsByActiveAndZone(isActive, zoneId);
+        List<Product> productList = productDAO.filterProductsByActiveAndZone(isActive, zoneIdParam);
         List<Zone> zones = zoneDAO.getActiveZones();
 
         // Set các attribute cho JSP
         request.setAttribute("productList", productList);
         request.setAttribute("zones", zones);
+        request.setAttribute("selectedZoneId", selectedZoneId); // Gửi ID đã chuyển đổi
         request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
     }
 

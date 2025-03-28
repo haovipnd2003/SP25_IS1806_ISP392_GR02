@@ -3,7 +3,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html>
     <head>
-        <title>Add Zone</title>
+        <title>Thêm Khu Vực</title>
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
@@ -63,7 +63,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header bg-primary text-white">
-                                    <h1 class="card-title text-center">Add New Zone</h1>
+                                    <h1 class="card-title text-center">Thêm Khu Vực Mới</h1>
                                 </div>
                                 <div class="card-body">
                                     <form action="zoneControl" method="post" onsubmit="return validateForm()">
@@ -72,7 +72,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="name" class="form-label">Zone Name:</label>
+                                                    <label for="name" class="form-label">Tên Khu Vực:</label>
                                                     <input type="text" class="form-control" id="name" name="name" value="${param.name}" required>
                                                     <c:if test="${not empty nameError}">
                                                         <small class="text-danger">${nameError}</small>
@@ -84,7 +84,7 @@
                                         <div class="row mt-3">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="description" class="form-label">Description:</label>
+                                                    <label for="description" class="form-label">Mô Tả:</label>
                                                     <textarea class="form-control" id="description" name="description" rows="3">${param.description}</textarea>
                                                 </div>
                                             </div>
@@ -93,17 +93,17 @@
                                         <div class="row mt-3">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="form-label">Status:</label>
+                                                    <label class="form-label">Trạng Thái:</label>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="isActive" id="active" value="true" ${param.isActive == 'true' ? 'checked' : ''} checked>
                                                         <label class="form-check-label" for="active">
-                                                            Active
+                                                            Hoạt Động
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="isActive" id="inactive" value="false" ${param.isActive == 'false' ? 'checked' : ''}>
                                                         <label class="form-check-label" for="inactive">
-                                                            Inactive
+                                                            Không Hoạt Động
                                                         </label>
                                                     </div>
                                                     <c:if test="${not empty statusError}">
@@ -115,8 +115,8 @@
 
                                         <div class="row mt-4">
                                             <div class="col-md-12 text-center">
-                                                <button type="submit" class="btn btn-primary">Add Zone</button>
-                                                <a href="zoneControl" class="btn btn-secondary">Cancel</a>
+                                                <button type="submit" class="btn btn-primary">Thêm Khu Vực</button>
+                                                <a href="zoneControl" class="btn btn-secondary">Hủy</a>
                                             </div>
                                         </div>
                                     </form>
@@ -142,8 +142,8 @@
                 if (existingZoneNames.includes(zoneName)) {
                     // Thay thế alert bằng toast
                     iziToast.error({
-                        title: 'Error',
-                        message: 'Zone name already exists!',
+                        title: 'Lỗi',
+                        message: 'Tên khu vực đã tồn tại!',
                         position: 'topRight',
                         timeout: 5000
                     });
@@ -174,7 +174,7 @@
                 var toastType = "${sessionScope.toastType}";
                 if (toastMessage) {
                     iziToast.show({
-                        title: toastType === 'success' ? 'Success' : 'Error',
+                        title: toastType === 'success' ? 'Thành Công' : 'Lỗi',
                         message: toastMessage,
                         position: 'topRight',
                         color: toastType === 'success' ? 'green' : 'red',

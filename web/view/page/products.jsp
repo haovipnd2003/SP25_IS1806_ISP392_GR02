@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -102,12 +102,12 @@
                         </button>
                         <section class="section">
                             <div class="section-header">
-                                <h1>Product List</h1>
+                                <h1>Danh Sách Sản Phẩm</h1>
                             </div>
                         <c:if test="${roletype == 2}">
                             <div class="text-right mb-3">
                                 <a href="products?action=add" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-plus"></i> Add Product
+                                    <i class="fas fa-plus"></i> Thêm Sản Phẩm
                                 </a>
                             </div>
                         </c:if>
@@ -117,7 +117,7 @@
                                 <form action="products" method="get" class="form-inline">
                                     <input type="hidden" name="action" value="search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" name="keyword" placeholder="Search products..." value="${param.keyword}">
+                                        <input type="text" class="form-control" name="keyword" placeholder="Tìm kiếm sản phẩm..." value="${param.keyword}">
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-search"></i>
@@ -130,25 +130,23 @@
                                 <form action="products" method="get" class="form-inline">
                                     <input type="hidden" name="action" value="filter">
                                     <div class="form-group mr-2">
-                                        <label for="isActive" class="mr-2">Active Status:</label>
+                                        <label for="isActive" class="mr-2">Trạng Thái:</label>
                                         <select name="isActive" id="isActive" class="form-control">
-                                            <option value="default">All Statuses</option>
-                                            <option value="true">Active</option>
-                                            <option value="false">Inactive</option>
+                                            <option value="default" ${param.isActive == null ? 'selected' : ''}>Tất Cả</option>
+                                            <option value="true" ${param.isActive == 'true' ? 'selected' : ''}>Đang Hoạt Động</option>
+                                            <option value="false" ${param.isActive == 'false' ? 'selected' : ''}>Không Hoạt Động</option>
                                         </select>
                                     </div>
                                     <div class="form-group mr-2">
-                                        <label for="zoneId" class="mr-2">Zone:</label>
+                                        <label for="zoneId" class="mr-2">Khu Vực:</label>
                                         <select name="zoneId" id="zoneId" class="form-control">
-                                            <option value="default">All Zones</option>
+                                            <option value="default" ${selectedZoneId == null ? 'selected' : ''}>Tất Cả</option>
                                             <c:forEach var="zone" items="${zones}">
-                                                <option value="${zone.id}" ${param.zoneId == zone.id ? 'selected' : ''}>
-                                                    ${zone.name}
-                                                </option>
+                                                <option value="${zone.id}" ${selectedZoneId == zone.id ? 'selected' : ''}>${zone.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                    <button type="submit" class="btn btn-primary">Lọc</button>
                                 </form>
                             </div>
                         </div>
@@ -157,16 +155,16 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Image</th>
-                                    <th>Description</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Packaging(kg)</th>
-                                    <th>Zone</th>
-                                    <th>Active</th>
+                                    <th>Tên</th>
+                                    <th>Hình Ảnh</th>
+                                    <th>Mô Tả</th>
+                                    <th>Giá</th>
+                                    <th>Số Lượng</th>
+                                    <th>Đóng Gói(kg)</th>
+                                    <th>Khu Vực</th>
+                                    <th>Hoạt Động</th>
                                         <c:if test="${roletype == 2}">
-                                        <th>Action</th>
+                                        <th>Thao Tác</th>
                                         </c:if>
                                 </tr>
                             </thead>
@@ -203,17 +201,17 @@
                                                         </c:forEach>
                                                     </c:if>
                                                 </td>
-                                                <td style="color: ${product.active ? 'green' : 'red'}">${product.active ? 'Yes' : 'No'}</td>
+                                                <td style="color: ${product.active ? 'green' : 'red'}">${product.active ? 'Đang hoạt động' : 'Không hoạt động'}</td>
                                                 <c:if test="${roletype == '2'}">
                                                     <td>
-                                                        <a href="products?action=edit&id=${product.id}" class="btn btn-primary">Update</a>
+                                                        <a href="products?action=edit&id=${product.id}" class="btn btn-primary">Cập Nhật</a>
                                                     </td>
                                                 </c:if>
                                             </tr>
                                         </c:forEach>
                                     </c:when>
                                     <c:otherwise>
-                                        <tr><td colspan="10" class="text-center">No products found.</td></tr>
+                                        <tr><td colspan="10" class="text-center">Không tìm thấy sản phẩm nào.</td></tr>
                                     </c:otherwise>
 
                                 </c:choose>
@@ -271,7 +269,7 @@
         <script>
             function deleteProduct(event) {
                 event.preventDefault(); // Prevent the form from submitting immediately
-                if (confirm('Are you sure you want to delete this product?')) {
+                if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
                     event.target.submit(); // Submit the form if user confirms
                 }
                 return false; // Prevent form submission if user cancels
@@ -296,7 +294,7 @@
                 var toastType = "${sessionScope.toastType}";
                 if (toastMessage) {
                     iziToast.show({
-                        title: toastType === 'success' ? 'Success' : 'Error',
+                        title: toastType === 'success' ? 'Thành Công' : 'Lỗi',
                         message: toastMessage,
                         position: 'topRight',
                         color: toastType === 'success' ? 'green' : 'red',

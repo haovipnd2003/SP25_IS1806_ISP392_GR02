@@ -7,7 +7,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Zone Management</title>
+        <title>Quản Lý Khu Vực</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
@@ -130,10 +130,10 @@
                     </button>
                     <section class="section">
                         <div class="section-header">
-                            <h1>Zone Management</h1>
+                            <h1>Quản Lý Khu Vực</h1>
                             <c:if test="${roletype == '2'}">
                                 <a href="zoneControl?action=add" class="btn btn-primary">
-                                    <i class="fas fa-plus"></i> Add New Zone
+                                    <i class="fas fa-plus"></i> Thêm Khu Vực Mới
                                 </a>
                             </c:if>
                         </div>
@@ -144,9 +144,9 @@
                                     <div class="col-md-8">
                                         <form action="zoneControl" method="get" class="d-flex">
                                             <input type="hidden" name="action" value="search">
-                                            <input type="text" name="keyword" class="form-control" placeholder="Search by name or ID" value="${keyword}">
+                                            <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm theo tên hoặc ID" value="${keyword}">
                                             <button type="submit" class="btn btn-primary ml-2">
-                                                <i class="fas fa-search"></i> Search
+                                                <i class="fas fa-search"></i> Tìm Kiếm
                                             </button>
                                         </form>
                                     </div>
@@ -154,12 +154,12 @@
                                         <form action="zoneControl" method="get" class="d-flex">
                                             <input type="hidden" name="action" value="filter">
                                             <select name="isActive" class="form-control" style="width: auto;">
-                                                <option value="default" ${param.isActive == 'default' ? 'selected' : ''}>All Status</option>
-                                                <option value="true" ${param.isActive == 'true' ? 'selected' : ''}>Active</option>
-                                                <option value="false" ${param.isActive == 'false' ? 'selected' : ''}>Inactive</option>
+                                                <option value="default" ${param.isActive == 'default' ? 'selected' : ''}>Tất Cả Trạng Thái</option>
+                                                <option value="true" ${param.isActive == 'true' ? 'selected' : ''}>Hoạt Động</option>
+                                                <option value="false" ${param.isActive == 'false' ? 'selected' : ''}>Không Hoạt Động</option>
                                             </select>
                                             <button type="submit" class="btn btn-primary ml-2">
-                                                <i class="fas fa-filter"></i> Filter
+                                                <i class="fas fa-filter"></i> Lọc
                                             </button>
                                         </form>
                                     </div>
@@ -171,11 +171,11 @@
                                     <thead>
                                         <tr>
                                             <th width="10%">ID</th>
-                                            <th width="25%">Name</th>
-                                            <th width="30%">Description</th>
-                                            <th width="10%">Status</th>
-                                            <th width="10%">Products</th>
-                                            <th width="15%">Actions</th>
+                                            <th width="25%">Tên</th>
+                                            <th width="30%">Mô Tả</th>
+                                            <th width="10%">Trạng Thái</th>
+                                            <th width="10%">Sản Phẩm</th>
+                                            <th width="15%">Thao Tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -190,26 +190,26 @@
                                                             <c:if test="${fn:length(zone.description) > 100}">...</c:if>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span class="text-muted">No description</span>
+                                                            <span class="text-muted">Không có mô tả</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
                                                 <td>
                                                     <span class="badge ${zone.isActive ? 'bg-success' : 'bg-danger'}">
-                                                        ${zone.isActive ? 'Active' : 'Inactive'}
+                                                        ${zone.isActive ? 'Hoạt Động' : 'Không Hoạt Động'}
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <span class="badge bg-info">${zone.productCount} products</span>
+                                                    <span class="badge bg-info">${zone.productCount} sản phẩm</span>
                                                 </td>
                                                 <td>
                                                     <div class="btn-action-container">
                                                         <a href="zoneControl?action=details&id=${zone.id}" class="btn btn-info btn-sm">
-                                                            <i class="fas fa-eye"></i> View
+                                                            <i class="fas fa-eye"></i> Xem
                                                         </a>
                                                         <c:if test="${roletype == '2'}">
                                                             <a href="zoneControl?action=edit&id=${zone.id}" class="btn btn-primary btn-sm">
-                                                                <i class="fas fa-edit"></i> Edit
+                                                                <i class="fas fa-edit"></i> Sửa
                                                             </a>
 <!--                                                            <form action="zoneControl" method="post" style="display: inline;" onsubmit="return deleteZone(event)">
                                                                 <input type="hidden" name="action" value="delete">
@@ -226,7 +226,7 @@
                                         
                                         <c:if test="${empty zoneList}">
                                             <tr>
-                                                <td colspan="6" class="text-center">No zones found</td>
+                                                <td colspan="6" class="text-center">Không tìm thấy khu vực nào</td>
                                             </tr>
                                         </c:if>
                                     </tbody>
@@ -302,15 +302,15 @@
                     displayMode: 'once',
                     id: 'question',
                     zindex: 999,
-                    title: 'Confirmation',
-                    message: 'Are you sure you want to delete this zone?',
+                    title: 'Xác Nhận',
+                    message: 'Bạn có chắc chắn muốn xóa khu vực này?',
                     position: 'center',
                     buttons: [
-                        ['<button><b>YES</b></button>', function (instance, toast) {
+                        ['<button><b>CÓ</b></button>', function (instance, toast) {
                             instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
                             event.target.submit(); // Submit the form if user confirms
                         }, true],
-                        ['<button>NO</button>', function (instance, toast) {
+                        ['<button>KHÔNG</button>', function (instance, toast) {
                             instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
                         }, false],
                     ]
@@ -337,7 +337,7 @@
                 var toastType = "${sessionScope.toastType}";
                 if (toastMessage) {
                     iziToast.show({
-                        title: toastType === 'success' ? 'Success' : 'Error',
+                        title: toastType === 'success' ? 'Thành Công' : 'Lỗi',
                         message: toastMessage,
                         position: 'topRight',
                         color: toastType === 'success' ? 'green' : 'red',

@@ -289,8 +289,11 @@ public class ProductDAO extends DBContext {
         try {
             StringBuilder sql = new StringBuilder();
             
-            if (zoneId != null) {
-                // If filtering by zone, use the junction table
+            // Kiểm tra xem zoneId có giá trị hợp lệ không (không phải null và không phải "default")
+            boolean filterByZone = zoneId != null && !zoneId.equals("default");
+            
+            if (filterByZone) {
+                // Nếu lọc theo zone, sử dụng bảng junction
                 sql.append("SELECT DISTINCT p.* FROM product p ");
                 sql.append("JOIN product_zone pz ON p.id = pz.product_id ");
                 sql.append("WHERE pz.zone_id = ? ");
@@ -299,7 +302,7 @@ public class ProductDAO extends DBContext {
                     sql.append("AND p.isactive = ? ");
                 }
             } else {
-                // If not filtering by zone, use simpler query
+                // Nếu không lọc theo zone, sử dụng truy vấn đơn giản hơn
                 sql.append("SELECT * FROM product WHERE 1=1 ");
                 
                 if (isActive != null) {
@@ -310,7 +313,7 @@ public class ProductDAO extends DBContext {
             PreparedStatement stm = cnn.prepareStatement(sql.toString());
             int paramIndex = 1;
             
-            if (zoneId != null) {
+            if (filterByZone) {
                 stm.setInt(paramIndex++, Integer.parseInt(zoneId));
             }
             

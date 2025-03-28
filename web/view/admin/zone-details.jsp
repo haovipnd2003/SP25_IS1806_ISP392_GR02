@@ -8,7 +8,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Zone Details</title>
+        <title>Chi Tiết Khu Vực</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
@@ -76,9 +76,9 @@
                         </button>
                         <section class="section">
                             <div class="section-header d-flex justify-content-between align-items-center">
-                                <h1>Zone Details</h1>
+                                <h1>Chi Tiết Khu Vực</h1>
                                 <a href="zoneControl" class="btn btn-primary">
-                                    <i class="fas fa-arrow-left"></i> Back to Zones
+                                    <i class="fas fa-arrow-left"></i> Quay Lại Danh Sách
                                 </a>
                             </div>
 
@@ -87,60 +87,61 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h3>${zone.name}</h3>
-                                        <p><strong>ID:</strong> ${zone.id}</p>
-                                        <p><strong>Status:</strong> 
-                                            <span class="badge ${zone.isActive ? 'bg-success' : 'bg-danger'}">
-                                                ${zone.isActive ? 'Active' : 'Inactive'}
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div class="col-md-6 text-md-right">
-                                        <p><strong>Total Products:</strong> ${zone.productCount}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <h4>Products in this Zone</h4>
-
-                            <c:if test="${empty products}">
-                                <div class="no-products">
-                                    <i class="fas fa-box-open fa-3x mb-3"></i>
-                                    <h5>No products found in this zone</h5>
-                                </div>
-                            </c:if>
-
-                            <div class="row">
-                                <c:forEach var="product" items="${products}">
-                                    <div class="col-md-4 col-lg-3">
-                                        <div class="product-card">
-                                            <c:choose>
-                                                <c:when test="${not empty product.image}">
-                                                    <img src="${pageContext.request.contextPath}/images/products/${product.image}" class="product-image" alt="${product.name}">
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <img src="${pageContext.request.contextPath}/images/products/default.jpg" class="product-image" alt="Default Image">
-                                                </c:otherwise>
-                                            </c:choose>
-                                            <div class="product-details">
-                                                <h5>${product.name}</h5>
-                                                <p class="text-truncate">${product.describe}</p>
-                                                <p><strong>Price:</strong> 
-                                                    <fmt:formatNumber value="${product.price}" 
-                                                                     pattern="###,###₫" />
-                                                </p>
-                                                <p>
-                                                    <span class="badge ${product.isActive ? 'bg-success' : 'bg-danger'}">
-                                                        ${product.isActive ? 'Active' : 'Inactive'}
-                                                    </span>
-                                                </p>
-                                                <a href="products?action=edit&id=${product.id}&zoneId=${zone.id}" class="btn btn-sm btn-primary">View Product</a>
-                                            </div>
+                                            <p><strong>ID:</strong> ${zone.id}</p>
+                                            <p><strong>Trạng Thái:</strong> 
+                                                <span class="badge ${zone.isActive ? 'bg-success' : 'bg-danger'}">
+                                                    ${zone.isActive ? 'Hoạt Động' : 'Không Hoạt Động'}
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6 text-md-right">
+                                            <p><strong>Tổng Số Sản Phẩm:</strong> ${zone.productCount}</p>
                                         </div>
                                     </div>
-                                </c:forEach>
+                                </div>
+
+                                <h4>Sản Phẩm Trong Khu Vực Này</h4>
+
+                                <c:if test="${empty products}">
+                                    <div class="no-products">
+                                        <i class="fas fa-box-open fa-3x mb-3"></i>
+                                        <h5>Không tìm thấy sản phẩm nào trong khu vực này</h5>
+                                    </div>
+                                </c:if>
+
+                                <div class="row">
+                                    <c:forEach var="product" items="${products}">
+                                        <div class="col-md-4 col-lg-3">
+                                            <div class="product-card">
+                                                <c:choose>
+                                                    <c:when test="${not empty product.image}">
+                                                        <img src="${pageContext.request.contextPath}/images/products/${product.image}" class="product-image" alt="${product.name}">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="${pageContext.request.contextPath}/images/products/default.jpg" class="product-image" alt="Hình Ảnh Mặc Định">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <div class="product-details">
+                                                    <h5>${product.name}</h5>
+                                                    <p class="text-truncate">${product.describe}</p>
+                                                    <p><strong>Giá:</strong> 
+                                                        <fmt:formatNumber value="${product.price}" 
+                                                                         pattern="###,###₫" />
+                                                    </p>
+                                                    <p>
+                                                        <span class="badge ${product.isActive ? 'bg-success' : 'bg-danger'}">
+                                                            ${product.isActive ? 'Hoạt Động' : 'Không Hoạt Động'}
+                                                        </span>
+                                                    </p>
+                                                    <a href="products?action=edit&id=${product.id}&zoneId=${zone.id}" class="btn btn-sm btn-primary">Xem Sản Phẩm</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+                    </div>
                 </div>
             </div>
         </div>
