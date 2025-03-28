@@ -40,12 +40,23 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/schedule"><i class="ion ion-calendar"></i><span>Schedule Management</span></a>
                 </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/zoneControl"><i class="ion ion-bag"></i><span>Zone Management</span></a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/statistics"><i class="ion ion-bag"></i><span>Statistics</span></a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/stock-audit"><i class="ion ion-bag"></i><span>Stock Audit</span></a>
+                </li>
             </c:if>
             <c:if test="${sessionScope.acc.roletype == 3}">
                 <li>
                     <a href="${pageContext.request.contextPath}/products"><i class="ion ion-bag"></i><span>Product</span></a>
                 </li>
-
+                <li>
+                    <a href="${pageContext.request.contextPath}/zoneControl"><i class="ion ion-bag"></i><span>Zone Management</span></a>
+                </li>
 
                 <li>
                     <a href="${pageContext.request.contextPath}/sale"><i class="ion ion-person-stalker"></i><span>Customer Management</span></a>
@@ -53,6 +64,9 @@
 
                 <li>
                     <a href="${pageContext.request.contextPath}/schedule"><i class="ion ion-calendar"></i><span>Schedule View</span></a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/stock-audit"><i class="ion ion-bag"></i><span>Stock Audit</span></a>
                 </li>
 
             </c:if>    
