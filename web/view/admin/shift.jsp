@@ -363,7 +363,7 @@
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     let shiftId = this.dataset.id;
-                    if (confirm("Are you sure you want to delete this shift?")) {
+                    if (confirm("Bạn có chắc chắn muốn xóa ca làm việc này không?")) {
                         window.location.href = "deleteShift?id=" + shiftId;
                     }
                 });

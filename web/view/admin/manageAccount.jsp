@@ -236,7 +236,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Chức vụ</label>
-                                <select class="form-control" name="roletype">
+                                <select class="form-control" name="roletype" >
                                     <option value="2">Chủ cửa hàng</option>
                                     <option value="3" selected>Nhân viên</option>
                                 </select>
