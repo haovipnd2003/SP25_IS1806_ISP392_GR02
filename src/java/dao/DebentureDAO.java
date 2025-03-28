@@ -20,10 +20,10 @@ import java.util.List;
 public class DebentureDAO extends DBContext{
     private int noOfRecords; 
     
-    public boolean insertDebenture(Debenture debenture) {
+    public boolean insertDebenture(Debenture debenture) throws SQLException {
         boolean success = false;
         try {
-            String query = "insert into debenture(note, amount, debtor_id, created_date) values(?,?,?,?)";
+            String query = "insert into debt(paymentstatus, amount, customerid, createdAt) values(?,?,?,?)";
             
             PreparedStatement stm = connection.prepareStatement(query);
             stm.setString(1, debenture.getNote());
@@ -31,11 +31,19 @@ public class DebentureDAO extends DBContext{
             stm.setInt(3, debenture.getDebtorId());
             java.sql.Date sqlDate = new java.sql.Date(debenture.getCreatedDate().getTime());
             stm.setDate(4, sqlDate);
+            stm.executeUpdate();
             
-            int res = stm.executeUpdate();
-            if (res != 0) success = true;
+            char operator = debenture.getAmount() > 0 ? '+' : ' ';
+            String queryU = "update customer set totaldebt=totaldebt" + operator + debenture.getAmount() + " where id=?";
+            PreparedStatement stmU = connection.prepareStatement(queryU);
+            stmU.setInt(1, debenture.getDebtorId());
+            stmU.executeUpdate();
+            
+            connection.commit();
+            success = true;
         }
-        catch (Exception e) {
+        catch (SQLException e) {
+            connection.rollback();
             e.printStackTrace();
         }
         finally
@@ -53,20 +61,21 @@ public class DebentureDAO extends DBContext{
     
     public List<Debenture> viewAllDebenturesByDebtorId(int debtorId, int offset, int noOfRecords) 
     { 
-        String query = "select SQL_CALC_FOUND_ROWS * from debenture where debtor_id = ? limit " + offset + ", " + noOfRecords; 
+        String query = "select SQL_CALC_FOUND_ROWS * from debt where customerid = ? order by createdAt desc limit " + offset + ", " + noOfRecords; 
         List<Debenture> list = new ArrayList<Debenture>(); 
         Debenture debenture = null; 
         try { 
             PreparedStatement stm = connection.prepareStatement(query);
+            
             stm.setInt(1, debtorId);
             ResultSet rs = stm.executeQuery(); 
             while (rs.next()) { 
                 debenture = new Debenture(); 
                 debenture.setId(rs.getInt(1)); 
-                debenture.setNote(rs.getString(2)); 
-                debenture.setAmount(rs.getDouble(3)); 
-                debenture.setDebtorId(rs.getInt(4)); 
-                debenture.setCreatedDate(rs.getDate(6)); 
+                debenture.setDebtorId(rs.getInt(2)); 
+                debenture.setAmount(rs.getDouble(4));
+                debenture.setNote(rs.getString(5)); 
+                debenture.setCreatedDate(rs.getDate(8)); 
                 list.add(debenture); 
             } 
   

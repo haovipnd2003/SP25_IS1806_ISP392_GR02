@@ -68,6 +68,11 @@ public class User {
         this.fullname = fullname;
     }
 
+    public User(String email, String code, boolean isEmailRegistration) {
+        this.email = email;
+        this.code = code;
+    }
+
     public String getCode() {
         return code;
     }
@@ -138,6 +143,11 @@ public class User {
 
     public void setIsactive(String isactive) {
         this.isactive = isactive;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + ", phone=" + phone + ", address=" + address + ", roletype=" + roletype + ", isactive=" + isactive + ", code=" + code + '}';
     }
 
 }

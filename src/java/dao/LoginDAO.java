@@ -36,7 +36,7 @@ public class LoginDAO extends DBContext{
         public User login(String name) {
 
         try {
-            String query = "select * from user where name = ?";
+            String query = "select id,name,password,email,phone,address,roletype,isactive from user where name = ?";
             stm = cnn.prepareStatement(query);
             stm.setString(1, name);
 

@@ -93,13 +93,13 @@ public class VerifyCode extends HttpServlet {
             request.setAttribute("code", code);
 
             if (currentTime > otpExpiryTime) {
-                request.setAttribute("error", "OTP has expired. Please request a new one.");
+                request.setAttribute("error", "OTP đã hết hạn. Vui lòng yêu cầu mã mới.");
                 request.getRequestDispatcher("view/page/enterOtp.jsp").forward(request, response);
                 return;
             }
 
             if (attempts >= MAX_ATTEMPTS) {
-                request.setAttribute("error", "Maximum number of attempts reached. Please request a new OTP.");
+                request.setAttribute("error", "Đã đạt đến số lần thử tối đa. Vui lòng yêu cầu OTP mới.");
                 request.getRequestDispatcher("view/page/enterOtp.jsp").forward(request, response);
                 return;
             }
@@ -111,7 +111,7 @@ public class VerifyCode extends HttpServlet {
             } else {
                 attempts++;
                 session.setAttribute("otpAttempts", attempts);
-                request.setAttribute("error", "Wrong OTP. Attempt " + attempts + " of " + MAX_ATTEMPTS);
+                request.setAttribute("error", "OTP sai." + attempts + " / " + MAX_ATTEMPTS);
                 request.getRequestDispatcher("view/page/enterOtp.jsp").forward(request, response);
             }
         } else {
@@ -128,13 +128,13 @@ public class VerifyCode extends HttpServlet {
             request.setAttribute("code", code);
 
             if (currentTime > otpExpiryTime) {
-                request.setAttribute("error", "OTP has expired. Please request a new one.");
+                request.setAttribute("error", "OTP đã hết hạn. Vui lòng yêu cầu mã mới.");
                 request.getRequestDispatcher("view/page/enterOtp_Reg.jsp").forward(request, response);
                 return;
             }
 
             if (attempts >= MAX_ATTEMPTS) {
-                request.setAttribute("error", "Maximum number of attempts reached. Please request a new OTP.");
+                request.setAttribute("error", "Đã đạt đến số lần thử tối đa. Vui lòng yêu cầu OTP mới.");
                 request.getRequestDispatcher("view/page/enterOtp_Reg.jsp").forward(request, response);
                 return;
             }
@@ -145,12 +145,12 @@ public class VerifyCode extends HttpServlet {
                 dao.addUser(newUser);
                 session.removeAttribute("newUser");
                 session.removeAttribute("otpAttempts"); //stop session saving attempts
-                session.setAttribute("successMessage", "Account created successfully!");
+                session.setAttribute("successMessage", "Tài khoản đã được tạo thành công!");
                 response.sendRedirect(request.getContextPath() + "/login");
             } else {
                 attempts++;
                 session.setAttribute("otpAttempts", attempts);
-                request.setAttribute("error", "Wrong OTP. Attempt " + attempts + " of " + MAX_ATTEMPTS);
+                request.setAttribute("error", "OTP sai. " + attempts + " / " + MAX_ATTEMPTS);
                 request.getRequestDispatcher("view/page/enterOtp_Reg.jsp").forward(request, response);
             }
         }

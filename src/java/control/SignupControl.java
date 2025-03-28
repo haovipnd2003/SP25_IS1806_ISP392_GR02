@@ -60,19 +60,19 @@ public class SignupControl extends HttpServlet {
         request.setAttribute("password", pass1);
         request.setAttribute("confirmpassword", pass2);
         if (name.contains(" ")) {
-            request.setAttribute("err", "Username cannot contain spaces!");
+            request.setAttribute("err", "Tên tài khoản không được có khoảng trống!");
             request.getRequestDispatcher("view/page/signup.jsp").forward(request, response);
             return;
         }
         // Validate email format
         if (!isValidEmail(email)) {
-            request.setAttribute("err", "Invalid email format!");
+            request.setAttribute("err", "Định dạng email không hợp lệ!");
             request.getRequestDispatcher("view/page/signup.jsp").forward(request, response);
             return;
         }
         // Check for empty fields
         if (name.isEmpty() || email.isEmpty() || pass1.isEmpty() || pass2.isEmpty()) {
-            request.setAttribute("err", "All fields must be filled!");
+            request.setAttribute("err", "Vui lòng điền đầy đủ thông tin!");
             request.getRequestDispatcher("view/page/signup.jsp").forward(request, response);
             return;
         }
@@ -81,12 +81,12 @@ public class SignupControl extends HttpServlet {
         ArrayList<User> list = dao.getAccount();
         for (User u : list) {
             if (email.equals(u.getEmail())) {
-                request.setAttribute("err", "Email already exists!");
+                request.setAttribute("err", "Email đã tồn tại!");
                 request.getRequestDispatcher("view/page/signup.jsp").forward(request, response);
                 return;
             }
             if (name.equals(u.getName())) {
-                request.setAttribute("err", "Username already exists!");
+                request.setAttribute("err", "Tên tài khoản đã tồn tại!");
                 request.getRequestDispatcher("view/page/signup.jsp").forward(request, response);
                 return;
             }
@@ -98,16 +98,16 @@ public class SignupControl extends HttpServlet {
 //        request.setAttribute("success", "Account created successfully!Please Signin <a href=\"login\">here</a>");
         SendEmail sm = new SendEmail();
         String code = sm.getRandom();
-        User user = new User(email, code);
+        User user = new User(email, code,true);
         session.setAttribute("authcode", user);
         session.setAttribute("otpExpiryTime", System.currentTimeMillis() + 30 * 1000);
 
         executorService.submit(() -> {
             boolean test = sm.sendEmail(user);
             if (test) {
-                session.setAttribute("message", "An OTP has been sent to " + email + ". Please check your inbox.");
+                session.setAttribute("message", "Một OTP đã được gửi đến " + email + ". Hãy kiểm tra email của bạn.");
             } else {
-                session.setAttribute("message", "Failed to send the OTP. Please try again.");
+                session.setAttribute("message", "Có lỗi khi gửi OTP. Hãy thử lại.");
             }
         });
 

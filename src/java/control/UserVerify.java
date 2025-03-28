@@ -52,15 +52,15 @@ public class UserVerify extends HttpServlet {
 
             session.setAttribute("authcode", user);
             session.setAttribute("otpExpiryTime", System.currentTimeMillis() + OTP_EXPIRY_TIME * 1000);
-            session.setAttribute("message", "A new OTP is being sent to " + email + ". Please check your inbox.");
+            session.setAttribute("message", "Một OTP đã được gửi đến " + email + ". Hãy kiểm tra email của bạn.");
             session.removeAttribute("otpAttempts");
 
             executorService.submit(() -> {
                 boolean test = sm.sendEmail(user);
                 if (test) {
-                    session.setAttribute("message", "A new OTP has been sent to " + email + ". Please check your inbox.");
+                    session.setAttribute("message", "Một OTP mới đã được gửi đến " + email + ".  Hãy kiểm tra email của bạn.");
                 } else {
-                    session.setAttribute("message", "Failed to send the new OTP. Please try again.");
+                    session.setAttribute("message", "Lỗi khi gửi OTP mới. Hãy kiểm tra lại.");
                 }
             });
             request.getRequestDispatcher("view/page/enterOtp.jsp").forward(request, response);
@@ -74,15 +74,15 @@ public class UserVerify extends HttpServlet {
 
             session.setAttribute("authcode", user);
             session.setAttribute("otpExpiryTime", System.currentTimeMillis() + OTP_EXPIRY_TIME * 1000);
-            session.setAttribute("message", "A new OTP is being sent to " + email + ". Please check your inbox.");
+            session.setAttribute("message", "Một OTP mới đã được gửi đến " + email + ".  Hãy kiểm tra email của bạn.");
             session.removeAttribute("otpAttempts");
 
             executorService.submit(() -> {
                 boolean test = sm.sendEmail(user);
                 if (test) {
-                    session.setAttribute("message", "A new OTP has been sent to " + email + ". Please check your inbox.");
+                    session.setAttribute("message", "Một OTP mới đã được gửi đến " + email + ". Hãy kiểm tra email của bạn.");
                 } else {
-                    session.setAttribute("message", "Failed to send the new OTP. Please try again.");
+                    session.setAttribute("message", "Lỗi khi gửi OTP mới. Hãy kiểm tra lại");
                 }
             });
             request.getRequestDispatcher("view/page/enterOtp_Reg.jsp").forward(request, response);
@@ -90,25 +90,25 @@ public class UserVerify extends HttpServlet {
             String email = request.getParameter("email");
             SendEmail sm = new SendEmail();
             String code = sm.getRandom();
-            User user = new User(email, code);
+            User user = new User(email, code,true);
             DAO d = new DAO();
             request.setAttribute("email", email);
             session.setAttribute("authcode", user);
             session.setAttribute("otpExpiryTime", System.currentTimeMillis() + OTP_EXPIRY_TIME * 1000);
             if (d.isAccountExists(email)) {
-                session.setAttribute("message", "An OTP is being sent to " + email + ". Please check your inbox.");
+                session.setAttribute("message", "Một OTP đã được gửi đến " + email + ".  Hãy kiểm tra email của bạn.");
 
                 executorService.submit(() -> {
                     boolean test = sm.sendEmail(user);
                     if (test) {
-                        session.setAttribute("message", "An email has been sent to " + email + ". Please check your inbox.");
+                        session.setAttribute("message", "Một OTP đã được gửi đến " + email + ".  Hãy kiểm tra email của bạn.");
                     } else {
-                        session.setAttribute("message", "Failed to send email. Please try again.");
+                        session.setAttribute("message", "Lỗi khi gửi OTP mới. Hãy kiểm tra lại");
                     }
                 });
                 request.getRequestDispatcher("view/page/enterOtp.jsp").forward(request, response);
             } else {
-                request.setAttribute("error", "Email is invalid");
+                request.setAttribute("error", "Email không tồn tại");
                 request.getRequestDispatcher("view/page/forgotPassword.jsp").forward(request, response);
             }
         }

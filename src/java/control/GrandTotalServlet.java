@@ -4,10 +4,6 @@
  */
 package control;
 
-import dao.CustomerDAO;
-import dao.ProductDAO;
-import entity.Customer;
-import entity.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,14 +11,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import jakarta.servlet.http.HttpSession;
+import java.text.DecimalFormat;
 
 /**
  *
  * @author binh2
  */
-@WebServlet(name = "SearchProductServlet", urlPatterns = {"/searchProduct"})
-public class SearchProductServlet extends HttpServlet {
+@WebServlet(name = "GrandTotalServlet", urlPatterns = {"/grandTotalServlet"})
+public class GrandTotalServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +38,10 @@ public class SearchProductServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchProductServlet</title>");
+            out.println("<title>Servlet GrandTotalServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchProductServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet GrandTotalServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,38 +59,7 @@ public class SearchProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String key = request.getParameter("key");
-        ProductDAO dao = new ProductDAO();
-        ArrayList<Product> list = new ArrayList<>();
-        if(!key.isEmpty()){
-           list = dao.searchProductByNameNDescribe(key, key);
-
-        }
-
-        PrintWriter out = response.getWriter();
-
-        for (Product product : list) {
-            String shortDescribe = product.getDescribe();
-            if (shortDescribe.length() > 30) {
-                shortDescribe = shortDescribe.substring(0, 50) + "...";
-            }
-
-            out.println("<tr><td>"
-                    + product.getName() + " - Tồn:"
-                    + product.getQuantity() + " - "
-                    + shortDescribe + "</td>\n"
-                    + "<td>"
-                    + "<input type='hidden' id='pID_" + product.getId() + "' value='" + product.getId()+ "' />"
-                    + "<input type='hidden' id='pName_" + product.getId() + "' value='" + product.getName() + "' />"
-                    + "<input type='hidden' id='pQuantity_" + product.getId() + "' value='" + product.getQuantity() + "' />"
-                    + "<input type='hidden' id='pDescribe_" + product.getId() + "' value='" + product.getDescribe() + "' />"
-                    + "<input type='hidden' id='pPrice_" + product.getId()+ "' value='" + product.getPrice()+ "' />"
-                    + "<input type='hidden' id='pStock_" + product.getId() + "' value='" + product.getQuantity() + "' />"
-                    + "<button class=\"tab-button\" onclick=\"choosePro('" + product.getId() + "')\">Choose</button>"
-                    + "</td>\n"
-                    + "</tr>");
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -107,7 +73,39 @@ public class SearchProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+
+        try {
+            String[] totalAmounts = request.getParameterValues("totalAmounts[]");
+            long grandTotal = 0;
+
+            if (totalAmounts != null && totalAmounts.length > 0) {
+                for (String amount : totalAmounts) {
+                    if (amount != null && !amount.trim().isEmpty()) {
+                        String cleanAmount = amount.replace(".", "").replaceAll("[^0-9]", "");
+                        try {
+                            long value = Long.parseLong(cleanAmount); // Ép kiểu trực tiếp sang long
+                            grandTotal += value;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Bỏ qua giá trị không hợp lệ: " + amount);
+                        }
+                    }
+                }
+            }
+
+            
+            System.out.println("Tổng tiền hàng: " + grandTotal);
+            response.getWriter().write(String.valueOf(grandTotal));
+
+            
+            HttpSession session = request.getSession();
+             session.setAttribute("totalGrand", String.valueOf(grandTotal));
+        } catch (Exception e) {
+            System.out.println("Lỗi khi tính tổng tiền hàng: " + e.getMessage());
+            e.printStackTrace();
+            response.getWriter().write("0");
+        }
     }
 
     /**

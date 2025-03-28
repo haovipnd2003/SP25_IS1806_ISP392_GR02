@@ -168,18 +168,18 @@
     <body>
         <div id="logreg-forms">
             <form action="${pageContext.request.contextPath}/signup" method="post" class="form-signup" id="submitForm">
-                <h1 class="h3 mb-3 font-weight-normal text-center">Sign up</h1>
+                <h1 class="h3 mb-3 font-weight-normal text-center">Đăng ký</h1>
                 <p class="text-danger text-center">${err}</p>
                 <p style="color: blue">${success}</p>
                 <div class="form-group">
                     <input name="email"  id="user-email" class="form-control" placeholder="Email (someone@example.com)" value="${email}">
                 </div>
                 <div class="form-group">
-                    <input name="user" type="text" id="user-name" class="form-control" placeholder="User name" value="${user}" autofocus>
+                    <input name="user" type="text" id="user-name" class="form-control" placeholder="Tên tài khoản" value="${user}" autofocus>
                 </div>
                 <div class="form-group">
                     <div class="input-group mb-3">
-                        <input name="password" type="password" id="password" class="form-control" placeholder="Password" value="${password}">
+                        <input name="password" type="password" id="password" class="form-control" placeholder="Mật khẩu" value="${password}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary eye-button" type="button" id="togglePassword">
                                 <i class="fa fa-eye fa-eye-slash" aria-hidden="true"></i>
@@ -190,7 +190,7 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group mb-3">
-                        <input name="repass" type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" value="${confirmpassword}">
+                        <input name="repass" type="password" id="confirmPassword" class="form-control" placeholder="Nhập lại mật khẩu" value="${confirmpassword}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary eye-button" type="button" id="toggleConfirmPassword">
                                 <i class="fa fa-eye fa-eye-slash" aria-hidden="true"></i>
@@ -201,7 +201,7 @@
                     <small id="passwordMatch" class="form-text"></small>
                 </div>
 
-                <button class="btn btn-primary btn-block" id="submitForm" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
+                <button class="btn btn-primary btn-block" id="submitForm" type="submit"><i class="fas fa-user-plus"></i> Đăng ký</button>
                 <!--                <a href="login" id="cancel_signup" class="btn btn-secondary btn-block"><i class="fas fa-angle-left"></i> Back</a>-->
             </form>
         </div>
@@ -227,10 +227,10 @@
                     passwordStrength.style.color = strength.color;
 
                     if (newPassword.value === confirmPassword.value) {
-                        passwordMatch.textContent = 'Passwords match';
+                        passwordMatch.textContent = 'Mật khẩu trùng khớp';
                         passwordMatch.style.color = 'green';
                     } else {
-                        passwordMatch.textContent = 'Passwords do not match';
+                        passwordMatch.textContent = 'Mật khẩu không trùng khớp';
                         passwordMatch.style.color = 'red';
                     }
                 }
@@ -260,10 +260,10 @@
                     let color = '';
 
                     if (password.length >= 6) {
-                        message = 'Valid password';
+                        message = 'Mật khẩu hợp lệ';
                         color = 'green';
                     } else {
-                        message = 'Password must have at least 6 characters!';
+                        message = 'Mật khẩu phải có ít nhất 6 ký tự!';
                         color = 'red';
                     }
                     return {message, color};
@@ -283,7 +283,7 @@
                     const strength = getPasswordStrength(newPassword.value);
                     if (newPassword.value !== confirmPassword.value || strength.color === 'red') {
                         event.preventDefault();
-                        alert('Password validation failed. Please check the requirements.');
+                        alert('Xác thực mật khẩu không thành công. Vui lòng kiểm tra các yêu cầu.');
                     }
                 });
 
