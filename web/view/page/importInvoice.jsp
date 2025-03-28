@@ -1,6 +1,6 @@
 <%-- 
-    Document   : saleInterface
-    Created on : 23 thg 2, 2025, 15:12:12
+    Document   : importInvoice
+    Created on : 21 thg 3, 2025, 11:52:32
     Author     : binh2
 --%>
 
@@ -10,8 +10,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Hoá Đơn Bán</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Invoice2.css">
+        <title>POS System</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/importInvoice.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body>
@@ -63,7 +63,7 @@
                 <!--SEARCH CUSTOMER-->
                 <div class="search-container">
                     <div class="search-box">
-                        <input oninput="search(this)" type="text" name="search" placeholder="Tìm khách hàng...">
+                        <input oninput="search(this)" type="text" name="search" placeholder="Tìm nhà cung cấp...">
                     </div>
                     <div class="add-customer-btn" onclick="openAddCustomerPopup()">+</div>
                 </div>
@@ -80,8 +80,8 @@
 
 
                 <div class="customer-info">
-                    <h2>Tên Khách Hàng</h2>
-                    <p class="customer-note">SDT: </p>
+                    <h2>Tên nhà cung cấp:</h2>
+                    <p class="customer-note">SĐT: </p>
                     <p class="customer-note">Địa Chỉ: </p>
                 </div>
 
@@ -91,7 +91,7 @@
                         <span>00.0 vnđ</span>
                     </div>
                     <div class="total-row final">
-                        <span>Khách Trả</span>
+                        <span>Cửa hàng trả:</span>
                         <span><input type="text" name="khachTra" value="" /></span>
                     </div>
                     <div class="total-row" id="debtRow" style="display: none;">
@@ -131,7 +131,7 @@
         <div id="addCustomerPopup" class="popup">
             <div class="popup-content">
                 <span class="close-popup" onclick="closeAddCustomerPopup()">&times;</span>
-                <h3>Thêm Khách Hàng Mới</h3>
+                <h3>Thêm Khách Hàng Mới:</h3>
                 <form id="addCustomerForm">
                     <div class="form-group">
                         <br>
@@ -158,7 +158,7 @@
                 <h3>Xác Nhận Đơn Hàng</h3>
 
                 <div class="confirmation-section">
-                    <h4>Thông Tin Khách Hàng</h4>
+                    <h4>Thông Tin Nhà Cung Cấp</h4>
                     <div id="customerSummary">
                         <p><strong>Tên:</strong> <span id="confirmCustomerName">---</span></p>
                         <p><strong>SĐT:</strong> <span id="confirmCustomerPhone">---</span></p>
@@ -191,8 +191,8 @@
                     <h4>Thanh Toán</h4>
                     <div id="paymentSummary">
                         <p><strong>Tổng Tiền</strong> <span id="confirmTotalAmount">0 VNĐ</span></p>
-                        <p><strong>Phương Thức</strong> <span id="confirmPaymentMethod">Pay All</span></p>
-                        <p><strong>Khách Trả</strong> <span id="confirmPaidAmount">0 VNĐ</span></p>
+                        <p><strong>Phương Thức Thanh Toán</strong> <span id="confirmPaymentMethod">Trả Tất</span></p>
+                        <p><strong>Cửa Hàng Trả</strong> <span id="confirmPaidAmount">0 VNĐ</span></p>
                         <p id="confirmDebtRow" style="color: #ff6666;"><strong>Nợ</strong> <span id="confirmDebtAmount">0 VNĐ</span></p>
                     </div>
                 </div>
@@ -339,22 +339,11 @@
 
                             let quantity = parseInt(value, 10);
                             let row = inputElement.closest('tr');
-                            let stockQuantity = parseInt(row.querySelector('.stock-quantity').value) || 0;
-
-                            if (stockQuantity === 0) {
-                                quantity = 0;
-                                inputElement.value = quantity;
-                                inputElement.disabled = true;
-                                alert("Sản phẩm này đã hết hàng!");
-                                return;
-                            }
+                            
 
                             if (quantity < 1) {
                                 quantity = 1;
                                 alert("Số lượng không thể nhỏ hơn 1!");
-                            } else if (quantity > stockQuantity) {
-                                quantity = stockQuantity;
-                                alert("Số lượng không thể vượt quá tồn kho (" + stockQuantity + ")!");
                             }
 
                             inputElement.value = quantity;
@@ -1059,7 +1048,7 @@
 
                             // Gửi dữ liệu đến Servlet
                             $.ajax({
-                                url: "/RiceManagement/addPrepareInvoice",
+                                url: "/RiceManagement/addImportInvoice",
                                 type: "POST",
                                 data: formData.toString(), // Chuyển dữ liệu về dạng string
                                 contentType: "application/x-www-form-urlencoded; charset=UTF-8",
@@ -1125,5 +1114,6 @@
                             document.getElementById('orderConfirmationPopup').style.display = 'none';
                             console.log("Popup display style:", document.getElementById('orderConfirmationPopup').style.display);
                         }
+
 
 </script>

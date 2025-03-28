@@ -5,14 +5,14 @@
     <head>
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
-        <title>Hóa đơn bán</title>
+        <title>Export Invoice Statistics</title>
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/invoiceStatistic.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/invoiceImportStatistic.css">
        
     </head>
 
@@ -32,7 +32,7 @@
                                                 <h2>Quản lý hóa đơn</h2>
                                             </div>
                                             <div class="card-body">
-                                                <form action="${pageContext.request.contextPath}/invoiceStatistic" method="post">
+                                                <form action="${pageContext.request.contextPath}/invoiceImportStatistic" method="post">
                                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                                     <h4 class="mb-0">Danh sách hóa đơn</h4>
                                                 </div>
@@ -183,13 +183,13 @@
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th>Tên</th>
-                                    <th>Quy Cách</th>
-                                    <th>Số Lượng</th>
-                                    <th>Tổng Khối Lượng</th>
-                                    <th>Giá 1 Cân</th>
-                                    <th>Giảm Giá(đ)</th>
-                                    <th>Giá Thành</th>
+                                    <th>Name</th>
+                                    <th>Product Packaging</th>
+                                    <th>Quantity</th>
+                                    <th>Total Mass</th>
+                                    <th>Price of 1 Kg</th>
+                                    <th>Discount(đ)</th>
+                                    <th>Amount Money</th>
                                 </tr>
                             </thead>
                             <tbody>
