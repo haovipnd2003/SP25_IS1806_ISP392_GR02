@@ -68,6 +68,11 @@ public class User {
         this.fullname = fullname;
     }
 
+    public User(String email, String code, boolean isEmailRegistration) {
+        this.email = email;
+        this.code = code;
+    }
+
     public String getCode() {
         return code;
     }
@@ -145,5 +150,4 @@ public class User {
         return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + ", phone=" + phone + ", address=" + address + ", roletype=" + roletype + ", isactive=" + isactive + ", code=" + code + '}';
     }
 
-    
 }

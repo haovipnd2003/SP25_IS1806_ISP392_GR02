@@ -129,10 +129,7 @@
         <div id="app">
             <div class="main-wrapper">
                 <jsp:include page="/view/common/nav_bar.jsp"></jsp:include>
-                    <!--MAIN-SIDEBAR-JSP-INCLUDE-->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
-                    <!--MAIN-SIDEBAR-JSP-INCLUDE-->
-                    <!--MAIN CONTENT-->
                     <div class="main-content" style="min-height: 600px;">
                         <section class="section">
                             <div class="section-body">
@@ -143,132 +140,136 @@
                                                 <h2><a href="customer" style="text-decoration: none; color: inherit;">Customer</a></h2>
                                             </div>
                                             <div class="card-body">
-                                                <!----------------------CUSTOMER----------------------------->
-
-                                                <div class="card-body">
-                                                    <form action="customer" method="get" class="mb-4">
-                                                        <input type="hidden" name="action" value="add">
-                                                        <button type="submit" class="btn btn-primary">
-                                                            + Add Customer</button>
-                                                    </form>
-                                                <c:set value="${srCus}" var="sr"></c:set>
-                                                    <form action="searchcustomer" method="post" class="mb-4">
-                                                        <div class="form-row">
-                                                            <div class="col">
-                                                                <input type="text" class="form-control" name="name" placeholder="Name" value="${requestScope.name}">
-                                                        </div>
-                                                        <div class="col">
-                                                            <input type="text" class="form-control" name="phone" placeholder="Phone" value="${requestScope.phone}">
-                                                        </div>
-                                                        <div class="col">
-                                                            <input type="email" class="form-control" name="email" placeholder="Email" value="${requestScope.email}" >
-                                                        </div>
-                                                        <div class="col">
-                                                            <input type="text" class="form-control" name="address" placeholder="Address" value="${requestScope.address}">
-                                                        </div>
-                                                        <div class="col">
-                                                            <button type="submit" class="btn btn-search">
-                                                                <i class="fas fa-search"></i> Search
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                                <form action="customer" method="get" class="mb-4">
+                                                    <input type="hidden" name="action" value="add">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        + Add Customer</button>
                                                 </form>
-                                                <!-- Check for no customers message -->
-                                                <c:if test="${not empty noCustomersMessage}">
-                                                    <div class="no-customers-message">${noCustomersMessage}</div>
-                                                </c:if>
-
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>ID</th>
-                                                                <th>Name</th>
-                                                                <th>Phone</th>
-                                                                <th>Email</th>
-                                                                <th>Address</th>
-                                                                <th>Action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <c:choose>
-                                                                <c:when test="${empty listCus || listCus.size() == 0}">
-                                                                    <!-- No customers found, table body remains empty -->
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <c:forEach items="${listCus}" var="lc">
-                                                                        <tr>
-                                                                            <td>${lc.id}</td>
-                                                                            <td>${lc.name}</td>
-                                                                            <td>${lc.phone}</td>
-                                                                            <td>${lc.email}</td>
-                                                                            <td>${lc.address}</td>
-                                                                            <td>
-                                                                                <div class="action-buttons">
-                                                                                    <form action="updatecustomer" method="get" style="display: inline;">
-                                                                                        <input type="hidden" name="action" value="update">
-                                                                                        <input type="hidden" name="id" value="${lc.id}">
-                                                                                        <button type="submit" class="btn btn-primary">Update</button>
-                                                                                    </form>  
-                                                                                    <form action="bancustomer" method="get" style="display: inline;" onsubmit="return confirm('Are you sure you want to ban this customer?');">
-                                                                                        <input type="hidden" name="action" value="ban">
-                                                                                        <input type="hidden" name="banId" value="${lc.id}">
-                                                                                        <button type="submit" class="btn btn-ban">Ban</button>
-                                                                                    </form>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </c:forEach>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </tbody>
-                                                    </table>
+                                            <%--<c:set value="${srCus}" var="sr"></c:set>--%>
+                                            <form action="searchcustomer" method="post" class="mb-4">
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" name="id" placeholder="ID" value="${requestScope.id}">
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" name="name" placeholder="Name" value="${requestScope.name}">
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" name="phone" placeholder="Phone" value="${requestScope.phone}">
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="email" class="form-control" name="email" placeholder="Email" value="${requestScope.email}" >
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control" name="address" placeholder="Address" value="${requestScope.address}">
+                                                    </div>
+                                                    <div class="col">
+                                                        <button type="submit" class="btn btn-search">
+                                                            <i class="fas fa-search"></i> Search
+                                                        </button>
+                                                    </div>
                                                 </div>
+                                            </form>
+                                            <!-- Check for no customers message -->
+                                            <c:if test="${not empty noCustomersMessage}">
+                                                <div class="no-customers-message">${noCustomersMessage}</div>
+                                            </c:if>
 
-                                                <!-- Pagination (only show if there are customers) -->
-                                                <c:if test="${not empty listCus && listCus.size() > 0}">
-                                                    <div class="pagination" style="margin-top: 20px; text-align: center;">
-                                                        <c:if test="${totalPages > 1}">
-                                                            <a href="customer?action=view&page=1" class="pagination-btn ${currentPage == 1 ? 'disabled' : ''}"><<</a>
-                                                            <a href="customer?action=view&page=${currentPage - 1}" class="pagination-btn ${currentPage == 1 ? 'disabled' : ''}">Previous</a>
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Name</th>
+                                                            <th>Phone</th>
+                                                            <th>Email</th>
+                                                            <th>Address</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:choose>
+                                                            <c:when test="${empty listCus || listCus.size() == 0}">
+                                                                <tr>
+                                                                    <td colspan="6" class="text-center text-danger">
+                                                                        Không tìm thấy khách hàng
+                                                                    </td>
+                                                                </tr>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <c:forEach items="${listCus}" var="lc">
+                                                                    <tr>
+                                                                        <td>${lc.id}</td>
+                                                                        <td>${lc.name}</td>
+                                                                        <td>${lc.phone}</td>
+                                                                        <td>${lc.email}</td>
+                                                                        <td>${lc.address}</td>
+                                                                        <td>
+                                                                            <div class="action-buttons">
+                                                                                <form action="updatecustomer" method="get" style="display: inline;">
+                                                                                    <input type="hidden" name="action" value="update">
+                                                                                    <input type="hidden" name="id" value="${lc.id}">
+                                                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                                                </form>  
+                                                                                <form action="bancustomer" method="get" style="display: inline;" onsubmit="return confirm('Are you sure you want to ban this customer?');">
+                                                                                    <input type="hidden" name="action" value="ban">
+                                                                                    <input type="hidden" name="banId" value="${lc.id}">
+                                                                                    <button type="submit" class="btn btn-ban">Ban</button>
+                                                                                </form>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </c:forEach>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
-                                                            <c:set var="startPage" value="${currentPage - 2}"/>
-                                                            <c:set var="endPage" value="${currentPage + 2}"/>
+                                            <!-- Pagination (only show if there are customers) -->
+                                            <c:if test="${not empty listCus && listCus.size() > 0}">
+                                                <div class="pagination" style="margin-top: 20px; text-align: center;">
+                                                    <c:if test="${totalPages > 1}">
+                                                        <a href="customer?action=view&page=1" class="pagination-btn ${currentPage == 1 ? 'disabled' : ''}"><<</a>
+                                                        <a href="customer?action=view&page=${currentPage - 1}" class="pagination-btn ${currentPage == 1 ? 'disabled' : ''}">Previous</a>
 
+                                                        <c:set var="startPage" value="${currentPage - 2}"/>
+                                                        <c:set var="endPage" value="${currentPage + 2}"/>
+
+                                                        <c:if test="${startPage < 1}">
+                                                            <c:set var="startPage" value="1"/>
+                                                            <c:set var="endPage" value="${endPage + (1 - startPage)}"/>
+                                                        </c:if>
+                                                        <c:if test="${endPage > totalPages}">
+                                                            <c:set var="endPage" value="${totalPages}"/>
+                                                            <c:set var="startPage" value="${startPage - (endPage - totalPages)}"/>
                                                             <c:if test="${startPage < 1}">
                                                                 <c:set var="startPage" value="1"/>
-                                                                <c:set var="endPage" value="${endPage + (1 - startPage)}"/>
                                                             </c:if>
-                                                            <c:if test="${endPage > totalPages}">
-                                                                <c:set var="endPage" value="${totalPages}"/>
-                                                                <c:set var="startPage" value="${startPage - (endPage - totalPages)}"/>
-                                                                <c:if test="${startPage < 1}">
-                                                                    <c:set var="startPage" value="1"/>
-                                                                </c:if>
-                                                            </c:if>
-
-                                                            <c:forEach begin="${startPage}" end="${endPage}" var="i">
-                                                                <c:choose>
-                                                                    <c:when test="${currentPage == i}">
-                                                                        <span class="pagination-btn active">${i}</span>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <a href="customer?action=view&page=${i}" class="pagination-btn">${i}</a>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </c:forEach>
-
-                                                            <a href="customer?action=view&page=${currentPage + 1}" class="pagination-btn ${currentPage == totalPages ? 'disabled' : ''}">Next</a>
-                                                            <a href="customer?action=view&page=${totalPages}" class="pagination-btn ${currentPage == totalPages ? 'disabled' : ''}">>></a>
                                                         </c:if>
-                                                    </div>
-                                                </c:if>
-                                            </div>
+
+                                                        <c:forEach begin="${startPage}" end="${endPage}" var="i">
+                                                            <c:choose>
+                                                                <c:when test="${currentPage == i}">
+                                                                    <span class="pagination-btn active">${i}</span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <a href="customer?action=view&page=${i}" class="pagination-btn">${i}</a>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:forEach>
+
+                                                        <a href="customer?action=view&page=${currentPage + 1}" class="pagination-btn ${currentPage == totalPages ? 'disabled' : ''}">Next</a>
+                                                        <a href="customer?action=view&page=${totalPages}" class="pagination-btn ${currentPage == totalPages ? 'disabled' : ''}">>></a>
+                                                    </c:if>
+                                                </div>
+                                            </c:if>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                  
                     </section>
                 </div>
 
@@ -286,11 +287,13 @@
                 <script src="${pageContext.request.contextPath}/js/demo.js"></script>
                 <script>
                     <c:if test="${not empty succMess}">
-                                                                                        toastr.success('${succMess}');
+                                                                                    toastr.success('${succMess}');
 
                     </c:if>
                     <% session.removeAttribute("succMess"); %>
 
                 </script>
-                </body>
-                </html>
+            </div>
+        </div>
+    </body>
+</html>
