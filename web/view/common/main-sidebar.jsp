@@ -12,7 +12,6 @@
         <ul class="sidebar-menu">
 
             <li class="menu-header">Menu</li>
-
             <c:if test="${sessionScope.acc.roletype == 2}">
                 <li>
                     <a href="${pageContext.request.contextPath}/manageaccount"><i class="ion ion-person"></i><span>Account Management</span></a>
@@ -32,7 +31,7 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/invoiceStatistic"><i class="ion ion-person-stalker"></i><span>Invoice Statistic</span></a>
                 </li>
-                
+
                 <li>
                     <a href="${pageContext.request.contextPath}/debtor.do"><i class="ion ion-clipboard"></i><span>Debt Management</span></a>
                 </li>
@@ -65,16 +64,6 @@
                     </ul>
                 </li>
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        document.querySelector(".menu-dropdown > a").addEventListener("click", function (e) {
-                            e.preventDefault();
-                            let submenu = this.nextElementSibling;
-                            submenu.style.display = submenu.style.display === "none" ? "block" : "none";
-                        });
-                    });
-                </script>
-
             </c:if>
             <c:if test="${sessionScope.acc.roletype == 3}">
                 <li>
@@ -95,3 +84,12 @@
         </ul>
     </aside>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector(".menu-dropdown > a").addEventListener("click", function (e) {
+            e.preventDefault();
+            let submenu = this.nextElementSibling;
+            submenu.style.display = submenu.style.display === "none" ? "block" : "none";
+        });
+    });
+</script>
