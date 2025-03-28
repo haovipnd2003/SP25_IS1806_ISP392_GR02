@@ -1,13 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Top Products Analysis</title>
+        <title>Phân Tích Sản Phẩm Bán Chạy</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
@@ -80,7 +81,7 @@
                     <div class="main-content">
                         <section class="section">
                             <h1 class="section-header">
-                                <div>Top Products Analysis</div>
+                                <div>Phân Tích Sản Phẩm Bán Chạy</div>
                                 <button id="sidebarToggle" class="btn btn-primary d-md-none">
                                     <i class="fa fa-bars"></i>
                                 </button>
@@ -90,15 +91,15 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Top Selling Products</h5>
+                                            <h5>Sản Phẩm Bán Chạy Nhất</h5>
                                         </div>
                                         <div class="card-body">
                                             <ul class="nav nav-tabs" id="productTabs" role="tablist">
                                                 <li class="nav-item">
-                                                    <a class="nav-link active" id="weekly-tab" data-toggle="tab" href="#weekly" role="tab">This Week</a>
+                                                    <a class="nav-link active" id="weekly-tab" data-toggle="tab" href="#weekly" role="tab">Tuần Này</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab">This Month</a>
+                                                    <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab">Tháng Này</a>
                                                 </li>
                                             </ul>
                                             <div class="tab-content" id="productTabsContent">
@@ -111,87 +112,88 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th>#</th>
-                                                                    <th>Product</th>
-                                                                    <th>Quantity (${unit})</th>
-                                                                <th>Revenue</th>
-                                                                <th>% of Total Sales</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <c:set var="totalWeeklySales" value="0" />
-                                                            <c:forEach var="product" items="${topWeeklyProducts}">
-                                                                <c:set var="totalWeeklySales" value="${totalWeeklySales + product.salesCount}" />
-                                                            </c:forEach>
+                                                                    <th>Sản Phẩm</th>
+                                                                    <th>Số Lượng (${unit})</th>
+                                                                    <th>Doanh Thu</th>
+                                                                    <th>% Tổng Doanh Số</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <c:set var="totalWeeklySales" value="0" />
+                                                                <c:forEach var="product" items="${topWeeklyProducts}">
+                                                                    <c:set var="totalWeeklySales" value="${totalWeeklySales + product.salesCount}" />
+                                                                </c:forEach>
 
-                                                            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
-                                                                <tr>
-                                                                    <td>${status.index + 1}</td>
-                                                                    <td>${product.productName}</td>
-                                                                    <td>${product.salesCount} ${unit}</td>
-                                                                    <td><fmt:formatNumber value="${product.totalRevenue}" type="currency"/></td>
-                                                                    <td>
-                                                                        <c:if test="${totalWeeklySales > 0}">
-                                                                            <fmt:formatNumber value="${(product.salesCount / totalWeeklySales) * 100}" type="number" maxFractionDigits="1"/>%
-                                                                        </c:if>
-                                                                        <c:if test="${totalWeeklySales == 0}">
-                                                                            0%
-                                                                        </c:if>
-                                                                    </td>
-                                                                </tr>
-                                                            </c:forEach>
-                                                            <c:if test="${empty topWeeklyProducts}">
-                                                                <tr>
-                                                                    <td colspan="5" class="text-center">No data available</td>
-                                                                </tr>
-                                                            </c:if>
-                                                        </tbody>
-                                                    </table>
+                                                                <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
+                                                                    <tr>
+                                                                        <td>${status.index + 1}</td>
+                                                                        <td>${product.productName}</td>
+                                                                        <td>${product.salesCount} ${unit}</td>
+                                                                        <td><fmt:formatNumber value="${product.totalRevenue}" type="currency"/></td>
+                                                                        <td>
+                                                                            <c:if test="${totalWeeklySales > 0}">
+                                                                                <fmt:formatNumber value="${(product.salesCount / totalWeeklySales) * 100}" type="number" maxFractionDigits="1"/>%
+                                                                            </c:if>
+                                                                            <c:if test="${totalWeeklySales == 0}">
+                                                                                0%
+                                                                            </c:if>
+                                                                        </td>
+                                                                    </tr>
+                                                                </c:forEach>
+                                                                <c:if test="${empty topWeeklyProducts}">
+                                                                    <tr>
+                                                                        <td colspan="5" class="text-center">Không có dữ liệu</td>
+                                                                    </tr>
+                                                                </c:if>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="monthly" role="tabpanel">
-                                                <div class="chart-container">
-                                                    <canvas id="monthlyProductsChart"></canvas>
-                                                </div>
-                                                <div class="table-responsive">
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>#</th>
-                                                                <th>Product</th>
-                                                                <th>Quantity (${unit})</th>
-                                                                <th>Revenue</th>
-                                                                <th>% of Total Sales</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <c:set var="totalMonthlySales" value="0" />
-                                                            <c:forEach var="product" items="${topMonthlyProducts}">
-                                                                <c:set var="totalMonthlySales" value="${totalMonthlySales + product.salesCount}" />
-                                                            </c:forEach>
+                                                <div class="tab-pane fade" id="monthly" role="tabpanel">
+                                                    <div class="chart-container">
+                                                        <canvas id="monthlyProductsChart"></canvas>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Sản Phẩm</th>
+                                                                    <th>Số Lượng (${unit})</th>
+                                                                    <th>Doanh Thu</th>
+                                                                    <th>% Tổng Doanh Số</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <c:set var="totalMonthlySales" value="0" />
+                                                                <c:forEach var="product" items="${topMonthlyProducts}">
+                                                                    <c:set var="totalMonthlySales" value="${totalMonthlySales + product.salesCount}" />
+                                                                </c:forEach>
 
-                                                            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
-                                                                <tr>
-                                                                    <td>${status.index + 1}</td>
-                                                                    <td>${product.productName}</td>
-                                                                    <td>${product.salesCount} ${unit}</td>
-                                                                    <td><fmt:formatNumber value="${product.totalRevenue}" type="currency"/></td>
-                                                                    <td>
-                                                                        <c:if test="${totalMonthlySales > 0}">
-                                                                            <fmt:formatNumber value="${(product.salesCount / totalMonthlySales) * 100}" type="number" maxFractionDigits="1"/>%
-                                                                        </c:if>
-                                                                        <c:if test="${totalMonthlySales == 0}">
-                                                                            0%
-                                                                        </c:if>
-                                                                    </td>
-                                                                </tr>
-                                                            </c:forEach>
-                                                            <c:if test="${empty topMonthlyProducts}">
-                                                                <tr>
-                                                                    <td colspan="5" class="text-center">No data available</td>
-                                                                </tr>
-                                                            </c:if>
-                                                        </tbody>
-                                                    </table>
+                                                                <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
+                                                                    <tr>
+                                                                        <td>${status.index + 1}</td>
+                                                                        <td>${product.productName}</td>
+                                                                        <td>${product.salesCount} ${unit}</td>
+                                                                        <td><fmt:formatNumber value="${product.totalRevenue}" type="currency"/></td>
+                                                                        <td>
+                                                                            <c:if test="${totalMonthlySales > 0}">
+                                                                                <fmt:formatNumber value="${(product.salesCount / totalMonthlySales) * 100}" type="number" maxFractionDigits="1"/>%
+                                                                            </c:if>
+                                                                            <c:if test="${totalMonthlySales == 0}">
+                                                                                0%
+                                                                            </c:if>
+                                                                        </td>
+                                                                    </tr>
+                                                                </c:forEach>
+                                                                <c:if test="${empty topMonthlyProducts}">
+                                                                    <tr>
+                                                                        <td colspan="5" class="text-center">Không có dữ liệu</td>
+                                                                    </tr>
+                                                                </c:if>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -204,15 +206,15 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Sales Distribution</h5>
+                                        <h5>Phân Phối Doanh Số</h5>
                                     </div>
                                     <div class="card-body">
                                         <ul class="nav nav-tabs" id="distributionTabs" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" id="weekly-dist-tab" data-toggle="tab" href="#weekly-dist" role="tab">This Week</a>
+                                                <a class="nav-link active" id="weekly-dist-tab" data-toggle="tab" href="#weekly-dist" role="tab">Tuần Này</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" id="monthly-dist-tab" data-toggle="tab" href="#monthly-dist" role="tab">This Month</a>
+                                                <a class="nav-link" id="monthly-dist-tab" data-toggle="tab" href="#monthly-dist" role="tab">Tháng Này</a>
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="distributionTabsContent">
@@ -232,31 +234,33 @@
                             </div>
                         </div>
 
-<!--                        <div class="row">
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Custom Date Range Analysis</h5>
+                                        <h5>Đề Xuất Sản Phẩm</h5>
                                     </div>
                                     <div class="card-body">
-                                        <form action="${pageContext.request.contextPath}/statistics" method="post" class="row g-3">
-                                            <input type="hidden" name="action" value="custom-date-range">
-                                            <div class="col-md-4">
-                                                <label for="startDate" class="form-label">Start Date</label>
-                                                <input type="date" class="form-control" id="startDate" name="startDate" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="endDate" class="form-label">End Date</label>
-                                                <input type="date" class="form-control" id="endDate" name="endDate" required>
-                                            </div>
-                                            <div class="col-md-4 d-flex align-items-end">
-                                                <button type="submit" class="btn btn-primary">Analyze</button>
-                                            </div>
-                                        </form>
+                                        <div class="alert alert-success">
+                                            <h6><i class="fa fa-lightbulb"></i> Dựa trên dữ liệu bán hàng, chúng tôi đề xuất:</h6>
+                                            <ul>
+                                                <c:if test="${not empty topWeeklyProducts}">
+                                                    <li>Tập trung quảng cáo vào sản phẩm bán chạy nhất: <strong>${topWeeklyProducts[0].productName}</strong></li>
+                                                    <li>Đảm bảo kho hàng đầy đủ cho các sản phẩm bán chạy</li>
+                                                    <c:if test="${fn:length(topWeeklyProducts) > 3}">
+                                                        <li>Xem xét các gói khuyến mãi kết hợp giữa sản phẩm bán chạy và sản phẩm bán chậm</li>
+                                                    </c:if>
+                                                </c:if>
+                                                <c:if test="${empty topWeeklyProducts}">
+                                                    <li>Bắt đầu theo dõi dữ liệu bán hàng để nhận đề xuất cụ thể</li>
+                                                    <li>Xem xét các chiến lược tiếp thị để tăng doanh số bán hàng</li>
+                                                </c:if>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                     </section>
                 </div>
             </div>
@@ -279,217 +283,217 @@
         <script>
             // Toggle sidebar
             document.getElementById('sidebarToggle').addEventListener('click', function () {
-            const sidebar = document.querySelector('.main-sidebar');
-            const mainContent = document.querySelector('.main-content');
-            if (sidebar.style.display === 'none') {
-            sidebar.style.display = 'block';
-            mainContent.style.marginLeft = '250px';
-            } else {
-            sidebar.style.display = 'none';
-            mainContent.style.marginLeft = '0';
-            }
+                const sidebar = document.querySelector('.main-sidebar');
+                const mainContent = document.querySelector('.main-content');
+                if (sidebar.style.display === 'none') {
+                    sidebar.style.display = 'block';
+                    mainContent.style.marginLeft = '250px';
+                } else {
+                    sidebar.style.display = 'none';
+                    mainContent.style.marginLeft = '0';
+                }
             });
             // Weekly Products Chart
             const weeklyProductsCtx = document.getElementById('weeklyProductsChart').getContext('2d');
             const weeklyProductsChart = new Chart(weeklyProductsCtx, {
-            type: 'bar',
-                    data: {
+                type: 'bar',
+                data: {
                     labels: [
-            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
-                    '${product.productName}'${!status.last ? ',' : ''}
-            </c:forEach>
+                        <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
+                            '${product.productName}'${!status.last ? ',' : ''}
+                        </c:forEach>
                     ],
-                            datasets: [{
-                            label: 'Quantity (${unit})',
-                                    data: [
-            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
-                ${product.salesCount}${!status.last ? ',' : ''}
-            </c:forEach>
-                                    ],
-                                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                                    borderColor: 'rgba(54, 162, 235, 1)',
-                                    borderWidth: 1
-                            }]
-                    },
-                    options: {
+                    datasets: [{
+                        label: 'Số Lượng (${unit})',
+                        data: [
+                            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
+                                ${product.salesCount}${!status.last ? ',' : ''}
+                            </c:forEach>
+                        ],
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
                     responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                            y: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
                             beginAtZero: true
-                            }
-                            },
-                            plugins: {
-                            title: {
+                        }
+                    },
+                    plugins: {
+                        title: {
                             display: true,
-                                    text: 'Top Products This Week',
-                                    font: {
-                                    size: 16
-                                    }
+                            text: 'Sản Phẩm Bán Chạy Tuần Này',
+                            font: {
+                                size: 16
                             }
-                            }
+                        }
                     }
+                }
             });
             // Monthly Products Chart
             const monthlyProductsCtx = document.getElementById('monthlyProductsChart').getContext('2d');
             const monthlyProductsChart = new Chart(monthlyProductsCtx, {
-            type: 'bar',
-                    data: {
+                type: 'bar',
+                data: {
                     labels: [
-            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
-                    '${product.productName}'${!status.last ? ',' : ''}
-            </c:forEach>
+                        <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
+                            '${product.productName}'${!status.last ? ',' : ''}
+                        </c:forEach>
                     ],
-                            datasets: [{
-                            label: 'Quantity (${unit})',
-                                    data: [
-            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
-                ${product.salesCount}${!status.last ? ',' : ''}
-            </c:forEach>
-                                    ],
-                                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1
-                            }]
-                    },
-                    options: {
+                    datasets: [{
+                        label: 'Số Lượng (${unit})',
+                        data: [
+                            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
+                                ${product.salesCount}${!status.last ? ',' : ''}
+                            </c:forEach>
+                        ],
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
                     responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                            y: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
                             beginAtZero: true
-                            }
-                            },
-                            plugins: {
-                            title: {
+                        }
+                    },
+                    plugins: {
+                        title: {
                             display: true,
-                                    text: 'Top Products This Month',
-                                    font: {
-                                    size: 16
-                                    }
+                            text: 'Sản Phẩm Bán Chạy Tháng Này',
+                            font: {
+                                size: 16
                             }
-                            }
+                        }
                     }
+                }
             });
             // Weekly Distribution Chart
             const weeklyDistributionCtx = document.getElementById('weeklyDistributionChart').getContext('2d');
             const weeklyDistributionChart = new Chart(weeklyDistributionCtx, {
-            type: 'pie',
-                    data: {
+                type: 'pie',
+                data: {
                     labels: [
-            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
-                    '${product.productName}'${!status.last ? ',' : ''}
-            </c:forEach>
+                        <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
+                            '${product.productName}'${!status.last ? ',' : ''}
+                        </c:forEach>
                     ],
-                            datasets: [{
-                            data: [
-            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
-                ${product.salesCount}${!status.last ? ',' : ''}
-            </c:forEach>
-                            ],
-                                    backgroundColor: [
-                                            'rgba(255, 99, 132, 0.6)',
-                                            'rgba(54, 162, 235, 0.6)',
-                                            'rgba(255, 206, 86, 0.6)',
-                                            'rgba(75, 192, 192, 0.6)',
-                                            'rgba(153, 102, 255, 0.6)',
-                                            'rgba(255, 159, 64, 0.6)',
-                                            'rgba(199, 199, 199, 0.6)',
-                                            'rgba(83, 102, 255, 0.6)',
-                                            'rgba(40, 159, 64, 0.6)',
-                                            'rgba(210, 199, 199, 0.6)'
-                                    ],
-                                    borderColor: [
-                                            'rgba(255, 99, 132, 1)',
-                                            'rgba(54, 162, 235, 1)',
-                                            'rgba(255, 206, 86, 1)',
-                                            'rgba(75, 192, 192, 1)',
-                                            'rgba(153, 102, 255, 1)',
-                                            'rgba(255, 159, 64, 1)',
-                                            'rgba(199, 199, 199, 1)',
-                                            'rgba(83, 102, 255, 1)',
-                                            'rgba(40, 159, 64, 1)',
-                                            'rgba(210, 199, 199, 1)'
-                                    ],
-                                    borderWidth: 1
-                            }]
-                    },
-                    options: {
+                    datasets: [{
+                        data: [
+                            <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
+                                ${product.salesCount}${!status.last ? ',' : ''}
+                            </c:forEach>
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(199, 199, 199, 0.6)',
+                            'rgba(83, 102, 255, 0.6)',
+                            'rgba(40, 159, 64, 0.6)',
+                            'rgba(210, 199, 199, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(199, 199, 199, 1)',
+                            'rgba(83, 102, 255, 1)',
+                            'rgba(40, 159, 64, 1)',
+                            'rgba(210, 199, 199, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
                     responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                            title: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
                             display: true,
-                                    text: 'Weekly Sales Distribution',
-                                    font: {
-                                    size: 16
-                                    }
-                            },
-                                    legend: {
-                                    position: 'right'
-                                    }
+                            text: 'Phân Phối Doanh Số Tuần Này',
+                            font: {
+                                size: 16
                             }
+                        },
+                        legend: {
+                            position: 'right'
+                        }
                     }
+                }
             });
             // Monthly Distribution Chart
             const monthlyDistributionCtx = document.getElementById('monthlyDistributionChart').getContext('2d');
             const monthlyDistributionChart = new Chart(monthlyDistributionCtx, {
-            type: 'pie',
-                    data: {
+                type: 'pie',
+                data: {
                     labels: [
-            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
-                    '${product.productName}'${!status.last ? ',' : ''}
-            </c:forEach>
+                        <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
+                            '${product.productName}'${!status.last ? ',' : ''}
+                        </c:forEach>
                     ],
-                            datasets: [{
-                            data: [
-            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
-                ${product.salesCount}${!status.last ? ',' : ''}
-            </c:forEach>
-                            ],
-                                    backgroundColor: [
-                                            'rgba(255, 99, 132, 0.6)',
-                                            'rgba(54, 162, 235, 0.6)',
-                                            'rgba(255, 206, 86, 0.6)',
-                                            'rgba(75, 192, 192, 0.6)',
-                                            'rgba(153, 102, 255, 0.6)',
-                                            'rgba(255, 159, 64, 0.6)',
-                                            'rgba(199, 199, 199, 0.6)',
-                                            'rgba(83, 102, 255, 0.6)',
-                                            'rgba(40, 159, 64, 0.6)',
-                                            'rgba(210, 199, 199, 0.6)'
-                                    ],
-                                    borderColor: [
-                                            'rgba(255, 99, 132, 1)',
-                                            'rgba(54, 162, 235, 1)',
-                                            'rgba(255, 206, 86, 1)',
-                                            'rgba(75, 192, 192, 1)',
-                                            'rgba(153, 102, 255, 1)',
-                                            'rgba(255, 159, 64, 1)',
-                                            'rgba(199, 199, 199, 1)',
-                                            'rgba(83, 102, 255, 1)',
-                                            'rgba(40, 159, 64, 1)',
-                                            'rgba(210, 199, 199, 1)'
-                                    ],
-                                    borderWidth: 1
-                            }]
-                    },
-                    options: {
+                    datasets: [{
+                        data: [
+                            <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
+                                ${product.salesCount}${!status.last ? ',' : ''}
+                            </c:forEach>
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(199, 199, 199, 0.6)',
+                            'rgba(83, 102, 255, 0.6)',
+                            'rgba(40, 159, 64, 0.6)',
+                            'rgba(210, 199, 199, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(199, 199, 199, 1)',
+                            'rgba(83, 102, 255, 1)',
+                            'rgba(40, 159, 64, 1)',
+                            'rgba(210, 199, 199, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
                     responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                            title: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
                             display: true,
-                                    text: 'Monthly Sales Distribution',
-                                    font: {
-                                    size: 16
-                                    }
-                            },
-                                    legend: {
-                                    position: 'right'
-                                    }
+                            text: 'Phân Phối Doanh Số Tháng Này',
+                            font: {
+                                size: 16
                             }
+                        },
+                        legend: {
+                            position: 'right'
+                        }
                     }
+                }
             });
         </script>
     </body>

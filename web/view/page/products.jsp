@@ -132,9 +132,9 @@
                                     <div class="form-group mr-2">
                                         <label for="isActive" class="mr-2">Trạng Thái:</label>
                                         <select name="isActive" id="isActive" class="form-control">
-                                            <option value="default" ${param.isActive == null ? 'selected' : ''}>Tất Cả</option>
-                                            <option value="true" ${param.isActive == 'true' ? 'selected' : ''}>Đang Hoạt Động</option>
-                                            <option value="false" ${param.isActive == 'false' ? 'selected' : ''}>Không Hoạt Động</option>
+                                            <option value="default" ${isActiveParam == null || isActiveParam == 'default' ? 'selected' : ''}>Tất Cả</option>
+                                            <option value="true" ${isActiveParam == 'true' ? 'selected' : ''}>Đang Hoạt Động</option>
+                                            <option value="false" ${isActiveParam == 'false' ? 'selected' : ''}>Không Hoạt Động</option>
                                         </select>
                                     </div>
                                     <div class="form-group mr-2">
@@ -222,7 +222,7 @@
                             <ul class="pagination justify-content-center">
                                 <c:if test="${currentPage > 1}">
                                     <li class="page-item">
-                                        <a class="page-link" href="products?page=${currentPage - 1}" aria-label="Previous">
+                                        <a class="page-link" href="products?page=${currentPage - 1}${filterMode ? '&action=filter&isActive='.concat(isActiveParam).concat('&zoneId=').concat(selectedZoneId != null ? selectedZoneId : 'default') : ''}" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
@@ -230,13 +230,13 @@
 
                                 <c:forEach begin="1" end="${totalPages}" var="i">
                                     <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                        <a class="page-link" href="products?page=${i}">${i}</a>
+                                        <a class="page-link" href="products?page=${i}${filterMode ? '&action=filter&isActive='.concat(isActiveParam).concat('&zoneId=').concat(selectedZoneId != null ? selectedZoneId : 'default') : ''}">${i}</a>
                                     </li>
                                 </c:forEach>
 
                                 <c:if test="${currentPage < totalPages}">
                                     <li class="page-item">
-                                        <a class="page-link" href="products?page=${currentPage + 1}" aria-label="Next">
+                                        <a class="page-link" href="products?page=${currentPage + 1}${filterMode ? '&action=filter&isActive='.concat(isActiveParam).concat('&zoneId=').concat(selectedZoneId != null ? selectedZoneId : 'default') : ''}" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>

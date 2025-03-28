@@ -7,7 +7,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User Trend Statistics Dashboard</title>
+        <title>Bảng Điều Khiển Thống Kê Xu Hướng Người Dùng</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
@@ -187,13 +187,13 @@
                     </button>
                     <section class="section">
                         <div class="section-header">
-                            <h1>User Trend Statistics Dashboard</h1>
+                            <h1>Bảng Điều Khiển Thống Kê Xu Hướng Người Dùng</h1>
                             <div class="btn-group ml-auto">
                                 <a href="${pageContext.request.contextPath}/statistics?action=top-products" class="btn btn-outline-primary">
-                                    Top Products
+                                    Sản Phẩm Bán Chạy
                                 </a>
                                 <a href="${pageContext.request.contextPath}/statistics?action=time-analysis" class="btn btn-outline-primary">
-                                    Time Analysis
+                                    Phân Tích Thời Gian
                                 </a>
                             </div>
                         </div>
@@ -202,35 +202,35 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="stat-card">
-                                    <h5>Top Product This Week</h5>
+                                    <h5>Sản Phẩm Hàng Đầu Tuần Này</h5>
                                     <c:choose>
                                         <c:when test="${not empty topWeeklyProducts}">
                                             <div class="value">${topWeeklyProducts[0].productName}</div>
                                             <div class="text-muted">${topWeeklyProducts[0].salesCount} ${unit}</div>
                                         </c:when>
                                         <c:otherwise>
-                                            <div class="value">No data</div>
+                                            <div class="value">Không có dữ liệu</div>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="stat-card">
-                                    <h5>Top Product This Month</h5>
+                                    <h5>Sản Phẩm Hàng Đầu Tháng Này</h5>
                                     <c:choose>
                                         <c:when test="${not empty topMonthlyProducts}">
                                             <div class="value">${topMonthlyProducts[0].productName}</div>
                                             <div class="text-muted">${topMonthlyProducts[0].salesCount} ${unit}</div>
                                         </c:when>
                                         <c:otherwise>
-                                            <div class="value">No data</div>
+                                            <div class="value">Không có dữ liệu</div>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="stat-card">
-                                    <h5>Busiest Day</h5>
+                                    <h5>Ngày Bận Rộn Nhất</h5>
                                     <c:choose>
                                         <c:when test="${not empty dailyStats}">
                                             <c:set var="busiestDay" value="${dailyStats[0]}" />
@@ -240,10 +240,10 @@
                                                 </c:if>
                                             </c:forEach>
                                             <div class="value">${busiestDay.timeSlot}</div>
-                                            <div class="text-muted">${busiestDay.orderCount} orders</div>
+                                            <div class="text-muted">${busiestDay.orderCount} đơn hàng</div>
                                         </c:when>
                                         <c:otherwise>
-                                            <div class="value">No data</div>
+                                            <div class="value">Không có dữ liệu</div>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -255,15 +255,15 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Top Selling Products</h5>
+                                        <h5>Sản Phẩm Bán Chạy Nhất</h5>
                                     </div>
                                     <div class="card-body">
                                         <ul class="nav nav-tabs" id="productTabs" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" id="weekly-tab" data-toggle="tab" href="#weekly" role="tab">This Week</a>
+                                                <a class="nav-link active" id="weekly-tab" data-toggle="tab" href="#weekly" role="tab">Tuần Này</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab">This Month</a>
+                                                <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab">Tháng Này</a>
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="productTabsContent">
@@ -275,9 +275,9 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th>Product</th>
-                                                                <th>Quantity (${unit})</th>
-                                                                <th>Revenue</th>
+                                                                <th>Sản Phẩm</th>
+                                                                <th>Số Lượng (${unit})</th>
+                                                                <th>Doanh Thu</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -290,7 +290,7 @@
                                                             </c:forEach>
                                                             <c:if test="${empty topWeeklyProducts}">
                                                                 <tr>
-                                                                    <td colspan="3" class="text-center">No data available</td>
+                                                                    <td colspan="3" class="text-center">Không có dữ liệu</td>
                                                                 </tr>
                                                             </c:if>
                                                         </tbody>
@@ -305,9 +305,9 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th>Product</th>
-                                                                <th>Quantity (${unit})</th>
-                                                                <th>Revenue</th>
+                                                                <th>Sản Phẩm</th>
+                                                                <th>Số Lượng (${unit})</th>
+                                                                <th>Doanh Thu</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -320,7 +320,7 @@
                                                             </c:forEach>
                                                             <c:if test="${empty topMonthlyProducts}">
                                                                 <tr>
-                                                                    <td colspan="3" class="text-center">No data available</td>
+                                                                    <td colspan="3" class="text-center">Không có dữ liệu</td>
                                                                 </tr>
                                                             </c:if>
                                                         </tbody>
@@ -336,12 +336,12 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Order Time Analysis</h5>
+                                        <h5>Phân Tích Thời Gian Đặt Hàng</h5>
                                     </div>
                                     <div class="card-body">
                                         <ul class="nav nav-tabs" id="timeTabs" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" id="daily-tab" data-toggle="tab" href="#daily" role="tab">By Day</a>
+                                                <a class="nav-link active" id="daily-tab" data-toggle="tab" href="#daily" role="tab">Theo Ngày</a>
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="timeTabsContent">
@@ -361,7 +361,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Trending Products</h5>
+                                        <h5>Sản Phẩm Xu Hướng</h5>
                                     </div>
                                     <div class="card-body">
                                         <c:forEach var="product" items="${trendingProducts}">
@@ -374,11 +374,11 @@
                                             </div>
                                         </c:forEach>
                                         <c:if test="${empty trendingProducts}">
-                                            <div class="text-center">No trending products data available</div>
+                                            <div class="text-center">Không có dữ liệu sản phẩm xu hướng</div>
                                         </c:if>
                                         <div class="text-center mt-3">
                                             <a href="${pageContext.request.contextPath}/statistics?action=trends" class="btn btn-outline-primary btn-sm">
-                                                View All Trends
+                                                Xem Tất Cả Xu Hướng
                                             </a>
                                         </div>
                                     </div>
@@ -430,7 +430,7 @@
                         </c:forEach>
                     ],
                     datasets: [{
-                        label: 'Quantity (${unit})',
+                        label: 'Số Lượng (${unit})',
                         data: [
                             <c:forEach var="product" items="${topWeeklyProducts}" varStatus="status">
                                 ${product.salesCount}${!status.last ? ',' : ''}
@@ -463,7 +463,7 @@
                         </c:forEach>
                     ],
                     datasets: [{
-                        label: 'Quantity (${unit})',
+                        label: 'Số Lượng (${unit})',
                         data: [
                             <c:forEach var="product" items="${topMonthlyProducts}" varStatus="status">
                                 ${product.salesCount}${!status.last ? ',' : ''}
@@ -496,7 +496,7 @@
                         </c:forEach>
                     ],
                     datasets: [{
-                        label: 'Orders',
+                        label: 'Đơn Hàng',
                         data: [
                             <c:forEach var="day" items="${dailyStats}" varStatus="status">
                                 ${day.orderCount}${!status.last ? ',' : ''}

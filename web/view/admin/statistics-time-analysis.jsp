@@ -7,7 +7,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Time Analysis</title>
+        <title>Phân Tích Thời Gian</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
@@ -121,7 +121,7 @@
                     <div class="main-content">
                         <section class="section">
                             <h1 class="section-header">
-                                <div>Time Analysis</div>
+                                <div>Phân Tích Thời Gian</div>
                                 <button id="sidebarToggle" class="btn btn-primary d-md-none">
                                     <i class="fa fa-bars"></i>
                                 </button>
@@ -131,7 +131,7 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Orders by Day of Week</h5>
+                                            <h5>Đơn Hàng Theo Ngày Trong Tuần</h5>
                                         </div>
                                         <div class="card-body">
                                             <div class="chart-container">
@@ -141,10 +141,10 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th>Day</th>
-                                                            <th>Order Count</th>
-                                                            <th>Revenue</th>
-                                                            <th>% of Total Orders</th>
+                                                            <th>Ngày</th>
+                                                            <th>Số Đơn Hàng</th>
+                                                            <th>Doanh Thu</th>
+                                                            <th>% Tổng Đơn Hàng</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -170,7 +170,7 @@
                                                     </c:forEach>
                                                     <c:if test="${empty dailyStats}">
                                                         <tr>
-                                                            <td colspan="4" class="text-center">No data available</td>
+                                                            <td colspan="4" class="text-center">Không có dữ liệu</td>
                                                         </tr>
                                                     </c:if>
                                                 </tbody>
@@ -185,7 +185,7 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Orders by Month</h5>
+                                        <h5>Đơn Hàng Theo Tháng</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="chart-container">
@@ -195,10 +195,10 @@
                                             <table class="table table-striped">
                                                 <thead>
                                                     <tr>
-                                                        <th>Month</th>
-                                                        <th>Order Count</th>
-                                                        <th>Revenue</th>
-                                                        <th>% of Total Orders</th>
+                                                        <th>Tháng</th>
+                                                        <th>Số Đơn Hàng</th>
+                                                        <th>Doanh Thu</th>
+                                                        <th>% Tổng Đơn Hàng</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -224,7 +224,7 @@
                                                     </c:forEach>
                                                     <c:if test="${empty monthlyStats}">
                                                         <tr>
-                                                            <td colspan="4" class="text-center">No data available</td>
+                                                            <td colspan="4" class="text-center">Không có dữ liệu</td>
                                                         </tr>
                                                     </c:if>
                                                 </tbody>
@@ -239,27 +239,27 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Staffing Recommendations</h5>
+                                        <h5>Đề Xuất Nhân Sự</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="alert alert-info">
-                                            <h6><i class="fa fa-info-circle"></i> Based on your order patterns, we recommend:</h6>
+                                            <h6><i class="fa fa-info-circle"></i> Dựa trên mẫu đơn hàng của bạn, chúng tôi đề xuất:</h6>
                                             <ul>
-                                                <li>Increase staffing during peak hours (
+                                                <li>Tăng nhân sự trong giờ cao điểm (
                                                     <c:forEach var="hour" items="${hourlyStats}" varStatus="status">
                                                         <c:if test="${hour.orderCount >= 5}">
                                                             ${hour.timeSlot}${!status.last ? ', ' : ''}
                                                         </c:if>
                                                     </c:forEach>
                                                     )</li>
-                                                <li>Consider additional staff on busy days (
+                                                <li>Cân nhắc bổ sung nhân viên vào những ngày bận rộn (
                                                     <c:forEach var="day" items="${dailyStats}" varStatus="status">
                                                         <c:if test="${day.orderCount >= 10}">
                                                             ${day.timeSlot}${!status.last ? ', ' : ''}
                                                         </c:if>
                                                     </c:forEach>
                                                     )</li>
-                                                <li>Prepare inventory before peak times to ensure smooth operations</li>
+                                                <li>Chuẩn bị hàng tồn kho trước thời gian cao điểm để đảm bảo hoạt động trơn tru</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -309,7 +309,7 @@
             </c:forEach>
                     ],
                             datasets: [{
-                            label: 'Orders',
+                            label: 'Đơn Hàng',
                                     data: [
             <c:forEach var="day" items="${dailyStats}" varStatus="status">
                 ${day.orderCount}${!status.last ? ',' : ''}
@@ -341,7 +341,7 @@
             </c:forEach>
                     ],
                             datasets: [{
-                            label: 'Orders',
+                            label: 'Đơn Hàng',
                                     data: [
             <c:forEach var="month" items="${monthlyStats}" varStatus="status">
                 ${month.orderCount}${!status.last ? ',' : ''}

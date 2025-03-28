@@ -133,14 +133,14 @@ public class ProductsControl extends HttpServlet {
             throws ServletException, IOException {
         Boolean isActive = null;
         Integer selectedZoneId = null;
+        String isActiveParam = request.getParameter("isActive");
+        String zoneIdParam = request.getParameter("zoneId");
 
         // Lấy tham số lọc với kiểm tra null và giá trị mặc định
-        String isActiveParam = request.getParameter("isActive");
         if (isActiveParam != null && !isActiveParam.equals("default")) {
             isActive = Boolean.parseBoolean(isActiveParam);
         }
 
-        String zoneIdParam = request.getParameter("zoneId");
         if (zoneIdParam != null && !zoneIdParam.equals("default")) {
             try {
                 selectedZoneId = Integer.parseInt(zoneIdParam);
@@ -149,14 +149,48 @@ public class ProductsControl extends HttpServlet {
             }
         }
 
+        // Lấy thông tin người dùng
+        User user = (User) request.getSession().getAttribute("acc");
+        if (user != null) {
+            request.setAttribute("roletype", user.getRoletype().toString()); 
+        } else {
+            request.setAttribute("roletype", null);
+        }
+
+        // Xử lý phân trang
+        int page = 1;
+        int pageSize = 10;
+        if (request.getParameter("page") != null) {
+            try {
+                page = Integer.parseInt(request.getParameter("page"));
+            } catch (NumberFormatException e) {
+                // Giữ giá trị mặc định
+            }
+        }
+
         // Gọi DAO để lọc
         List<Product> productList = productDAO.filterProductsByActiveAndZone(isActive, zoneIdParam);
         List<Zone> zones = zoneDAO.getActiveZones();
+        
+        // Tính toán phân trang (nếu cần)
+        int totalProducts = productList.size();
+        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+        
+        // Giới hạn danh sách sản phẩm theo trang hiện tại
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, productList.size());
+        if (startIndex < productList.size()) {
+            productList = productList.subList(startIndex, endIndex);
+        }
 
         // Set các attribute cho JSP
         request.setAttribute("productList", productList);
         request.setAttribute("zones", zones);
-        request.setAttribute("selectedZoneId", selectedZoneId); // Gửi ID đã chuyển đổi
+        request.setAttribute("selectedZoneId", selectedZoneId);
+        request.setAttribute("isActiveParam", isActiveParam);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("filterMode", true);
         request.getRequestDispatcher("view/page/products.jsp").forward(request, response);
     }
 

@@ -7,7 +7,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Trending Products</title>
+        <title>Sản Phẩm Xu Hướng</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
@@ -110,7 +110,7 @@
                     <div class="main-content">
                         <section class="section">
                             <h1 class="section-header">
-                                <div>Trending Products</div>
+                                <div>Sản Phẩm Xu Hướng</div>
                                 <button id="sidebarToggle" class="btn btn-primary d-md-none">
                                     <i class="fa fa-bars"></i>
                                 </button>
@@ -120,84 +120,85 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Weekly Trending Products</h5>
+                                            <h5>Sản Phẩm Xu Hướng Tuần Này</h5>
                                         </div>
                                         <div class="card-body">
                                             <div class="alert alert-info">
-                                                <i class="fa fa-info-circle"></i> This analysis shows products with significant growth in sales (measured in ${unit}) compared to the previous week. Use this information to identify emerging trends and adjust your inventory accordingly.
-                                        </div>
+                                                <i class="fa fa-info-circle"></i> Phân tích này hiển thị các sản phẩm có sự tăng trưởng đáng kể về doanh số (đo bằng ${unit}) so với tuần trước. Sử dụng thông tin này để xác định xu hướng mới nổi và điều chỉnh hàng tồn kho của bạn phù hợp.
+                                            </div>
 
-                                        <div class="chart-container">
-                                            <canvas id="trendingChart"></canvas>
-                                        </div>
+                                            <div class="chart-container">
+                                                <canvas id="trendingChart"></canvas>
+                                            </div>
 
-                                        <div class="row">
-                                            <c:forEach var="product" items="${trendingProducts}">
-                                                <div class="col-md-6">
-                                                    <div class="trend-card">
-                                                        <div class="product-name">${product.productName}</div>
-                                                        <div class="sales-count">
-                                                            <i class="fa fa-shopping-cart"></i> ${product.salesCount} ${unit} sold this week
-                                                        </div>
-                                                        <div class="growth ${product.totalRevenue >= 0 ? 'growth-positive' : 'growth-negative'}">
-                                                            <c:if test="${product.totalRevenue >= 0}">
-                                                                <i class="fa fa-arrow-up"></i>
-                                                            </c:if>
-                                                            <c:if test="${product.totalRevenue < 0}">
-                                                                <i class="fa fa-arrow-down"></i>
-                                                            </c:if>
-                                                            <fmt:formatNumber value="${Math.abs(product.totalRevenue)}" type="number" maxFractionDigits="1"/>% 
-                                                            <c:if test="${product.totalRevenue >= 0}">growth</c:if>
-                                                            <c:if test="${product.totalRevenue < 0}">decline</c:if>
-                                                                from last week
+                                            <div class="row">
+                                                <c:forEach var="product" items="${trendingProducts}">
+                                                    <div class="col-md-6">
+                                                        <div class="trend-card">
+                                                            <div class="product-name">${product.productName}</div>
+                                                            <div class="sales-count">
+                                                                <i class="fa fa-shopping-cart"></i> ${product.salesCount} ${unit} đã bán tuần này
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                            </c:forEach>
-                                            <c:if test="${empty trendingProducts}">
-                                                <div class="col-md-12">
-                                                    <div class="text-center p-5">
-                                                        <i class="fa fa-chart-line fa-3x text-muted mb-3"></i>
-                                                        <p>No trending data available yet. This could be because there aren't enough orders to establish trends.</p>
-                                                    </div>
-                                                </div>
-                                            </c:if>
-                                        </div>
-
-                                        <div class="table-responsive mt-4">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Product</th>
-                                                        <th>Quantity (${unit})</th>
-                                                        <th>Growth Rate</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach var="product" items="${trendingProducts}" varStatus="status">
-                                                        <tr>
-                                                            <td>${status.index + 1}</td>
-                                                            <td>${product.productName}</td>
-                                                            <td>${product.salesCount}</td>
-                                                            <td class="${product.totalRevenue >= 0 ? 'trend-up' : 'trend-down'}">
+                                                            <div class="growth ${product.totalRevenue >= 0 ? 'growth-positive' : 'growth-negative'}">
                                                                 <c:if test="${product.totalRevenue >= 0}">
                                                                     <i class="fa fa-arrow-up"></i>
                                                                 </c:if>
                                                                 <c:if test="${product.totalRevenue < 0}">
                                                                     <i class="fa fa-arrow-down"></i>
                                                                 </c:if>
-                                                                <fmt:formatNumber value="${Math.abs(product.totalRevenue)}" type="number" maxFractionDigits="1"/>%
-                                                            </td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                    <c:if test="${empty trendingProducts}">
+                                                                <fmt:formatNumber value="${Math.abs(product.totalRevenue)}" type="number" maxFractionDigits="1"/>% 
+                                                                <c:if test="${product.totalRevenue >= 0}">tăng trưởng</c:if>
+                                                                <c:if test="${product.totalRevenue < 0}">giảm</c:if>
+                                                                so với tuần trước
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </c:forEach>
+                                                <c:if test="${empty trendingProducts}">
+                                                    <div class="col-md-12">
+                                                        <div class="text-center p-5">
+                                                            <i class="fa fa-chart-line fa-3x text-muted mb-3"></i>
+                                                            <p>Chưa có dữ liệu xu hướng. Điều này có thể là do chưa có đủ đơn hàng để thiết lập xu hướng.</p>
+                                                        </div>
+                                                    </div>
+                                                </c:if>
+                                            </div>
+
+                                            <div class="table-responsive mt-4">
+                                                <table class="table table-striped">
+                                                    <thead>
                                                         <tr>
-                                                            <td colspan="4" class="text-center">No data available</td>
+                                                            <th>#</th>
+                                                            <th>Sản Phẩm</th>
+                                                            <th>Số Lượng (${unit})</th>
+                                                            <th>Tỷ Lệ Tăng Trưởng</th>
                                                         </tr>
-                                                    </c:if>
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach var="product" items="${trendingProducts}" varStatus="status">
+                                                            <tr>
+                                                                <td>${status.index + 1}</td>
+                                                                <td>${product.productName}</td>
+                                                                <td>${product.salesCount}</td>
+                                                                <td class="${product.totalRevenue >= 0 ? 'trend-up' : 'trend-down'}">
+                                                                    <c:if test="${product.totalRevenue >= 0}">
+                                                                        <i class="fa fa-arrow-up"></i>
+                                                                    </c:if>
+                                                                    <c:if test="${product.totalRevenue < 0}">
+                                                                        <i class="fa fa-arrow-down"></i>
+                                                                    </c:if>
+                                                                    <fmt:formatNumber value="${Math.abs(product.totalRevenue)}" type="number" maxFractionDigits="1"/>%
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                        <c:if test="${empty trendingProducts}">
+                                                            <tr>
+                                                                <td colspan="4" class="text-center">Không có dữ liệu</td>
+                                                            </tr>
+                                                        </c:if>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -208,30 +209,30 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Inventory Recommendations</h5>
+                                        <h5>Đề Xuất Hàng Tồn Kho</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="alert alert-success">
-                                            <h6><i class="fa fa-lightbulb"></i> Based on trending products, we recommend:</h6>
+                                            <h6><i class="fa fa-lightbulb"></i> Dựa trên sản phẩm xu hướng, chúng tôi đề xuất:</h6>
                                             <ul>
                                                 <c:if test="${not empty trendingProducts}">
                                                     <c:forEach var="product" items="${trendingProducts}" begin="0" end="2">
                                                         <c:if test="${product.totalRevenue > 20}">
-                                                            <li>Increase inventory for <strong>${product.productName}</strong> (growing at ${product.totalRevenue}%) - Current sales: ${product.salesCount} ${unit}</li>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                        <c:forEach var="product" items="${trendingProducts}">
-                                                            <c:if test="${product.totalRevenue < -20}">
-                                                            <li>Consider reducing inventory for <strong>${product.productName}</strong> (declining at ${Math.abs(product.totalRevenue)}%) - Current sales: ${product.salesCount} ${unit}</li>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    <li>Monitor these trends weekly to adjust inventory levels</li>
-                                                    </c:if>
-                                                    <c:if test="${empty trendingProducts}">
-                                                    <li>Start tracking sales consistently to build trend data</li>
-                                                    <li>Maintain balanced inventory levels across product categories</li>
-                                                    <li>Consider seasonal factors when planning inventory</li>
-                                                    </c:if>
+                                                            <li>Tăng hàng tồn kho cho <strong>${product.productName}</strong> (tăng trưởng ${product.totalRevenue}%) - Doanh số hiện tại: ${product.salesCount} ${unit}</li>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                    <c:forEach var="product" items="${trendingProducts}">
+                                                        <c:if test="${product.totalRevenue < -20}">
+                                                            <li>Cân nhắc giảm hàng tồn kho cho <strong>${product.productName}</strong> (giảm ${Math.abs(product.totalRevenue)}%) - Doanh số hiện tại: ${product.salesCount} ${unit}</li>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                    <li>Theo dõi các xu hướng này hàng tuần để điều chỉnh mức hàng tồn kho</li>
+                                                </c:if>
+                                                <c:if test="${empty trendingProducts}">
+                                                    <li>Bắt đầu theo dõi doanh số bán hàng một cách nhất quán để xây dựng dữ liệu xu hướng</li>
+                                                    <li>Duy trì mức hàng tồn kho cân đối trên các danh mục sản phẩm</li>
+                                                    <li>Xem xét các yếu tố theo mùa khi lập kế hoạch hàng tồn kho</li>
+                                                </c:if>
                                             </ul>
                                         </div>
                                     </div>
@@ -281,7 +282,7 @@
             </c:forEach>
                     ],
                             datasets: [{
-                            label: 'Growth Rate (%)',
+                            label: 'Tỷ Lệ Tăng Trưởng (%)',
                                     data: [
             <c:forEach var="product" items="${trendingProducts}" varStatus="status">
                 ${product.totalRevenue}${!status.last ? ',' : ''}
@@ -308,20 +309,20 @@
                             beginAtZero: true,
                                     title: {
                                     display: true,
-                                            text: 'Growth Rate (%)'
+                                            text: 'Tỷ Lệ Tăng Trưởng (%)'
                                     }
                             },
                                     x: {
                                     title: {
                                     display: true,
-                                            text: 'Products'
+                                            text: 'Sản Phẩm'
                                     }
                                     }
                             },
                             plugins: {
                             title: {
                             display: true,
-                                    text: 'Weekly Growth Rate by Product',
+                                    text: 'Tỷ Lệ Tăng Trưởng Hàng Tuần Theo Sản Phẩm',
                                     font: {
                                     size: 16
                                     }
