@@ -211,13 +211,13 @@
                                                             <a href="zoneControl?action=edit&id=${zone.id}" class="btn btn-primary btn-sm">
                                                                 <i class="fas fa-edit"></i> Edit
                                                             </a>
-                                                            <form action="zoneControl" method="post" style="display: inline;" onsubmit="return deleteZone(event)">
+<!--                                                            <form action="zoneControl" method="post" style="display: inline;" onsubmit="return deleteZone(event)">
                                                                 <input type="hidden" name="action" value="delete">
                                                                 <input type="hidden" name="id" value="${zone.id}">
                                                                 <button type="submit" class="btn btn-danger btn-sm">
                                                                     <i class="fas fa-trash"></i>
                                                                 </button>
-                                                            </form>
+                                                            </form>-->
                                                         </c:if>
                                                     </div>
                                                 </td>

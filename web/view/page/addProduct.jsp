@@ -117,7 +117,7 @@
 
                     <div class="card">
                         <div class="card-header bg-primary text-white">
-                            <h3 class="card-title mb-0">Add New Product</h3>
+                            <h3 class="card-title mb-0">Thêm Sản Phẩm Mới</h3>
                         </div>
                         <div class="card-body">
                             <form action="products" method="post" onsubmit="return validateForm()">
@@ -126,7 +126,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="name" class="form-label">Product Name <span class="text-danger">*</span></label>
+                                            <label for="name" class="form-label">Tên Sản Phẩm <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control ${not empty nameError ? 'is-invalid' : ''}" 
                                                    id="name" name="name" value="${not empty param.name ? param.name : productName}" required>
                                             <c:if test="${not empty nameError}">
@@ -135,7 +135,7 @@
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label for="price" class="form-label">Price (VNĐ) <span class="text-danger">*</span></label>
+                                            <label for="price" class="form-label">Giá (VNĐ) <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control ${not empty priceError ? 'is-invalid' : ''}" 
                                                    id="price" name="price" step="1000" min="0" value="${not empty param.price ? param.price : productPrice}" required>
                                             <c:if test="${not empty priceError}">
@@ -144,36 +144,36 @@
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label for="quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
+                                            <label for="quantity" class="form-label">Số Lượng <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control" 
                                                    id="quantity" name="quantity" value="0" readonly>
-                                            <small class="form-text text-muted">Initial quantity is set to 0 by default</small>
+                                            <small class="form-text text-muted">Số lượng ban đầu được đặt là 0 theo mặc định</small>
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label for="describe" class="form-label">Description</label>
+                                            <label for="describe" class="form-label">Mô Tả</label>
                                             <textarea class="form-control" id="describe" name="describe" 
-                                                      rows="4" placeholder="Enter product description">${not empty param.describe ? param.describe : productDescribe}</textarea>
+                                                      rows="4" placeholder="Nhập mô tả sản phẩm">${not empty param.describe ? param.describe : productDescribe}</textarea>
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label for="packaging" class="form-label">Packaging Options</label>
+                                            <label for="packaging" class="form-label">Tùy Chọn Đóng Gói</label>
                                             <input type="text" class="form-control" id="packaging" name="packaging" 
-                                                   placeholder="e.g., 10kg, 50kg, 100kg" value="${not empty param.packaging ? param.packaging : productPackaging}">
-                                            <small class="form-text text-muted">Enter packaging sizes separated by commas</small>
+                                                   placeholder="Ví dụ: 10kg, 50kg, 100kg" value="${not empty param.packaging ? param.packaging : productPackaging}">
+                                            <small class="form-text text-muted">Nhập kích thước đóng gói, phân cách bằng dấu phẩy</small>
                                         </div>
                                     </div>
                                     
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="image" class="form-label">Image URL</label>
+                                            <label for="image" class="form-label">URL Hình Ảnh</label>
                                             <input type="text" class="form-control" id="image" name="image" 
-                                                   placeholder="Enter image URL or leave blank for default" value="${param.image}">
-                                            <small class="form-text text-muted">Optional: URL to product image</small>
+                                                   placeholder="Nhập URL hình ảnh hoặc để trống để sử dụng mặc định" value="${param.image}">
+                                            <small class="form-text text-muted">Tùy chọn: URL đến hình ảnh sản phẩm</small>
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label class="form-label">Zones <span class="text-danger">*</span></label>
+                                            <label class="form-label">Khu Vực <span class="text-danger">*</span></label>
                                             <c:if test="${not empty zoneError}">
                                                 <div class="text-danger mb-2">${zoneError}</div>
                                             </c:if>
@@ -183,7 +183,7 @@
                                             </div>
                                             
                                             <button type="button" class="btn btn-outline-primary" id="selectZonesBtn">
-                                                <i class="fas fa-map-marker-alt me-1"></i> Chọn Zones
+                                                <i class="fas fa-map-marker-alt me-1"></i> Chọn Khu Vực
                                             </button>
                                             
                                             <!-- Input ẩn để lưu các zone ID đã chọn -->
@@ -191,7 +191,7 @@
                                                 <!-- Các input hidden chứa zone ID sẽ được thêm vào đây -->
                                             </div>
                                             
-                                            <small class="form-text text-muted">Click vào nút để chọn các zone cho sản phẩm.</small>
+                                            <small class="form-text text-muted">Nhấp vào nút để chọn các khu vực cho sản phẩm.</small>
                                         </div>
                                         
                                         <!-- jQuery added before modal -->
@@ -202,7 +202,7 @@
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="zonesModalLabel">Chọn Zones</h5>
+                                                        <h5 class="modal-title" id="zonesModalLabel">Chọn Khu Vực</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
@@ -242,19 +242,19 @@
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label for="isActive" class="form-label">Status <span class="text-danger">*</span></label>
+                                            <label for="isActive" class="form-label">Trạng Thái <span class="text-danger">*</span></label>
                                             <select class="form-select" id="isActive" name="isActive" required>
-                                                <option value="true" ${param.isActive == 'true' ? 'selected' : ''}>Active</option>
-                                                <option value="false" ${param.isActive == 'false' ? 'selected' : ''}>Inactive</option>
+                                                <option value="true" ${param.isActive == 'true' ? 'selected' : ''}>Hoạt Động</option>
+                                                <option value="false" ${param.isActive == 'false' ? 'selected' : ''}>Không Hoạt Động</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="d-flex justify-content-center mt-4">
-                                    <a href="products" class="btn btn-secondary me-2">Cancel</a>
+                                    <a href="products" class="btn btn-secondary me-2">Hủy</a>
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-plus-circle me-2"></i>Add Product
+                                        <i class="fas fa-plus-circle me-2"></i>Thêm Sản Phẩm
                                     </button>
                                 </div>
                             </form>

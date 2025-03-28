@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Update Product</title>
+        <title>Cập Nhật Sản Phẩm</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
@@ -26,14 +26,14 @@
                             <i class="fas fa-bars"></i>
                         </button>
                         <div class="container mt-5">
-                            <h2>Update Product</h2>
-                            <form action="products" method="post">
+                            <h2>Cập Nhật Sản Phẩm</h2>
+                            <form action="products" method="post" onsubmit="return validateForm()">
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="id" value="${product.id}">
                                 <input type="hidden" name="zoneId" value="${param.zoneId}" />
 
                             <div class="form-group">
-                                <label for="name">Name:</label>
+                                <label for="name">Tên Sản Phẩm:</label>
                                 <input type="text" class="form-control" id="name" name="name" value="${fn:escapeXml(not empty param.name ? param.name : product.name)}">
                                 <c:if test="${not empty nameError}">
                                     <small class="text-danger">${nameError}</small>
@@ -41,19 +41,19 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="describe">Description:</label>
+                                <label for="describe">Mô Tả:</label>
                                 <textarea class="form-control" id="describe" name="describe" rows="3">${fn:escapeXml(product.describe)}</textarea>
                             </div>
 
                             <div class="form-group">
-                                <label for="packaging">Packaging Options:</label>
+                                <label for="packaging">Tùy Chọn Đóng Gói:</label>
                                 <input type="text" class="form-control" id="packaging" name="packaging" 
-                                       value="${product.packaging}" placeholder="e.g., 10kg, 50kg, 100kg">
-                                <small class="form-text text-muted">Enter packaging sizes separated by commas</small>
+                                       value="${product.packaging}" placeholder="Ví dụ: 10kg, 50kg, 100kg">
+                                <small class="form-text text-muted">Nhập kích thước đóng gói, phân cách bằng dấu phẩy</small>
                             </div>
 
                             <div class="form-group">
-                                <label for="price">Price:</label>
+                                <label for="price">Giá:</label>
                                 <input type="number" class="form-control" id="price" name="price" 
                                        value="${not empty param.price ? param.price : product.price}" step="0.01">
                                 <c:if test="${not empty priceError}">
@@ -62,7 +62,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="quantity">Quantity:</label>
+                                <label for="quantity">Số Lượng:</label>
                                 <input type="number" class="form-control" id="quantity" name="quantity" 
                                        value="${not empty param.quantity ? param.quantity : product.quantity}" step="1" min="1">
                                 <c:if test="${not empty quantityError}">
@@ -71,7 +71,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Zones <span class="text-danger">*</span></label>
+                                <label class="form-label">Khu Vực <span class="text-danger">*</span></label>
                                 <c:if test="${not empty zoneError}">
                                     <div class="text-danger mb-2">${zoneError}</div>
                                 </c:if>
@@ -81,7 +81,7 @@
                                 </div>
                                 
                                 <button type="button" class="btn btn-outline-primary" id="selectZonesBtn">
-                                    <i class="fas fa-map-marker-alt me-1"></i> Chọn Zones
+                                    <i class="fas fa-map-marker-alt me-1"></i> Chọn Khu Vực
                                 </button>
                                 
                                 <!-- Input ẩn để lưu các zone ID đã chọn -->
@@ -89,7 +89,7 @@
                                     <!-- Các input hidden chứa zone ID sẽ được thêm vào đây -->
                                 </div>
                                 
-                                <small class="form-text text-muted">Click vào nút để chọn các zone cho sản phẩm.</small>
+                                <small class="form-text text-muted">Nhấp vào nút để chọn các khu vực cho sản phẩm.</small>
                             </div>
                             
                             <!-- jQuery added before modal -->
@@ -100,13 +100,13 @@
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="zonesModalLabel">Chọn Zones</h5>
+                                            <h5 class="modal-title" id="zonesModalLabel">Chọn Khu Vực</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="mb-3">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="zoneSearchInput" placeholder="Tìm kiếm zone...">
+                                                    <input type="text" class="form-control" id="zoneSearchInput" placeholder="Tìm kiếm khu vực...">
                                                     <button class="btn btn-outline-secondary" type="button" id="searchZoneBtn">
                                                         <i class="fas fa-search"></i>
                                                     </button>
@@ -117,7 +117,7 @@
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" id="selectAllZones">
                                                     <label class="form-check-label fw-bold" for="selectAllZones">
-                                                        Chọn tất cả zones
+                                                        Chọn tất cả khu vực
                                                     </label>
                                                 </div>
                                             </div>
@@ -127,7 +127,7 @@
                                                     <div class="spinner-border text-primary" role="status">
                                                         <span class="visually-hidden">Loading...</span>
                                                     </div>
-                                                    <p class="mt-2">Đang tải danh sách zones...</p>
+                                                    <p class="mt-2">Đang tải danh sách khu vực...</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,21 +140,21 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="isActive">Active:</label>
+                                <label for="isActive">Trạng Thái:</label>
                                 <select class="form-control" id="isActive" name="isActive" required>
-                                    <option value="true" ${product.active ? 'selected' : ''}>Yes</option>
-                                    <option value="false" ${!product.active ? 'selected' : ''}>No</option>
+                                    <option value="true" ${product.active ? 'selected' : ''}>Hoạt Động</option>
+                                    <option value="false" ${!product.active ? 'selected' : ''}>Không Hoạt Động</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label for="image">Image URL:</label>
-                                <input type="text" class="form-control" id="image" name="image" value="${product.image}" placeholder="Enter image URL">
+                                <label for="image">URL Hình Ảnh:</label>
+                                <input type="text" class="form-control" id="image" name="image" value="${product.image}" placeholder="Nhập URL hình ảnh">
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Update Product</button>
-                            <a href="products" class="btn btn-secondary">Back to product list</a>
-                            <a href="zoneControl?action=details&id=${param.zoneId}" class="btn btn-info">Back to Zone Details</a>
+                            <button type="submit" class="btn btn-primary">Cập Nhật Sản Phẩm</button>
+                            <a href="products" class="btn btn-secondary">Quay Lại Danh Sách</a>
+                            <a href="zoneControl?action=details&id=${param.zoneId}" class="btn btn-info">Quay Lại Chi Tiết Khu Vực</a>
                         </form>
                     </div>
                 </div>
