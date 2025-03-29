@@ -57,9 +57,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="${pageContext.request.contextPath}/riceproductionstatistics">
-                                <i class="ion ion-ios-nutrition"></i>
-                                <span style="margin-left: 8px;">Production Statistics</span>
+                            <a href="${pageContext.request.contextPath}/purchaseorderstatistics">
+                                <i class="ion ion-archive"></i>
+                                <span style="margin-left: 8px;">Supplier Invoice Statistics</span>
                             </a>
                         </li>
                     </ul>

@@ -1,3 +1,9 @@
+<%-- 
+    Document   : purchaseorderstatistics.jsp
+    Created on : Mar 21, 2025, 2:36:50 PM
+    Author     : Viet Duc
+--%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
@@ -7,15 +13,12 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
 <%
-    List<Revenue> revenueByDate = (List<Revenue>) request.getAttribute("revenueByDate");
-    List<Revenue> revenueByWeek = (List<Revenue>) request.getAttribute("revenueByWeek");
-    List<Revenue> revenueByMonth = (List<Revenue>) request.getAttribute("revenueByMonth");
+    List<Revenue> purchaseByWeek = (List<Revenue>) request.getAttribute("purchaseByWeek");
+    List<Revenue> purchaseByMonth = (List<Revenue>) request.getAttribute("purchaseByMonth");
+    Double totalPurchaseRevenue = (Double) request.getAttribute("totalPurchaseRevenue");
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     String currentDate = dateFormat.format(new Date());
-
-    SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");
-    String currentMonth = monthFormat.format(new Date());
 
     NumberFormat numberFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
     numberFormat.setMinimumFractionDigits(1);
@@ -26,11 +29,11 @@
     <head>
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
-        <title>Revenue Statistics</title>
+        <title>Purchase Order Statistics</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
         <!--<link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/demo.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
@@ -105,44 +108,17 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h2><a href="revenuestatistics" style="text-decoration: none; color: inherit;">Thống kê doanh thu</a></h2>
+                                            <h2><a href="purchaseorderstatistics" style="text-decoration: none; color: inherit;">Thống kê hóa đơn nhập</a></h2>
                                         </div>
                                         <div class="card-body">
                                             <!-- Navigation Tabs -->
                                             <div class="d-flex mb-3">
-                                                <div id="tabDay" class="stats-tab active" onclick="switchTab('day')">Theo ngày</div>
-                                                <div id="tabWeek" class="stats-tab" onclick="switchTab('week')">Theo tuần</div>
+                                                <div id="tabWeek" class="stats-tab active" onclick="switchTab('week')">Theo tuần</div>
                                                 <div id="tabMonth" class="stats-tab" onclick="switchTab('month')">Theo tháng</div>
                                             </div>
 
-                                            <!-- Daily Statistics -->
-                                            <div id="contentDay" class="stats-content active">
-                                                <div class="revenue-summary">
-                                                    <div class="summary-item">
-                                                        <div class="icon text-primary"><i class="fas fa-calendar-day"></i></div>
-                                                        <div class="value"><%= currentDate %></div>
-                                                        <div class="label">Ngày hiện tại</div>
-                                                    </div>
-                                                    <div class="summary-item">
-                                                        <div class="icon text-success">VND</div>
-                                                        <div class="value">
-                                                            <%= numberFormat.format(request.getAttribute("todayRevenue") != null ? (Double)request.getAttribute("todayRevenue") : 0) %>
-                                                        </div>
-                                                        <div class="label">Doanh Thu hôm nay</div>
-                                                    </div>
-                                                    <div class="summary-item">
-                                                        <div class="icon text-warning"><i class="fas fa-chart-line"></i></div>
-                                                        <div class="value"><%= String.format("%.2f", request.getAttribute("dailyGrowth") != null ? (Double)request.getAttribute("dailyGrowth") : 0) %>%</div>
-                                                        <div class="label">So với ngày trước</div>
-                                                    </div>
-                                                </div>
-                                                <div class="chart-container">
-                                                    <canvas id="chartByDate"></canvas>
-                                                </div>
-                                            </div>
-
                                             <!-- Weekly Statistics -->
-                                            <div id="contentWeek" class="stats-content">
+                                            <div id="contentWeek" class="stats-content active">
                                                 <div class="revenue-summary">
                                                     <div class="summary-item">
                                                         <div class="icon text-primary"><i class="fas fa-calendar-week"></i></div>
@@ -155,17 +131,17 @@
                                                     <div class="summary-item">
                                                         <div class="icon text-success">VND</div>
                                                         <div class="value">
-                                                            <% if (revenueByWeek != null && !revenueByWeek.isEmpty()) { %>
-                                                                <%= numberFormat.format(revenueByWeek.get(revenueByWeek.size() - 1).getRevenue()) %>
+                                                            <% if (purchaseByWeek != null && !purchaseByWeek.isEmpty()) { %>
+                                                                <%= numberFormat.format(purchaseByWeek.get(purchaseByWeek.size() - 1).getRevenue()) %>
                                                             <% } else { %>
                                                                 <%= numberFormat.format(0) %>
                                                             <% } %>
                                                         </div>
-                                                        <div class="label">Doanh Thu tuần này</div>
+                                                        <div class="label">Hóa đơn nhập tuần này</div>
                                                     </div>
                                                     <div class="summary-item">
                                                         <div class="icon text-warning"><i class="fas fa-chart-line"></i></div>
-                                                        <div class="value"><%= String.format("%.2f", request.getAttribute("weeklyGrowth") != null ? (Double)request.getAttribute("weeklyGrowth") : 0) %>%</div>
+                                                        <div class="value"><%= String.format("%.2f", request.getAttribute("weeklyPurchaseGrowth") != null ? (Double)request.getAttribute("weeklyPurchaseGrowth") : 0) %>%</div>
                                                         <div class="label">So với tuần trước</div>
                                                     </div>
                                                 </div>
@@ -188,17 +164,17 @@
                                                     <div class="summary-item">
                                                         <div class="icon text-success">VND</div>
                                                         <div class="value">
-                                                            <% if (revenueByMonth != null && !revenueByMonth.isEmpty()) { %>
-                                                                <%= numberFormat.format(revenueByMonth.get(revenueByMonth.size() - 1).getRevenue()) %>
+                                                            <% if (purchaseByMonth != null && !purchaseByMonth.isEmpty()) { %>
+                                                                <%= numberFormat.format(purchaseByMonth.get(purchaseByMonth.size() - 1).getRevenue()) %>
                                                             <% } else { %>
                                                                 <%= numberFormat.format(0) %>
                                                             <% } %>
                                                         </div>
-                                                        <div class="label">Doanh Thu tháng này</div>
+                                                        <div class="label">Hóa đơn nhập tháng này</div>
                                                     </div>
                                                     <div class="summary-item">
                                                         <div class="icon text-warning"><i class="fas fa-chart-line"></i></div>
-                                                        <div class="value"><%= String.format("%.2f", request.getAttribute("monthlyGrowth") != null ? (Double)request.getAttribute("monthlyGrowth") : 0) %>%</div>
+                                                        <div class="value"><%= String.format("%.2f", request.getAttribute("monthlyPurchaseGrowth") != null ? (Double)request.getAttribute("monthlyPurchaseGrowth") : 0) %>%</div>
                                                         <div class="label">So với tháng trước</div>
                                                     </div>
                                                 </div>
@@ -234,71 +210,45 @@
         </script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            // Doanh thu theo ngày
-            const labelsByDate = [
-                <% for (Revenue r : revenueByDate) { %>
-                    "<%= r.getDate() %>",
-                <% } %>
-            ];
-            const dataByDate = [
-                <% for (Revenue r : revenueByDate) { %>
-                    <%= r.getRevenue() %>,
-                <% } %>
-            ];
-
-            // Doanh thu theo tuần
+            // Hóa đơn nhập theo tuần
             const labelsByWeek = [
-                <% for (Revenue r : revenueByWeek) { %>
+                <% for (Revenue r : purchaseByWeek) { %>
                     "Tuần <%= r.getDate() %>",
                 <% } %>
             ];
             const dataByWeek = [
-                <% for (Revenue r : revenueByWeek) { %>
+                <% for (Revenue r : purchaseByWeek) { %>
                     <%= r.getRevenue() %>,
                 <% } %>
             ];
 
-            // Doanh thu theo tháng
+            // Hóa đơn nhập theo tháng
             const labelsByMonth = [
-                <% for (Revenue r : revenueByMonth) { %>
+                <% for (Revenue r : purchaseByMonth) { %>
                     "T <%= r.getDate() %>",
                 <% } %>
             ];
             const dataByMonth = [
-                <% for (Revenue r : revenueByMonth) { %>
+                <% for (Revenue r : purchaseByMonth) { %>
                     <%= r.getRevenue() %>,
                 <% } %>
             ];
 
-            // Hàm vẽ biểu đồ kết hợp đường và cột
-            function drawMixedChart(canvasId, labels, data, labelText) {
-                console.log("Drawing mixed chart with labels:", labels);
-                console.log("Drawing mixed chart with data:", data);
+            // Hàm vẽ biểu đồ cột
+            function drawChart(canvasId, labels, data, labelText) {
+                console.log("Drawing chart with labels:", labels);
+                console.log("Drawing chart with data:", data);
                 return new Chart(document.getElementById(canvasId), {
+                    type: 'bar',
                     data: {
                         labels: labels,
-                        datasets: [
-                            {
-                                type: 'bar', 
-                                label: labelText + ' (Cột)',
-                                data: data,
-                                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1,
-                                yAxisID: 'y', 
-                            },
-                            {
-                                type: 'line', 
-                                label: labelText + ' (Đường)',
-                                data: data,
-                                fill: false,
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                                borderWidth: 2,
-                                tension: 0.1, 
-                                yAxisID: 'y', 
-                            }
-                        ]
+                        datasets: [{
+                            label: labelText,
+                            data: data,
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
                     },
                     options: {
                         responsive: true,
@@ -308,15 +258,12 @@
                                 text: labelText,
                                 font: { size: 16 }
                             },
-                            legend: {
-                                display: true, 
-                                position: 'top',
-                            },
+                            legend: { display: false },
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
                                         return context.raw !== undefined 
-                                            ? context.dataset.label + ': ' + context.raw.toLocaleString('vi-VN') 
+                                            ? context.raw.toLocaleString('vi-VN') 
                                             : 'Không có dữ liệu';
                                     }
                                 }
@@ -330,8 +277,7 @@
                                     callback: function(value) {
                                         return value.toLocaleString('vi-VN');
                                     }
-                                },
-                                position: 'left', 
+                                }
                             },
                             x: {
                                 grid: { display: false },
@@ -342,7 +288,7 @@
                 });
             }
 
-          
+            // Tab switching function
             function switchTab(tab) {
                 document.querySelectorAll('.stats-content').forEach(item => item.classList.remove('active'));
                 document.querySelectorAll('.stats-tab').forEach(item => item.classList.remove('active'));
@@ -350,11 +296,10 @@
                 document.getElementById('content' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
             }
 
-          
+            // Vẽ biểu đồ khi DOM loaded
             document.addEventListener('DOMContentLoaded', function() {
-                drawMixedChart("chartByDate", labelsByDate, dataByDate, "Doanh thu theo ngày");
-                drawMixedChart("chartByWeek", labelsByWeek, dataByWeek, "Doanh thu theo tuần");
-                drawMixedChart("chartByMonth", labelsByMonth, dataByMonth, "Doanh thu theo tháng");
+                drawChart("chartByWeek", labelsByWeek, dataByWeek, "Hóa đơn nhập theo tuần");
+                drawChart("chartByMonth", labelsByMonth, dataByMonth, "Hóa đơn nhập theo tháng");
             });
         </script>
     </body>
