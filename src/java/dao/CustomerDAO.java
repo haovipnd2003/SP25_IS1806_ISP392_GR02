@@ -37,7 +37,7 @@ public class CustomerDAO extends DBContext {
     public ArrayList<Customer> getAllCustomers() {
         ArrayList<Customer> list = new ArrayList<>();
         try {
-            String query = "SELECT * FROM customer WHERE isactive = 1";
+            String query = "SELECT * FROM customer ";
             stm = cnn.prepareStatement(query);
             rs = stm.executeQuery();
             while (rs.next()) {

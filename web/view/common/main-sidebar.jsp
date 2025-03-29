@@ -33,6 +33,9 @@
                 </li>
                 
                 <li>
+
+                    <a href="${pageContext.request.contextPath}/debtor.do"><i class="ion ion-clipboard"></i><span>Quản lý khách hàng</span></a>
+
                     <a href="${pageContext.request.contextPath}/invoiceStatistic"><i class="ion ion-document-text"></i><span>Export Statistics</span></a>
                 </li>
                 
@@ -42,6 +45,7 @@
 
                 <li>
                     <a href="${pageContext.request.contextPath}/debtor.do"><i class="ion ion-clipboard"></i><span>Debt Management</span></a>
+
                 </li>
 
                 <li>
@@ -50,6 +54,15 @@
 
                 <li>
                     <a href="${pageContext.request.contextPath}/schedule"><i class="ion ion-calendar"></i><span>Schedule Management</span></a>
+                </li>
+
+                
+                <li>
+                    <a href="${pageContext.request.contextPath}/fund"><i class="ion ion-clipboard"></i></i><span>Fund Management</span></a>
+                </li>
+                               
+                <li>
+                    <a href="${pageContext.request.contextPath}/CashManagement"><i class="ion ion-clipboard"></i></i><span>Cash Management</span></a>
                 </li>
 
                 <li>
@@ -82,6 +95,7 @@
                         </li>
                     </ul>
                 </li>
+
 
 
             </c:if>

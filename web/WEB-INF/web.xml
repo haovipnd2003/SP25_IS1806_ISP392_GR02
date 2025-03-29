@@ -12,6 +12,7 @@
         <servlet-name>LogoutControl</servlet-name>
         <servlet-class>control.LogoutControl</servlet-class>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
         <url-pattern>/execute</url-pattern>
@@ -36,4 +37,13 @@
         <servlet-name>DebentureServlet</servlet-name>
         <url-pattern>/debenture.do</url-pattern>
     </servlet-mapping>
+<servlet>
+    <servlet-name>CashManagementServlet</servlet-name>
+    <servlet-class>control.CashManagementServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>CashManagementServlet</servlet-name>
+    <url-pattern>/CashManagement</url-pattern>
+</servlet-mapping>
+
 </web-app>

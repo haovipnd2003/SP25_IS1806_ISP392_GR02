@@ -11,7 +11,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
-        <title>Components &rsaquo; Toastr &mdash; Stisla</title>
+        <title>Quản lý phiếu nợ</title>
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
@@ -108,6 +108,84 @@
                 height: 18px;
                 filter: hue-rotate(276deg);
             }
+             /* Table styles for clear columns and rows */
+            .table {
+                width: 100%;
+                border-collapse: collapse; /* Ensure borders collapse for clean lines */
+            }
+
+            .table-grey {
+                background-color: #f5f5f5; /* Light gray header background */
+                font-weight: bold; /* Bold header text */
+            }
+
+            .table th {
+                background-color: #007bff; /* Blue background for header */
+                color: white; /* White text for header */
+                border: 1px solid #dee2e6; /* Light gray borders for cells */
+                padding: 12px; /* Increased padding for better spacing */
+                text-align: left; /* Align text to the left for consistency */
+                vertical-align: middle; /* Center text vertically */
+                font-weight: bold; /* Bold header text */
+            }
+
+            .table td {
+                border: 1px solid #dee2e6; /* Light gray borders for cells */
+                padding: 12px; /* Increased padding for better spacing */
+                text-align: left; /* Align text to the left for consistency */
+                vertical-align: middle; /* Center text vertically */
+            }
+
+            .table th {
+                background-color: #f5f5f5; /* Match header background */
+                color: #333; /* Darker text for headers */
+            }
+
+            .table tr {
+                border-bottom: 1px solid #dee2e6; /* Light gray line between rows */
+            }
+
+            .table tr:last-child {
+                border-bottom: none; /* Remove bottom border for the last row */
+            }
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.page-link:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+
         </style>
     </head>
 
@@ -128,78 +206,103 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h2>Debtor</h2>
+                                            <h2>Quản lý khách hàng</h2>
                                         </div>
                                         <div class="card-body">
                                             <!-- Trigger/Open The Modal -->
                                             <div class="display-flex-al-center justify-space-between">
                                                 <form action="${pageContext.request.contextPath}/debtor.do" method="get">
-                                                    <input id="search-field" type="text" name="keyword" value="${keyword}">
-                                                    <button type="submit">Search</button>
+                    <input id="search-field" type="text" name="keyword" value="${keyword}" style="    font-size: 18px;">
+                                                    <button class="btn btn-info" type="submit">Tìm kiếm</button>
                                                 </form>
-                                                <button id="addBtn" onclick="openModal('debtor')">Add new</button>
+                                                <button class="btn btn-warning" id="addBtn" onclick="openModal('debtor', null, 'khách hàng')">Thêm khách hàng</button>
                                             </div>
-                                            <table class="table-list-content" border="1" cellpadding="5" cellspacing="5"> 
-                                                <tr> 
+                                        
+                                             <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
                                                     <th>ID</th> 
-                                                    <th>Name</th> 
-                                                    <th>Phone</th> 
+                                                    <th>Tên</th> 
+                                                    <th>Điện thoại</th> 
                                                     <th>Email</th> 
-                                                    <th>Address</th>
-                                                    <th>Total debt</th>
-                                                    <th style="width: 60px;"></th>
-                                                    <th style="width: 132px;"></th>
-                                                    <th style="width: 132px;"></th>
-                                                </tr> 
-                                                <c:forEach var="debtor" items="${debtorList}"> 
-                                                    <tr> 
-                                                        <td>${debtor.id}</td> 
-                                                        <td>${debtor.name}</td> 
-                                                        <td>${debtor.phone}</td> 
-                                                        <td>${debtor.email}</td> 
-                                                        <td>${debtor.address}</td> 
-                                                        <td>${debtor.getTotalDebtString()}</td>
-                                                        <td style="width: 60px;">
-                                                            <button onclick="openUpdateDebtorModal('${debtor.id}', '${debtor.name}', '${debtor.phone}', '${debtor.email}', '${debtor.address}', '${debtor.totalDebt}')">
-                                                                Update
-                                                            </button>
-                                                        </td>
-                                                        <td style="width: 132px;">
-                                                            <button onclick="openModal('debenture', '${debtor.id}')">
-                                                                Add a debenture
-                                                            </button>
-                                                        </td>
-                                                        <td style="width: 132px;">
-                                                            <a href="debenture.do?debtorId=${debtor.id}"><button>Debenture detail</button></a>
-                                                        </td>
-                                                    </tr> 
-                                                </c:forEach> 
-                                            </table> 
+                                                    <th>Địa chỉ</th>
+                                                    <th>Tổng nợ</th>
+                                                    <th>Hành động</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:choose>
+                                                                <c:when test="${empty debtorList || debtorList.size() == 0}">
+                                                                    <!-- No customers found, table body remains empty -->
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:forEach items="${debtorList}" var="lc">
+                                                                        <tr>
+                                                                            <td>${lc.id}</td>
+                                                                            <td>${lc.name}</td>
+                                                                            <td>${lc.phone}</td>
+                                                                            <td>${lc.email}</td>
+                                                                            <td>${lc.address}</td>
+                                                                             <td>${lc.getTotalDebtString()}</td>
+                                                                            <td>
+                                                                                <div class="action-buttons">
+                                                                                 <button class="btn btn-primary" 
+                                                                                        onclick="openUpdateDebtorModal('${lc.id}', '${lc.name}', '${lc.phone}', '${lc.email}', '${lc.address}', '${lc.totalDebt}')">
+                                                                                    Cập nhật
+                                                                                </button>
+ 
+                                                                                <button class="btn btn-warning"  onclick="openModal('debenture', '${lc.id}', 'phiếu nợ')">
+                                                                                      Thêm phiếu nợ
+                                                                                 </button>
+                                                                                     <a  href="debenture.do?debtorId=${lc.id}"><button class="btn btn-info" >Chi tiết</button></a> 
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </c:forEach>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+<div class="pagination-container">
+    <ul class="pagination">
+       <c:if test="${currentPage == 1}">
+            <li class="page-item">
+                <a class="page-link disabled" href="debtor.do?keyword=${keyword}&page=1" style="border: none;color: #ccc; pointer-events: none; background-color: #f8f9fa; border-color: #ddd; cursor: not-allowed;"><<</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link disabled" href="debtor.do?keyword=${keyword}&page=${currentPage - 1}" style="border: none;color: #ccc; pointer-events: none; background-color: #f8f9fa; border-color: #ddd; cursor: not-allowed;">Trang trước</a>
+            </li>
+        </c:if>
+        <c:if test="${currentPage > 1}">
+            <li class="page-item">
+                <a class="page-link" href="debtor.do?keyword=${keyword}&page=1"><<</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="debtor.do?keyword=${keyword}&page=${currentPage - 1}">Trang trước</a>
+            </li>
+        </c:if>
 
-                                            <!-- Pagination -->
-                                            <div class="display-flex-al-center" style="justify-content: flex-end;">
-                                                <c:if test="${currentPage != 1}"> 
-                                                    <td><a href="debtor.do?keyword=${keyword}&page=${currentPage - 1}">Previous</a></td> 
-                                                </c:if> 
-                                                <table style="margin: 0 5px;" border="1" cellpadding="5" cellspacing="5"> 
-                                                    <tr> 
-                                                        <c:forEach begin="1" end="${noOfPages}" var="i"> 
-                                                            <c:choose> 
-                                                                <c:when test="${currentPage eq i}"> 
-                                                                    <td>${i}</td> 
-                                                                </c:when> 
-                                                                <c:otherwise> 
-                                                                    <td><a href="debtor.do?keyword=${keyword}&page=${i}">${i}</a></td> 
-                                                                </c:otherwise> 
-                                                            </c:choose> 
-                                                        </c:forEach> 
-                                                    </tr> 
-                                                </table> 
-                                                <c:if test="${currentPage lt noOfPages}"> 
-                                                    <td><a href="debtor.do?keyword=${keyword}&page=${currentPage + 1}">Next</a></td> 
-                                                </c:if> 
-                                            </div>
+        <c:forEach begin="1" end="${noOfPages}" var="i">
+            <li class="page-item ${currentPage eq i ? 'active' : ''}">
+                <a class="page-link" href="debtor.do?keyword=${keyword}&page=${i}">${i}</a>
+            </li>
+        </c:forEach>
 
+        <c:if test="${currentPage lt noOfPages}">
+            <li class="page-item">
+                <a class="page-link" href="debtor.do?keyword=${keyword}&page=${currentPage + 1}">Tiếp</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="debtor.do?keyword=${keyword}&page=${noOfPages}">>></a>
+            </li>
+        </c:if>
+    </ul>
+</div>
+
+
+                                         
                                             <!-- Modal Debtor (Add/Update) -->
                                             <div id="debtor" class="modal">
                                                 <div class="modal-content">
@@ -210,15 +313,15 @@
                                                     <form id="debtorForm" class="form-signin" action="${pageContext.request.contextPath}/debtor.do" method="post">
                                                         <input id="id" style="display: none;" name="id" type="text"/>
                                                         <div class="row display-flex-al-center">
-                                                            <h6>Full name (*)</h6>
+                                                            <h6>Tên đầy đủ</h6>
                                                             <input id="name" name="name" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
-                                                            <h6>Address</h6>
+                                                            <h6>Địa chỉ</h6>
                                                             <input id="address" name="address" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
-                                                            <h6>Phone number</h6>
+                                                            <h6>Điện thoại</h6>
                                                             <input id="phone" name="phone" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
@@ -226,10 +329,10 @@
                                                             <input id="email" name="email" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
-                                                            <h6>Total debt</h6>
+                                                            <h6>Tổng nợ</h6>
                                                             <input id="debt" name="debt" type="text" readonly/>
                                                         </div>
-                                                        <button style="width: 80px; margin-top: 5px;" type="submit">Add</button>
+                                                        <button style="width: 80px; margin-top: 5px;" type="submit">Thêm</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -245,16 +348,16 @@
                                                     <form id="debentureForm" class="form-signin" action="${pageContext.request.contextPath}/debenture.do" method="post">
                                                         <input id="debtor" style="display: none;" name="debtor" type="text"/>
                                                         <div class="row display-flex-al-center">
-                                                            <h6>Note</h6>
+                                                            <h6>Ghi chú</h6>
                                                             <input name="note" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
-                                                            <h6>Type (*)</h6>
+                                                            <h6>Loại phiếu</h6>
                                                             <select name="type" id="type-cbx">
-                                                                <option value="0">Customer takes a loan</option>
-                                                                <option value="1">Customer pays</option>
-                                                                <option value="0">Owe</option>
-                                                                <option value="1">Pay for the customer</option>
+                                                                <option value="0">Khách hàng vay nợ</option>
+                                                                <option value="1">Khách hàng thanh toán</option>
+                                                                <option value="0">Nợ</option>
+                                                                <option value="1">Trả tiền khách hàng</option>
                                                             </select>
 <!--                                                            <div class="display-flex-al-center" style="width: 60%;">
                                                                 <input id="negative" type="radio" name="type" value="0" checked>
@@ -262,14 +365,14 @@
                                                             </div>-->
                                                         </div>
                                                         <div class="row display-flex-al-center">
-                                                            <h6>Amount (*)</h6>
+                                                            <h6>Số tiền</h6>
                                                             <input name="amount" type="text"/>
                                                         </div>
                                                         <div class="row display-flex-al-center">
-                                                            <h6>Created date</h6>
+                                                            <h6>Ngày tạo</h6>
                                                             <input name="created" type="date"/>
                                                         </div>
-                                                        <button style="width: 80px; margin-top: 5px;" type="submit">Submit</button>
+                                                        <button style="width: 80px; margin-top: 5px;" type="submit">Lưu</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -298,9 +401,9 @@
                 $("#" + name + ".modal").hide();
             }
 
-            function openModal(name, debtorIdToAddDebenture) {
-                $("#"+ name +".modal h3").html('Add a ' + name);
-                $("#"+ name +".modal button[type='submit']").html('Add');
+            function openModal(name, debtorIdToAddDebenture, nameVi) {
+                $("#"+ name +".modal h3").html('Thêm ' + nameVi);
+                $("#"+ name +".modal button[type='submit']").html('Thêm');
                 
                 // Reset các ô nhập cho modal Debtor
                 $("#debtor.modal input#id").val("");
@@ -318,8 +421,8 @@
             }
 
             function openUpdateDebtorModal(id, name, phone, email, address, totalDebt) {
-                $("#debtor.modal h3").html('Update a debtor');
-                $("#debtor.modal button[type='submit']").html('Update');
+                $("#debtor.modal h3").html('Cập nhật khách hàng');
+                $("#debtor.modal button[type='submit']").html('Sửa');
                 
                 $("#debtor.modal input#id").val(id);
                 $("#debtor.modal input#name").val(name);
