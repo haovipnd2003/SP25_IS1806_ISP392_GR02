@@ -193,4 +193,108 @@ public class DAO extends DBContext {
         return list;
     }
 
+    // Lấy danh sách tài khoản theo phân trang
+    public List<User> getAccountsByPage(int start, int total) {
+        List<User> list = new ArrayList<>();
+        String query = "SELECT id, name, email, phone, address, roletype, isactive, fullname FROM user ORDER BY id DESC LIMIT ?, ?";
+        try {
+            stm = cnn.prepareStatement(query);
+            stm.setInt(1, start);
+            stm.setInt(2, total);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getString("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                user.setRoletype(rs.getString("roletype"));
+                user.setIsactive(rs.getString("isactive"));
+                user.setFullname(rs.getString("fullname"));
+                list.add(user);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAccountsByPage: " + e.getMessage());
+        }
+        return list;
+    }
+
+    // Đếm tổng số tài khoản
+    public int getTotalAccounts() {
+        String query = "SELECT COUNT(*) FROM user";
+        int count = 0;
+        try {
+            stm = cnn.prepareStatement(query);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("getTotalAccounts: " + e.getMessage());
+        }
+        return count;
+    }
+    // Lấy tổng số tài khoản
+
+    public int countAccounts() {
+        String query = "SELECT COUNT(*) FROM user";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+// Lấy tổng số tài khoản khi tìm kiếm
+    public int countSearchAccounts(String keyword) {
+        String query = "SELECT COUNT(*) FROM user WHERE name LIKE ? OR email LIKE ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, "%" + keyword + "%");
+            ps.setString(2, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+// Tìm kiếm tài khoản có phân trang
+
+    public ArrayList<User> searchUsersPaginated(String keyword, int start, int limit) {
+        ArrayList<User> list = new ArrayList<>();
+        String sql = "SELECT id, name, email, phone, address, roletype, isactive, fullname FROM user "
+                + "WHERE name LIKE ? OR email LIKE ? ORDER BY id DESC LIMIT ?, ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, "%" + keyword + "%");
+            ps.setString(2, "%" + keyword + "%");
+            ps.setInt(3, start);
+            ps.setInt(4, limit);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getString("id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                user.setRoletype(rs.getString("roletype"));
+                user.setIsactive(rs.getString("isactive"));
+                user.setFullname(rs.getString("fullname"));
+                list.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

@@ -192,6 +192,75 @@
                                             </c:forEach>
                                         </tbody>
                                     </table>
+
+                                    <div class="d-flex justify-content-center align-items-center mt-3">
+                                        <c:if test="${totalPages > 1}">
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination">
+                                                    <!-- Nút Đầu -->
+                                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                        <c:choose>
+                                                            <c:when test="${isSearching}">
+                                                                <a class="page-link" href="manageaccount?keyword=${keywordS}&page=1">Đầu</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a class="page-link" href="manageaccount?page=1">Đầu</a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </li>
+                                                    <!-- Nút Sau -->
+                                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                        <c:choose>
+                                                            <c:when test="${isSearching}">
+                                                                <a class="page-link" href="manageaccount?keyword=${keywordS}&page=${currentPage - 1}">Trước</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a class="page-link" href="manageaccount?page=${currentPage - 1}">Trước</a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </li>
+                                                    <!-- Hiển thị số trang -->
+                                                    <c:forEach var="i" begin="1" end="${totalPages}">
+                                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                                            <c:choose>
+                                                                <c:when test="${isSearching}">
+                                                                    <a class="page-link" href="manageaccount?keyword=${keywordS}&page=${i}">${i}</a>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <a class="page-link" href="manageaccount?page=${i}">${i}</a>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </li>
+                                                    </c:forEach>
+                                                    <!-- Nút Sau -->
+                                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                                        <c:choose>
+                                                            <c:when test="${isSearching}">
+                                                                <a class="page-link" href="manageaccount?keyword=${keywordS}&page=${currentPage + 1}">Sau</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a class="page-link" href="manageaccount?page=${currentPage + 1}">Sau</a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </li>
+                                                    <!-- Nút Cuối -->
+                                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                                        <c:choose>
+                                                            <c:when test="${isSearching}">
+                                                                <a class="page-link" href="manageaccount?keyword=${keywordS}&page=${totalPages}">Cuối</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a class="page-link" href="manageaccount?page=${totalPages}">Cuối</a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </c:if>
+                                    </div>
+
+
+
                                 </div>
                             </div>
                         </div>
