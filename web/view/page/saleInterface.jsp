@@ -10,7 +10,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>POS System</title>
+        <title>Hoá Đơn Bán</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Invoice2.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <style>
@@ -146,15 +146,15 @@
                     <table class="product-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Product Packaging</th>
-                                <th>Quantity</th>
-                                <th>Total Mass</th>
-                                <th>Price of 1 Kg</th>
-                                <th>Discount (%)</th>
-                                <th>Amount Money</th>
-                                <th>Action</th>
+                                <th>STT</th>
+                                <th>Tên</th>
+                                <th>Quy Cách</th>
+                                <th>Số Lượng</th>
+                                <th>Tổng Khối Lượng</th>
+                                <th>Giá 1 Cân</th>
+                                <th>Giảm Giá (đ)</th>
+                                <th>Thành Tiền</th>
+                                <th>Hành Động</th>
                             </tr>
                         </thead>
                         <tbody id="productTableBody">
@@ -187,18 +187,18 @@
 
 
                 <div class="customer-info">
-                    <h2>Name customer</h2>
+                    <h2>Tên Khách Hàng</h2>
                     <p class="customer-note">SDT: </p>
-                    <p class="customer-note">Address: </p>
+                    <p class="customer-note">Địa Chỉ: </p>
                 </div>
 
                 <div class="totals">
                     <div class="total-row">
-                        <span>Tổng tiền hàng</span>
+                        <span>Tổng Tiền</span>
                         <span>00.0 vnđ</span>
                     </div>
                     <div class="total-row final">
-                        <span>Khách cần trả</span>
+                        <span>Khách Trả</span>
                         <span><input type="text" name="khachTra" value="" /></span>
                     </div>
                     <div class="total-row" id="debtRow" style="display: none;">
@@ -208,8 +208,8 @@
                 </div>
 
                 <div class="payment-methods">
-                    <button class="payment-method selected" onclick="selectPaymentMethod(this)">Trả tất</button>
-                    <button class="payment-method" onclick="selectPaymentMethod(this)">Trả một phần</button>
+                    <button class="payment-method selected" onclick="selectPaymentMethod(this)">Trả Tất</button>
+                    <button class="payment-method" onclick="selectPaymentMethod(this)">Trả Một Phần</button>
                     <button class="payment-method" onclick="selectPaymentMethod(this)">Nợ</button>
                 </div>
 
@@ -243,7 +243,7 @@
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
             <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
-            Home
+            Trang Chủ
         </a>
 
 
@@ -259,11 +259,11 @@
                 <form id="addCustomerForm">
                     <div class="form-group">
                         <br>
-                        <label for="customerName">Tên Khách Hàng:</label>
+                        <label for="customerName">Tên:</label>
                         <input type="text" id="customerName" name="customerName" required>
                     </div>
                     <div class="form-group">
-                        <label for="customerPhone">Số Điện Thoại:</label>
+                        <label for="customerPhone">SĐT:</label>
                         <input type="text" id="customerPhone" name="customerPhone">
                     </div>
                     <div class="form-actions">
@@ -296,12 +296,12 @@
                         <thead>
                             <tr>
                                 <th>STT</th>
-                                <th>Tên Sản Phẩm</th>
-                                <th>Đóng Gói</th>
+                                <th>Tên</th>
+                                <th>Quy Cách</th>
                                 <th>Số Lượng</th>
-                                <th>Tổng KL</th>
-                                <th>Đơn Giá</th>
-                                <th>Giảm Giá</th>
+                                <th>Tổng Khối Lượng</th>
+                                <th>Giá 1 Cân</th>
+                                <th>Giảm Giá (đ)</th>
                                 <th>Thành Tiền</th>
                             </tr>
                         </thead>
@@ -320,10 +320,10 @@
                             <img src="img/QR_Code_payment.jpg" alt="QR Code" width="200">
                         </div>
                     <div id="paymentSummary">
-                        <p><strong>Tổng tiền hàng:</strong> <span id="confirmTotalAmount">0 VNĐ</span></p>
-                        <p><strong>Phương thức thanh toán:</strong> <span id="confirmPaymentMethod">Trả tất</span></p>
-                        <p><strong>Số tiền thanh toán:</strong> <span id="confirmPaidAmount">0 VNĐ</span></p>
-                        <p id="confirmDebtRow" style="color: #ff6666;"><strong>Nợ còn lại:</strong> <span id="confirmDebtAmount">0 VNĐ</span></p>
+                        <p><strong>Tổng Tiền</strong> <span id="confirmTotalAmount">0 VNĐ</span></p>
+                        <p><strong>Phương Thức</strong> <span id="confirmPaymentMethod">Pay All</span></p>
+                        <p><strong>Khách Trả</strong> <span id="confirmPaidAmount">0 VNĐ</span></p>
+                        <p id="confirmDebtRow" style="color: #ff6666;"><strong>Nợ</strong> <span id="confirmDebtAmount">0 VNĐ</span></p>
                     </div>
                 </div>
 
@@ -432,7 +432,7 @@
                                 newRow.innerHTML = '<td>' + currentId + '</td>' +
                                         '<td>' + name + '</td>' +
                                         '<td>' + createDropdown() + '</td>' +
-                                        '<td><input type="text" class="quantity-input underline-input" oninput="validateQuantity(this); calculateTotal(this);"  onchange=" sendQuantityToServer(this);"/></td>' +
+                                        '<td><input type="text" class="quantity-input underline-input" oninput="validateQuantity(this); calculateTotal(this);"  onchange=" sendQuantityToServer(this);" value="1"/></td>' +
                                         '<td>Total mass in here</td>' +
                                         '<td><span>' + priceFormat + '</span></td>' +
                                         '<td><input type="text" class="discount-input underline-input" oninput="validateDiscount(this); calculateTotal(this);" onchange="sendDiscountToServer(this);"/></td>' +
@@ -697,7 +697,7 @@
                             }
 
                             // Cập nhật giá trị hiển thị
-                            totalMassCell.textContent = totalMass.toFixed(2) + " kg";
+                            totalMassCell.textContent = totalMass + " kg";
                         }
 
 // Đảm bảo tính tổng khối lượng khi số lượng hoặc packaging thay đổi
@@ -749,17 +749,17 @@
                                     inputKhachTra.setAttribute('disabled', 'true'); // Ban đầu không thể sửa
                                 }
 
-                                // Tìm nút "Trả tất"
+                                // Tìm nút "Pay All"
                                 const traAllButton = Array.from(document.querySelectorAll('.payment-method'))
-                                        .find(button => button.textContent.trim() === "Trả tất");
+                                        .find(button => button.textContent.trim() === "Trả Tất");
 
                                 // Kiểm tra xem nút có tồn tại không
                                 if (traAllButton) {
-                                    console.log("Đã tìm thấy nút 'Trả tất', đang chọn mặc định...");
+                                    console.log("Đã tìm thấy nút 'Trả Tất', đang chọn mặc định...");
                                     traAllButton.classList.add('selected'); // Thêm class selected trực tiếp
                                     selectPaymentMethod(traAllButton); // Gọi hàm xử lý
                                 } else {
-                                    console.error("Không tìm thấy nút 'Trả tất'");
+                                    console.error("Không tìm thấy nút 'Trả Tất'");
 
                                     // Debug: Hiển thị tất cả các nút để xem có gì
                                     const allButtons = document.querySelectorAll('.payment-method');
@@ -787,7 +787,7 @@
                             let totalAmount = removeDots(totalAmountElement.textContent); // Chỉ lấy số (bỏ dấu chấm)
                             totalAmount = parseFloat(totalAmount) || 0; // Chuyển thành số
 
-                            if (button.textContent.trim() === "Trả tất") {
+                            if (button.textContent.trim() === "Trả Tất") {
                                 inputKhachTra.value = formatMoney(totalAmount);
                                 inputKhachTra.setAttribute('disabled', 'true');
                                 updateDebt(0); // Khách không nợ gì
@@ -814,7 +814,7 @@
                                         alert("Lỗi khi gửi dữ liệu đến server!");
                                     }
                                 });
-                            } else { // Trả một phần
+                            } else { // Partial Payment
                                 inputKhachTra.value = formatMoney(totalAmount);
                                 ; // Cho phép nhập tay
                                 inputKhachTra.removeAttribute('disabled');
@@ -1085,7 +1085,7 @@ $("#bank-payment").click(function () {
                                     const newRow = document.createElement('tr');
 
                                     // Add each cell
-                                    const cells = [productId, productName, packaging, quantity, totalMass, price, discount + '%', amount];
+                                    const cells = [productId, productName, packaging, quantity, totalMass, price, discount , amount];
                                     cells.forEach(text => {
                                         const td = document.createElement('td');
                                         td.textContent = text;
@@ -1148,9 +1148,38 @@ $("#bank-payment").click(function () {
     // Hiển thị popup xác nhận
     document.getElementById("confirmPopup").style.display = "flex";
 
+
     // Xử lý khi bấm nút "Xác nhận"
     document.getElementById("confirmBtn").onclick = function () {
         document.getElementById("confirmPopup").style.display = "none"; // Ẩn popup và tiếp tục xử lý thanh toán
+
+                            // Tra tat Session
+                            if (isTraTatSelected()) {
+                                const totalAmountElement = document.querySelector('.total-row span:nth-child(2)');
+                                let totalAmount = removeDots(totalAmountElement.textContent); // Chỉ lấy số (bỏ dấu chấm)
+                                totalAmount = parseFloat(totalAmount) || 0; // Chuyển thành số
+                                // Add debug log
+                                console.log("Đây là nút Pay All mặc định, gửi AJAX với totalAmount:", totalAmount);
+                                // Send the data to the servlet
+                                $.ajax({
+                                    url: "/RiceManagement/checkPaymentServlet",
+                                    type: "POST",
+                                    data: {
+                                        amountPaid: totalAmount,
+                                        totalAmount: totalAmount
+                                    },
+                                    success: function (response) {
+                                        console.log("Server response for default Pay All:", response);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error("AJAX Error:", error);
+                                        alert("Lỗi khi gửi dữ liệu đến server!");
+                                    }
+                                });
+                            } else {
+                                console.log("Không phải nút Pay All mặc định, bỏ qua việc gửi AJAX");
+                            }
+
 
         // Tra tat Session
         if (isTraTatSelected()) {

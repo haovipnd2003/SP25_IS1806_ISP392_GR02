@@ -3,7 +3,7 @@
     Created on : Feb 8, 2025, 4:53:21 PM
     Author     : Admin
 --%>
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -31,7 +31,7 @@
 
                     if (distance < 0) {
                         clearInterval(interval);
-                        countdownElement.innerHTML = "OTP expired";
+                        countdownElement.innerHTML = "OTP hết hạn";
                     }
                 }, 1000);
             });
@@ -47,25 +47,25 @@
                         <div class="panel-body">
                             <div class="text-center">
                                 <h3><i class="fa fa-lock fa-4x"></i></h3>
-                                <h2 class="text-center">Enter OTP</h2>
+                                <h2 class="text-center">Nhập OTP</h2>
                                 <div class="panel-body">
                                     <form id="register-form" action="${pageContext.request.contextPath}/VerifyCode" role="form" autocomplete="off" class="form" method="post">
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
-                                                <input id="otp" name="otp" placeholder="Enter OTP" class="form-control" type="text" value="${code}" >
+                                                <input id="otp" name="otp" placeholder="Nhập OTP" class="form-control" type="text" value="${code}" >
                                             </div>
                                             <p style="color: red">${error}</p>
                                         </div>
                                         <div class="form-group">
-                                            <input name="submit_reg" class="btn btn-lg btn-primary btn-block" value="Submit" type="submit">
+                                            <input name="submit_reg" class="btn btn-lg btn-primary btn-block" value="Gửi" type="submit">
                                         </div>
                                         <input type="hidden" class="hide" name="token" id="token" value="">
                                     </form>
                                     <form id="resend-form" action="${pageContext.request.contextPath}/UserVerify" method="post">
                                         <input type="hidden" name="resend_register">
                                         <div class="form-group">
-                                            <input class="btn btn-lg btn-secondary btn-block" value="Resend OTP" type="submit">
+                                            <input class="btn btn-lg btn-secondary btn-block" value="Gửi lại OTP" type="submit">
                                         </div>
                                     </form>
                                     <p id="countdown" class="text-danger"></p>

@@ -9,8 +9,9 @@ package entity;
  * @author binh2
  */
 public class OrderItems {
-    String id,orderId,productId,productName,price1kg,
-            describe,quantityInput,packaging,discount,amountMoney;
+
+    String id, orderId, productId, productName, price1kg,
+            describe, quantityInput, packaging, discount, amountMoney;
 
     public OrderItems(String id, String orderId, String productId, String productName, String price1kg, String describe, String quantityInput, String packaging, String discount, String amountMoney) {
         this.id = id;
@@ -112,6 +113,5 @@ public class OrderItems {
     public String toString() {
         return "OrderItems{" + "id=" + id + ", orderId=" + orderId + ", productId=" + productId + ", productName=" + productName + ", price1kg=" + price1kg + ", describe=" + describe + ", quantityInput=" + quantityInput + ", packaging=" + packaging + ", discount=" + discount + ", amountMoney=" + amountMoney + '}';
     }
-    
-    
+
 }

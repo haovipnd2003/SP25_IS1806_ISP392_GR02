@@ -39,14 +39,14 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h2>Manage Shift</h2>
+                                        <h2>Quản lý ca làm việc</h2>
                                     </div>
                                     <div class="card-body">
                                         <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addShiftModal">+
-                                            Add Shift</button>
+                                            Thêm ca</button>
                                         <form action="searchshift" method="post">
                                             <div class="mb-3">
-                                                <input type="text" value="${keywordS}" name="keyword" id="search-input" class="form-control" placeholder="Search by shift">
+                                                <input type="text" value="${keywordS}" name="keyword" id="search-input" class="form-control" placeholder="Tìm kiếm theo ca">
                                         </div>
                                     </form>
 
@@ -54,11 +54,11 @@
                                         <thead class="table-dark">
                                             <tr>
                                            
-                                                <th>Shift</th>
-                                                <th>Time</th>   
-                                                <th>Total time</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
+                                                <th>Tên ca làm việc</th>
+                                                <th>Thời gian</th>   
+                                                <th>Tổng thời gian</th>
+                                                <th>Trang thái</th>
+                                                <th>Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -67,14 +67,14 @@
                                                     
                                                     <td>${shift.name}</td>
                                                     <td>${shift.start_time} - ${shift.end_time}</td>
-                                                    <td>${shift.total_time} hours</td>
+                                                    <td>${shift.total_time} Giờ</td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${shift.isactive == 1}">
-                                                                <span class="badge bg-success">Active</span>
+                                                                <span class="badge bg-success">Hoạt động</span>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <span class="badge bg-danger">Inactive</span>
+                                                                <span class="badge bg-danger">Không hoạt động</span>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>
@@ -173,31 +173,31 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addShiftModalLabel">Add Shift</h5>
+                        <h5 class="modal-title" id="addShiftModalLabel">Thêm ca</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="addshift" method="post">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="shiftName" class="form-label">Shift Name</label>
+                                <label for="shiftName" class="form-label">Tên ca</label>
                                 <input type="text" class="form-control" id="shiftName" name="name">
                             </div>
                             <div class="mb-3">
-                                <label for="startTime" class="form-label" >Start Time</label>
+                                <label for="startTime" class="form-label" >Thời gian bắt đầu</label>
                                 <input type="time" class="form-control" id="startTime" name="start_time" >
                             </div>
                             <div class="mb-3">
-                                <label for="endTime" class="form-label">End Time</label>
+                                <label for="endTime" class="form-label">Thời gian kết thúc</label>
                                 <input type="time" class="form-control" id="endTime" name="end_time" >
                             </div>
                             <div class="mb-3">
-                                <label for="totalTime" class="form-label">Total Time</label>
-                                <p id="totalTimeDisplay">0 hours</p>
+                                <label for="totalTime" class="form-label">Tổng thời gian</label>
+                                <p id="totalTimeDisplay">0 giờ</p>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
                         </div>
                     </form>
                 </div>
@@ -209,39 +209,39 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editShiftModalLabel">Edit Shift</h5>
+                        <h5 class="modal-title" id="editShiftModalLabel">Chỉnh sửa ca</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="editShift" method="post">
                         <div class="modal-body">
                             <input type="hidden" id="editShiftId" name="id">
                             <div class="mb-3">
-                                <label for="editShiftName" class="form-label">Shift Name</label>
+                                <label for="editShiftName" class="form-label">Tên ca</label>
                                 <input type="text" class="form-control" id="editShiftName" name="name">
                             </div>
                             <div class="mb-3">
-                                <label for="editStartTime" class="form-label">Start Time</label>
+                                <label for="editStartTime" class="form-label">Thời gian bắt đầu</label>
                                 <input type="time" class="form-control" id="editStartTime" name="start_time">
                             </div>
                             <div class="mb-3">
-                                <label for="editEndTime" class="form-label">End Time</label>
+                                <label for="editEndTime" class="form-label">Thời gian kết thúc</label>
                                 <input type="time" class="form-control" id="editEndTime" name="end_time">
                             </div>
                             <div class="mb-3">
-                                <label for="editTotalTime" class="form-label">Total Time</label>
-                                <p id="editTotalTimeDisplay">0 hours</p>
+                                <label for="editTotalTime" class="form-label">Tổng thời gian</label>
+                                <p id="editTotalTimeDisplay">0 giờ</p>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Status</label>
+                                <label class="form-label">Trang thái</label>
                                 <select class="form-control" id="editShiftStatus" name="isactive">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
+                                    <option value="1">Hoạt động</option>
+                                    <option value="0">Không hoạt động</option>
                                 </select>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                         </div>
                     </form>
                 </div>
@@ -273,7 +273,7 @@
                 if (diff < 0)
                     diff += 24;
 
-                document.getElementById('totalTimeDisplay').textContent = diff.toFixed(2) + ' hours';
+                document.getElementById('totalTimeDisplay').textContent = diff.toFixed(2) + ' giờ';
             }
 
             document.getElementById('addShiftModal').addEventListener('shown.bs.modal', function () {
@@ -299,14 +299,14 @@
             document.querySelector("form[action='addshift']").addEventListener("submit", function (e) {
                 let shiftName = document.getElementById("shiftName").value.trim();
                 if (shiftName === "") {
-                    toastr.error("Please enter shift name.");
+                    toastr.error("Hãy nhập tên ca.");
                     e.preventDefault(); // Ngăn form gửi đi
                     return;
                 }
                 // Check if name already exists
                 const existingNames = getExistingShiftNames();
                 if (existingNames.includes(shiftName.toLowerCase())) {
-                    toastr.error("Shift name already exists. Please use a different name.");
+                    toastr.error("Tên ca đã tồn tại, hãy nhập tên ca khác.");
                     e.preventDefault();
                     return;
                 }
@@ -351,7 +351,7 @@
                 if (diff < 0)
                     diff += 24;
 
-                document.getElementById('editTotalTimeDisplay').textContent = diff.toFixed(2) + ' hours';
+                document.getElementById('editTotalTimeDisplay').textContent = diff.toFixed(2) + ' giờ';
             }
 
 // Lắng nghe sự thay đổi của thời gian trong modal Edit
@@ -363,7 +363,7 @@
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     let shiftId = this.dataset.id;
-                    if (confirm("Are you sure you want to delete this shift?")) {
+                    if (confirm("Bạn có chắc chắn muốn xóa ca làm việc này không?")) {
                         window.location.href = "deleteShift?id=" + shiftId;
                     }
                 });
@@ -379,27 +379,27 @@
 
                 // Validate shift name
                 if (shiftName === "") {
-                    toastr.error("Please enter shift name.");
+                    toastr.error("Hãy nhập tên ca.");
                     e.preventDefault();
                     return;
                 }
                 // Check if the shift name already exists (excluding the current shift being edited)
                 const existingNames = getExistingShiftNames(shiftId);
                 if (existingNames.includes(shiftName.toLowerCase())) {
-                    toastr.error("Shift name already exists. Please use a different name.");
+                    toastr.error("Tên ca đã tồn tại, hãy nhập tên khác.");
                     e.preventDefault();
                     return;
                 }
 
                 // Validate start and end times
                 if (!startTime) {
-                    toastr.error("Please enter a start time.");
+                    toastr.error("Hãy nhập giờ bắt đầu.");
                     e.preventDefault();
                     return;
                 }
 
                 if (!endTime) {
-                    toastr.error("Please enter an end time.");
+                    toastr.error("Hãy nhập giờ kết thúc.");
                     e.preventDefault();
                     return;
                 }

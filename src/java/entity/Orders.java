@@ -9,12 +9,14 @@ package entity;
  * @author binh2
  */
 public class Orders {
-    private String id,customerID,userID,totalAmount,customerPay,createdAt,createdBy;
-    private String cusName,userName;
+
+    private String id, customerID, userID, totalAmount, customerPay, createdAt, createdBy;
+    private String cusName, userName;
+
     public Orders() {
     }
 
-    public Orders(String id, String customerID, String userID, String totalAmount, 
+    public Orders(String id, String customerID, String userID, String totalAmount,
             String customerPay, String createdAt, String createdBy, String cusName, String userName) {
         this.id = id;
         this.customerID = customerID;
@@ -27,9 +29,6 @@ public class Orders {
         this.userName = userName;
     }
 
- 
-
-    
     public String getId() {
         return id;
     }
@@ -107,7 +106,4 @@ public class Orders {
         return "Orders{" + "id=" + id + ", customerID=" + customerID + ", userID=" + userID + ", totalAmount=" + totalAmount + ", customerPay=" + customerPay + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", cusName=" + cusName + ", userName=" + userName + '}';
     }
 
-    
-    
-    
 }

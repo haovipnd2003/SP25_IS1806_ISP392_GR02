@@ -83,6 +83,9 @@
         <condition property="do.compile.jsps">
             <istrue value="${compile.jsps}"/>
         </condition>
+
+
+        
         <condition property="do.debug.server">
             <or>
                 <not>

@@ -248,7 +248,7 @@ public ArrayList<Orders> searchInvoicesWithPagination(
                 + "FROM orders o "
                 + "JOIN customer c ON o.customerid = c.id "
                 + "JOIN user u ON o.userid = u.id "
-                + "WHERE o.isactive = 1"
+                + "WHERE o.isactive = 1 AND o.orderType = 0"
         );
 
         // Danh sách tham số để truyền vào PreparedStatement
@@ -689,6 +689,129 @@ public int getTotalOrdersCountAfterSearch(String orderID, String createdAt, Stri
             System.out.println("Error updating customer: " + e.getMessage());
         }
     }
+     
+     
+     
+     
+         public void addImportInvoice(String customerID, String userID, String totalAmount, String customerPay, int isactive, String createdAt, String createdBy) {
+        String query = "INSERT INTO orders (customerid, userid, totalAmount,customerPay,isactive,createdAt,createdBy,orderType) "
+                + "VALUES (?,?,?,?,?,?,?,?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, customerID);
+            ps.setString(2, userID);
+            ps.setString(3, totalAmount);
+            ps.setString(4, customerPay);
+            ps.setInt(5, isactive);
+            ps.setString(6, createdAt);
+            ps.setString(7, createdBy);
+            ps.setString(8, "1");
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+         
+         
+         
+         public ArrayList<Orders> searchInvoicesImportWithPagination(
+        String orderID, String createdAt, String customerName, String userName,
+        Double totalAmountMin, Double totalAmountMax, Double customerPayMin, Double customerPayMax,
+        int page, int recordsPerPage) {
+
+    ArrayList<Orders> list = new ArrayList<>();
+    try {
+        StringBuilder query = new StringBuilder(
+                "SELECT o.id as orderID, o.customerid, totalAmount, customerPay, "
+                + "o.isactive, o.createdAt, o.createdBy, c.name as customerName, o.userid, u.name as userName "
+                + "FROM orders o "
+                + "JOIN customer c ON o.customerid = c.id "
+                + "JOIN user u ON o.userid = u.id "
+                + "WHERE o.isactive = 1 AND o.orderType = 1"
+        );
+
+        // Danh sách tham số để truyền vào PreparedStatement
+        ArrayList<Object> params = new ArrayList<>();
+
+        if (orderID != null && !orderID.isEmpty()) {
+            query.append(" AND o.id LIKE ?");
+            params.add("%" + orderID + "%");
+        }
+        if (createdAt != null && !createdAt.isEmpty()) {
+            query.append(" AND o.createdAt LIKE ?");
+            params.add("%" + createdAt + "%");
+        }
+        if (customerName != null && !customerName.isEmpty()) {
+            query.append(" AND c.name LIKE ?");
+            params.add("%" + customerName + "%");
+        }
+        if (userName != null && !userName.isEmpty()) {
+            query.append(" AND u.name LIKE ?");
+            params.add("%" + userName + "%");
+        }
+        if (totalAmountMin != null) {
+            query.append(" AND o.totalAmount >= ?");
+            params.add(totalAmountMin);
+        }
+        if (totalAmountMax != null) {
+            query.append(" AND o.totalAmount <= ?");
+            params.add(totalAmountMax);
+        }
+        if (customerPayMin != null) {
+            query.append(" AND o.customerPay >= ?");
+            params.add(customerPayMin);
+        }
+        if (customerPayMax != null) {
+            query.append(" AND o.customerPay <= ?");
+            params.add(customerPayMax);
+        }
+
+        // Thêm điều kiện phân trang
+        query.append(" ORDER BY o.id DESC LIMIT ? OFFSET ?");
+        params.add(recordsPerPage);
+        params.add((page - 1) * recordsPerPage);
+
+        // Chuẩn bị truy vấn an toàn với PreparedStatement
+        PreparedStatement stm = cnn.prepareStatement(query.toString());
+
+        // Gán giá trị cho các tham số của PreparedStatement
+        for (int i = 0; i < params.size(); i++) {
+            if (params.get(i) instanceof String) {
+                stm.setString(i + 1, (String) params.get(i));
+            } else if (params.get(i) instanceof Double) {
+                stm.setDouble(i + 1, (Double) params.get(i));
+            } else if (params.get(i) instanceof Integer) {
+                stm.setInt(i + 1, (Integer) params.get(i));
+            }
+        }
+
+        // Thực thi truy vấn
+        ResultSet rs = stm.executeQuery();
+
+        while (rs.next()) {
+            Orders o = new Orders(
+                    String.valueOf(rs.getInt("orderID")),
+                    rs.getString("customerid"),
+                    rs.getString("userid"),
+                    formatMoney(String.valueOf(rs.getLong("totalAmount"))),
+                    formatMoney(String.valueOf(rs.getLong("customerPay"))),
+                    rs.getString("createdAt"),
+                    rs.getString("createdBy"),
+                    rs.getString("customerName"),
+                    rs.getString("userName")
+            );
+            list.add(o);
+        }
+    } catch (Exception e) {
+        System.out.println("Error searching invoices with pagination: " + e.getMessage());
+        e.printStackTrace();
+    }
+    return list;
+}
+         
+         
+         
     
     public static void main(String[] args) {
         InvoiceDAO dao = new InvoiceDAO();

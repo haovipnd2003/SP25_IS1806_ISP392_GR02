@@ -43,12 +43,16 @@ public class DBContext {
         try {
             String user = "root"; // Change to your MySQL username
             String pass = "123456"; // Change to your MySQL password
-            String url = "jdbc:mysql://localhost:3306/ricemanagement"; // Update the URL to fit MySQL format
+            String url = "jdbc:mysql://localhost:3306/ricemanagement_2"; // Update the URL to fit MySQL format
             Class.forName("com.mysql.cj.jdbc.Driver"); // MySQL JDBC driver
             connection = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public Connection getConnection() {
+        return new DBContext().connection;
     }
 
     public static void main(String[] args) {
