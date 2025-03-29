@@ -21,17 +21,17 @@
                 color: white;
             }
             .btn-ban {
-                background-color: #dc3545;  /* Màu đỏ tươi */
+                background-color: #dc3545; 
                 border-color: #dc3545;
-                color: white;              /* Chữ màu trắng */
-                margin-left: 5px;          /* Tạo khoảng cách nhỏ giữa hai nút */
+                color: white;             
+                margin-left: 5px;         
             }
             .action-buttons {
                 display: flex;
                 flex-direction: row;
                 gap: 5px;
             }
-            /* Pagination styles */
+        
             .pagination {
                 display: flex;
                 justify-content: center;
@@ -41,7 +41,7 @@
 
             .pagination-btn {
                 display: inline-block;
-                padding: 8px 14px; /* Increased padding to fit text */
+                padding: 8px 14px; 
                 margin: 0 2px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
@@ -51,11 +51,11 @@
                 cursor: pointer;
                 font-size: 14px;
                 transition: background-color 0.3s, color 0.3s;
-                white-space: nowrap; /* Prevent text from wrapping */
+                white-space: nowrap; 
             }
 
             .pagination-btn.active {
-                background-color: #007bff; /* Màu xanh giống ảnh */
+                background-color: #007bff; 
                 color: white;
                 border-color: #007bff;
                 cursor: default;
@@ -63,50 +63,50 @@
 
             .pagination-btn:disabled,
             .pagination-btn.disabled {
-                background-color: transparent; /* No background for disabled */
-                color: #999; /* Gray color for disabled */
-                border: none; /* No border for disabled */
+                background-color: transparent; 
+                color: #999; 
+                border: none;
                 cursor: not-allowed;
-                pointer-events: none; /* Prevent clicks on disabled buttons */
+                pointer-events: none; 
             }
 
             .pagination-btn:hover:not(.disabled):not(.active) {
                 background-color: #e9ecef;
                 border-color: #adb5bd;
             }
-            /* Style for no customers message */
+          
             .no-customers-message {
                 text-align: center;
-                color: #dc3545; /* Red color for emphasis */
+                color: #dc3545; 
                 margin-top: 20px;
                 font-size: 16px;
             }
-            /* Table styles for clear columns and rows */
+        
             .table {
                 width: 100%;
-                border-collapse: collapse; /* Ensure borders collapse for clean lines */
+                border-collapse: collapse;
             }
 
             .table-grey {
-                background-color: #f5f5f5; /* Light gray header background */
-                font-weight: bold; /* Bold header text */
+                background-color: #f5f5f5; 
+                font-weight: bold;
             }
 
             .table th {
-                background-color: #007bff; /* Blue background for header */
-                color: white; /* White text for header */
-                border: 1px solid #dee2e6; /* Light gray borders for cells */
-                padding: 12px; /* Increased padding for better spacing */
-                text-align: left; /* Align text to the left for consistency */
-                vertical-align: middle; /* Center text vertically */
-                font-weight: bold; /* Bold header text */
+                background-color: #007bff; 
+                color: white; 
+                border: 1px solid #dee2e6; 
+                padding: 12px; 
+                text-align: left;
+                vertical-align: middle; 
+                font-weight: bold; 
             }
 
             .table td {
-                border: 1px solid #dee2e6; /* Light gray borders for cells */
-                padding: 12px; /* Increased padding for better spacing */
-                text-align: left; /* Align text to the left for consistency */
-                vertical-align: middle; /* Center text vertically */
+                border: 1px solid #dee2e6; 
+                padding: 12px;
+                text-align: left;
+                vertical-align: middle; 
             }
 
             .table th {
@@ -115,11 +115,11 @@
             }
 
             .table tr {
-                border-bottom: 1px solid #dee2e6; /* Light gray line between rows */
+                border-bottom: 1px solid #dee2e6; 
             }
 
             .table tr:last-child {
-                border-bottom: none; /* Remove bottom border for the last row */
+                border-bottom: none; 
             }
         </style>
     </head>
@@ -137,13 +137,13 @@
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h2><a href="customer" style="text-decoration: none; color: inherit;">Customer</a></h2>
+                                                <h2><a href="customer" style="text-decoration: none; color: inherit;">Khách hàng</a></h2>
                                             </div>
                                             <div class="card-body">
                                                 <form action="customer" method="get" class="mb-4">
                                                     <input type="hidden" name="action" value="add">
                                                     <button type="submit" class="btn btn-primary">
-                                                        + Add Customer</button>
+                                                        + Thêm Khách hàng</button>
                                                 </form>
                                             <%--<c:set value="${srCus}" var="sr"></c:set>--%>
                                             <form action="searchcustomer" method="post" class="mb-4">
@@ -152,20 +152,20 @@
                                                         <input type="text" class="form-control" name="id" placeholder="ID" value="${requestScope.id}">
                                                     </div>
                                                     <div class="col">
-                                                        <input type="text" class="form-control" name="name" placeholder="Name" value="${requestScope.name}">
+                                                        <input type="text" class="form-control" name="name" placeholder="Tên" value="${requestScope.name}">
                                                     </div>
                                                     <div class="col">
-                                                        <input type="text" class="form-control" name="phone" placeholder="Phone" value="${requestScope.phone}">
+                                                        <input type="text" class="form-control" name="phone" placeholder="SĐT" value="${requestScope.phone}">
                                                     </div>
                                                     <div class="col">
                                                         <input type="email" class="form-control" name="email" placeholder="Email" value="${requestScope.email}" >
                                                     </div>
                                                     <div class="col">
-                                                        <input type="text" class="form-control" name="address" placeholder="Address" value="${requestScope.address}">
+                                                        <input type="text" class="form-control" name="address" placeholder="Địa chỉ" value="${requestScope.address}">
                                                     </div>
                                                     <div class="col">
                                                         <button type="submit" class="btn btn-search">
-                                                            <i class="fas fa-search"></i> Search
+                                                            <i class="fas fa-search"></i> Tìm kiếm
                                                         </button>
                                                     </div>
                                                 </div>
@@ -180,11 +180,11 @@
                                                     <thead>
                                                         <tr>
                                                             <th>ID</th>
-                                                            <th>Name</th>
-                                                            <th>Phone</th>
+                                                            <th>Tên</th>
+                                                            <th>Điện Thoại</th>
                                                             <th>Email</th>
-                                                            <th>Address</th>
-                                                            <th>Action</th>
+                                                            <th>Địa chỉ</th>
+                                                            <th>Hành động</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
