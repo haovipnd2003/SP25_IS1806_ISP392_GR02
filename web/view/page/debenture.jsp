@@ -11,7 +11,6 @@
     <head>
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
-        <title>Components &rsaquo; Toastr &mdash; Stisla</title>
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
@@ -124,13 +123,13 @@
                     <ul class="navbar-nav navbar-right">
                         <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
                                 <i class="ion ion-android-person d-lg-none"></i>
-                                <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div></a>
+                                <div class="d-sm-none d-lg-inline-block">Hi</div></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a href="${pageContext.request.contextPath}/profile" class="dropdown-item has-icon">
-                                    <i class="ion ion-android-person"></i> Profile
+                                    <i class="ion ion-android-person"></i> Thông tin
                                 </a>
                                 <a href="#" class="dropdown-item has-icon">
-                                    <i class="ion ion-log-out"></i> Logout
+                                    <i class="ion ion-log-out"></i> Đăng xuất
                                 </a>
                             </div>
                         </li>
@@ -148,26 +147,26 @@
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h2>Debenture</h2>
+                                            <h2>Phiếu nợ</h2>
                                         </div>
                                         <div class="card-body">
-                                            <a href="debtor.do?">Back</a>
+                                            <a href="debtor.do?">Trở lại</a>
                                             <!-- Trigger/Open The Modal -->
                                             <table class="table-list-content" border="1" cellpadding="5" cellspacing="5"> 
                                                 <tr> 
                                                     <th>ID</th> 
-                                                    <th>Note</th> 
-                                                    <th>Amount</th> 
-                                                    <th>Debtor Id</th> 
-                                                    <th>Created Date</th>
+                                                    <th>Ghi chú</th> 
+                                                    <th>Số tiền</th> 
+                                                    <th>Khách hàng</th> 
+                                                    <th>Ngày tạo</th>
                                                 </tr> 
 
                                                 <c:forEach var="debenture" items="${debentureList}"> 
                                                     <tr> 
-                                                        <td>${debenture.id}</td> 
+                                                        <td>${debenture.debtorId}</td> 
                                                         <td>${debenture.note}</td> 
                                                         <td>${debenture.amount}</td> 
-                                                        <td>${debenture.debtorId}</td> 
+                                                        <td>${debenture.debtorName}</td> 
                                                         <td>${debenture.createdDate}</td> 
                                                     </tr> 
                                                 </c:forEach> 
@@ -176,7 +175,7 @@
                                             <%--For displaying Previous link except for the 1st page --%> 
                                             <div class="display-flex-al-center" style="justify-content: flex-end;">
                                                 <c:if test="${currentPage != 1}"> 
-                                                    <td><a href="debenture.do?debtorId=${debentureList[0].debtorId}&page=${currentPage - 1}">Previous</a></td> 
+                                                    <td><a href="debenture.do?debtorId=${debentureList[0].debtorId}&page=${currentPage - 1}">Trang trước</a></td> 
                                                 </c:if> 
 
                                                 <%--For displaying Page numbers. The when condition does not display 
@@ -198,7 +197,7 @@
                                                 </table> 
                                                 <%--For displaying Next link --%> 
                                                 <c:if test="${currentPage lt noOfPages}"> 
-                                                    <td><a href="debenture.do?debtorId=${debentureList[0].debtorId}&page=${currentPage + 1}">Next</a></td> 
+                                                    <td><a href="debenture.do?debtorId=${debentureList[0].debtorId}&page=${currentPage + 1}">Tiếp</a></td> 
                                                 </c:if> 
                                             </div>
                                      </div>

@@ -11,8 +11,115 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>POS System</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/invoice2.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Invoice2.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <style>
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1000;
+    border-radius: 12px;
+    width: auto;
+    height: auto;
+    text-align: center;
+}
+/* Nút đóng (X) ở góc trên bên phải */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: red;
+}
+
+#close-popup:hover {
+    color: #ff0000;
+}
+
+/* Các nút */
+ .popup button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* Màu sắc nút */
+#cash-payment {
+    background-color: #28a745;
+    color: white;
+}
+
+#bank-payment {
+    background-color: #007bff;
+    color: white;
+}
+
+#close-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Hiệu ứng hover */
+.popup button:hover {
+    opacity: 0.8;
+}
+
+.qr-code-container {
+    text-align: center;  /* Căn giữa nội dung */
+    margin-top: 10px;    /* Khoảng cách với phần trên */
+}
+.qr-code-container img {
+    margin-top: 5px;  /* Khoảng cách giữa tiêu đề và ảnh */
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content p {
+    margin-bottom: 15px;
+}
+
+.btn-confirm {
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.btn-cancel {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+    </style>
     </head>
     <body>
         <div class="container">
@@ -108,6 +215,23 @@
 
 
                 <button class="pay-button">THANH TOÁN</button>
+        <div id="payment-popup" class="popup">
+    <button id="close-popup">❌ Đóng</button>
+    <div class="popup-content">
+        <h3><b>Chọn phương thức thanh toán</b></h3>
+        <button id="cash-payment">💵 Thanh toán tiền mặt</button>
+        <button id="bank-payment">🏦 Thanh toán chuyển khoản (ATM)</button>
+      
+    </div>
+</div>
+<div id="confirmPopup" class="popup">
+    <div class="popup-content">
+        <p>Bạn có muốn xác nhận đơn đã thanh toán không?</p>
+        <button id="confirmBtn" class="btn-confirm">Xác nhận</button>
+        <button id="cancelBtn" class="btn-cancel">Hủy</button>
+    </div>
+</div>
+
             </div>
         </div>
 
@@ -189,6 +313,12 @@
 
                 <div class="confirmation-section">
                     <h4>Thanh Toán</h4>
+              
+                        <div class="qr-code-container" id="qrCodeContainer" style="display: none;">   
+                             <h4>Quét Mã QR Để Thanh Toán</h4>
+                             
+                            <img src="img/QR_Code_payment.jpg" alt="QR Code" width="200">
+                        </div>
                     <div id="paymentSummary">
                         <p><strong>Tổng tiền hàng:</strong> <span id="confirmTotalAmount">0 VNĐ</span></p>
                         <p><strong>Phương thức thanh toán:</strong> <span id="confirmPaymentMethod">Trả tất</span></p>
@@ -203,7 +333,7 @@
                 </div>
             </div>
         </div>
-
+  
     </body>
 </html>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -839,17 +969,34 @@
                             if (event.target === popup) {
                                 closeAddCustomerPopup();
                             }
-                        }
+                        };
 
 //-------------------------------------------POP UP CONFIRM INVOICE----------------------------------------------------------------------------------------------------------------------------------------
 // Add this to your existing script section
-                        document.addEventListener('DOMContentLoaded', function () {
-                            // Add event listener to the pay button
-                            const payButton = document.querySelector('.pay-button');
-                            if (payButton) {
-                                payButton.addEventListener('click', openOrderConfirmationPopup);
-                            }
-                        });
+$(document).ready(function () {
+    $(".pay-button").click(function () {
+        $("#payment-popup").fadeIn();
+    });
+
+    // Đóng popup khi bấm ❌ hoặc nút Đóng
+    $("#close-popup, #close-btn").click(function () {
+        $("#payment-popup").fadeOut();
+    });
+    // Xử lý khi chọn phương thức "Thanh toán tiền mặt"
+    $("#cash-payment").click(function () {
+        $("#qrCodeContainer").fadeOut();
+        openOrderConfirmationPopup(); // Gọi hàm khi chọn thanh toán tiền mặt
+         $("#payment-popup").fadeOut();
+    });
+$("#bank-payment").click(function () {
+        $("#qrCodeContainer").fadeIn(); // Hiển thị ảnh QR
+        openOrderConfirmationPopup();   // Mở popup xác nhận đơn hàng
+        $("#payment-popup").fadeOut();  // Ẩn popup thanh toán
+    });
+});
+
+
+
 
 // Function to open order confirmation popup
                         function openOrderConfirmationPopup() {
@@ -882,7 +1029,7 @@
                             document.getElementById('orderConfirmationPopup').style.display = 'block';
                         }
 
-
+                      
 
 // Function to populate product list in confirmation popup
                         // Modified populateProductList function
@@ -996,105 +1143,105 @@
                             return traAllButton && traAllButton.textContent.trim() === "Trả tất";
                         }
 
-                        function getTableData() {
+                function getTableData() {
+                   closeOrderConfirmationPopup();
+    // Hiển thị popup xác nhận
+    document.getElementById("confirmPopup").style.display = "flex";
 
-                            // Tra tat Session
-                            if (isTraTatSelected()) {
-                                const totalAmountElement = document.querySelector('.total-row span:nth-child(2)');
-                                let totalAmount = removeDots(totalAmountElement.textContent); // Chỉ lấy số (bỏ dấu chấm)
-                                totalAmount = parseFloat(totalAmount) || 0; // Chuyển thành số
-                                // Add debug log
-                                console.log("Đây là nút Trả tất mặc định, gửi AJAX với totalAmount:", totalAmount);
-                                // Send the data to the servlet
-                                $.ajax({
-                                    url: "/RiceManagement/checkPaymentServlet",
-                                    type: "POST",
-                                    data: {
-                                        amountPaid: totalAmount,
-                                        totalAmount: totalAmount
-                                    },
-                                    success: function (response) {
-                                        console.log("Server response for default Trả tất:", response);
-                                    },
-                                    error: function (xhr, status, error) {
-                                        console.error("AJAX Error:", error);
-                                        alert("Lỗi khi gửi dữ liệu đến server!");
-                                    }
-                                });
-                            } else {
-                                console.log("Không phải nút Trả tất mặc định, bỏ qua việc gửi AJAX");
-                            }
+    // Xử lý khi bấm nút "Xác nhận"
+    document.getElementById("confirmBtn").onclick = function () {
+        document.getElementById("confirmPopup").style.display = "none"; // Ẩn popup và tiếp tục xử lý thanh toán
 
-                            let rows = document.getElementById("productTableBody").getElementsByTagName("tr");
+        // Tra tat Session
+        if (isTraTatSelected()) {
+            const totalAmountElement = document.querySelector('.total-row span:nth-child(2)');
+            let totalAmount = removeDots(totalAmountElement.textContent);
+            totalAmount = parseFloat(totalAmount) || 0;
 
-                            let formData = new URLSearchParams(); // Dùng URLSearchParams để xử lý form data
+            console.log("Đây là nút Trả tất mặc định, gửi AJAX với totalAmount:", totalAmount);
 
-                            for (let i = 0; i < rows.length; i++) {
-                                let cols = rows[i].getElementsByTagName("td");
-                                if (cols.length < 10)
-                                    continue; // Kiểm tra nếu hàng có đủ cột
+            $.ajax({
+                url: "/RiceManagement/checkPaymentServlet",
+                type: "POST",
+                data: { amountPaid: totalAmount, totalAmount: totalAmount },
+                success: function (response) {
+                    console.log("Server response for default Trả tất:", response);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                    alert("Lỗi khi gửi dữ liệu đến server!");
+                }
+            });
+        } else {
+            console.log("Không phải nút Trả tất mặc định, bỏ qua việc gửi AJAX");
+        }
 
-                                // Check if customer is selected
-                                const customerName = document.querySelector('.customer-info h2').textContent;
-                                if (!customerName || customerName === 'Name customer') {
-                                    alert('Vui lòng chọn khách hàng!');
-                                    return;
-                                }
+        let rows = document.getElementById("productTableBody").getElementsByTagName("tr");
+        let formData = new URLSearchParams();
 
-                                let productID = cols[9]?.querySelector("input")?.value || "";
-                                let dropdown = cols[2]?.querySelector("select")?.value || "";
-                                let quantity = cols[3]?.querySelector("input")?.value || "0";
-                                let totalMass = cols[4]?.innerText.trim().replace(" kg", "") || "0"; // Loại bỏ đơn vị kg
-                                let discount = cols[6]?.querySelector("input")?.value || "0";
+        for (let i = 0; i < rows.length; i++) {
+            let cols = rows[i].getElementsByTagName("td");
+            if (cols.length < 10) continue;
 
-                                // Thêm dữ liệu từng phần tử vào formData
-                                formData.append("productID", productID);
-                                formData.append("dropdown", dropdown);
-                                formData.append("quantity", quantity);
-                                formData.append("totalMass", totalMass);
-                                formData.append("discount", discount);
-                            }
+            const customerName = document.querySelector('.customer-info h2').textContent;
+            if (!customerName || customerName === 'Name customer') {
+                alert('Vui lòng chọn khách hàng!');
+                return;
+            }
 
-                            console.log([...formData]); // Kiểm tra dữ liệu trước khi gửi
+            let productID = cols[9]?.querySelector("input")?.value || "";
+            let dropdown = cols[2]?.querySelector("select")?.value || "";
+            let quantity = cols[3]?.querySelector("input")?.value || "0";
+            let totalMass = cols[4]?.innerText.trim().replace(" kg", "") || "0";
+            let discount = cols[6]?.querySelector("input")?.value || "0";
 
-                            // Gửi dữ liệu đến Servlet
-                            $.ajax({
-                                url: "/RiceManagement/addPrepareInvoice",
-                                type: "POST",
-                                data: formData.toString(), // Chuyển dữ liệu về dạng string
-                                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                                success: function (response) {
-                                    console.log("Dữ liệu đã được gửi thành công:", response);
+            formData.append("productID", productID);
+            formData.append("dropdown", dropdown);
+            formData.append("quantity", quantity);
+            formData.append("totalMass", totalMass);
+            formData.append("discount", discount);
+        }
 
-                                    //         Close the popup
-                                    closeOrderConfirmationPopup();
+        console.log([...formData]);
 
-                                    // Show success notification
-                                    showNotification('Đơn hàng đã được thanh toán thành công!');
+        $.ajax({
+            url: "/RiceManagement/addPrepareInvoice",
+            type: "POST",
+            data: formData.toString(),
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            success: function (response) {
+                console.log("Dữ liệu đã được gửi thành công:", response);
 
-                                    // Clear product table and reset form
-                                    // This is just a simulation - in real implementation you would do this after server confirms the order
-                                    setTimeout(() => {
-                                        document.getElementById('productTableBody').innerHTML = '';
-                                        document.querySelector('.customer-info h2').textContent = 'Name customer';
-                                        document.querySelector('.customer-info p:nth-child(2)').textContent = 'SDT: ';
-                                        document.querySelector('.customer-info p:nth-child(3)').textContent = 'Address: ';
-                                        document.querySelector('.totals .total-row:first-child span:last-child').textContent = '00.0 vnđ';
-                                        document.querySelector('input[name="khachTra"]').value = '';
-                                        document.querySelector(".header .search-box input").value = '';
-                                        document.querySelector(".search-container .search-box input").value = '';
-                                        document.querySelector("#debtAmount").textContent = '';
-                                        currentId = 1;
-                                    }, 500);
+                closeOrderConfirmationPopup();
+                showNotification('Đơn hàng đã được thanh toán thành công!');
+
+                setTimeout(() => {
+                    document.getElementById('productTableBody').innerHTML = '';
+                    document.querySelector('.customer-info h2').textContent = 'Name customer';
+                    document.querySelector('.customer-info p:nth-child(2)').textContent = 'SDT: ';
+                    document.querySelector('.customer-info p:nth-child(3)').textContent = 'Address: ';
+                    document.querySelector('.totals .total-row:first-child span:last-child').textContent = '00.0 vnđ';
+                    document.querySelector('input[name="khachTra"]').value = '';
+                    document.querySelector(".header .search-box input").value = '';
+                    document.querySelector(".search-container .search-box input").value = '';
+                    document.querySelector("#debtAmount").textContent = '';
+                    currentId = 1;
+                }, 500);
+            },
+            error: function (xhr, status, error) {
+                console.error("Lỗi khi gửi dữ liệu:", error);
+                console.error("Response:", xhr.responseText);
+            }
+        });
+    };
+
+    // Xử lý khi bấm nút "Hủy"
+    document.getElementById("cancelBtn").onclick = function () {
+        document.getElementById("confirmPopup").style.display = "none"; // Ẩn popup, không làm gì
+    };
+}
 
 
-                                },
-                                error: function (xhr, status, error) {
-                                    console.error("Lỗi khi gửi dữ liệu:", error);
-                                    console.error("Response:", xhr.responseText);
-                                }
-                            });
-                        }
 
 
 
@@ -1122,6 +1269,7 @@
 
                         // Function to close order confirmation popup
                         function closeOrderConfirmationPopup() {
+                            $("#qrCodeContainer").fadeOut();
                             document.getElementById('orderConfirmationPopup').style.display = 'none';
                             console.log("Popup display style:", document.getElementById('orderConfirmationPopup').style.display);
                         }
