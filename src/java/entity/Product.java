@@ -13,6 +13,7 @@ public class Product {
     private double price;
     private String zone;
     private double quantity;
+    private String zoneId;
     private boolean isActive;
     private String image;
     private String[] zoneIds;
@@ -34,6 +35,16 @@ public class Product {
         this.name = name;
         this.describe = describe;
         this.price = price;
+        this.quantity = quantity;
+        this.isActive = isActive;
+        this.image = image;
+    }
+    public Product(String id, String name, String describe, double price, double quantity, String zoneId, boolean isActive, String image) {
+        this.id = id;
+        this.name = name;
+        this.describe = describe;
+        this.price = price;
+        this.zoneId = zoneId;
         this.quantity = quantity;
         this.isActive = isActive;
         this.image = image;

@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -33,13 +34,34 @@ public class ManageAccount extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         DAO dao = new DAO();
-        ArrayList<User> accounts = dao.getAccount();
 
+        // Lấy tham số từ request
+        String pageParam = request.getParameter("page");
+        String keyword = request.getParameter("keyword");
 
+        boolean isSearching = (keyword != null && !keyword.trim().isEmpty());
+
+        // Số tài khoản trên mỗi trang
+        int recordsPerPage = 5;
+        int currentPage = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
+        int totalAccounts = isSearching ? dao.countSearchAccounts(keyword) : dao.countAccounts();
+        int totalPages = (int) Math.ceil((double) totalAccounts / recordsPerPage);
+
+        // Lấy danh sách tài khoản theo phân trang
+        List<User> accounts;
+        if (isSearching) {
+            accounts = dao.searchUsersPaginated(keyword, (currentPage - 1) * recordsPerPage, recordsPerPage);
+        } else {
+            accounts = dao.getAccountsByPage((currentPage - 1) * recordsPerPage, recordsPerPage);
+        }
+
+        // Gửi dữ liệu về JSP
         request.setAttribute("accounts", accounts);
-
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("isSearching", isSearching);
+        request.setAttribute("keywordS", keyword);
 
         request.getRequestDispatcher("/view/admin/manageAccount.jsp").forward(request, response);
     }

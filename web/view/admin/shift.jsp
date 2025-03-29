@@ -97,25 +97,25 @@
                                         <c:if test="${totalPages > 1}">
                                             <nav aria-label="Page navigation">
                                                 <ul class="pagination">
-                                                    <!-- Nút First -->
+                                                    <!-- Nút Đầu -->
                                                     <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                                                         <c:choose>
                                                             <c:when test="${isSearching == true}">
-                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=1">First</a>
+                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=1">Đầu</a>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <a class="page-link" href="shift?page=1">First</a>
+                                                                <a class="page-link" href="shift?page=1">Đầu</a>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </li>
-                                                    <!-- Nút Previous -->
+                                                    <!-- Nút Trước -->
                                                     <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                                                         <c:choose>
                                                             <c:when test="${isSearching == true}">
-                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=${currentPage - 1}">Previous</a>
+                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=${currentPage - 1}">Trước</a>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <a class="page-link" href="shift?page=${currentPage - 1}">Previous</a>
+                                                                <a class="page-link" href="shift?page=${currentPage - 1}">Trước</a>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </li>
@@ -132,25 +132,25 @@
                                                             </c:choose>
                                                         </li>
                                                     </c:forEach>
-                                                    <!-- Nút Next -->
+                                                    <!-- Nút Sau -->
                                                     <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
                                                         <c:choose>
                                                             <c:when test="${isSearching == true}">
-                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=${currentPage + 1}">Next</a>
+                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=${currentPage + 1}">Sau</a>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <a class="page-link" href="shift?page=${currentPage + 1}">Next</a>
+                                                                <a class="page-link" href="shift?page=${currentPage + 1}">Sau</a>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </li>
-                                                    <!-- Nút Last -->
+                                                    <!-- Nút Cuối -->
                                                     <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
                                                         <c:choose>
                                                             <c:when test="${isSearching == true}">
-                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=${totalPages}">Last</a>
+                                                                <a class="page-link" href="searchshift?keyword=${keywordS}&page=${totalPages}">Cuối</a>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <a class="page-link" href="shift?page=${totalPages}">Last</a>
+                                                                <a class="page-link" href="shift?page=${totalPages}">Cuối</a>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </li>
