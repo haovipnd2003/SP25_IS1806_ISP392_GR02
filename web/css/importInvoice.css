@@ -1,0 +1,906 @@
+/* Base styles with green color scheme (only purple changed to green) */
+:root {
+  --primary: #2e7d32;         /* Deep Green (was Purple #8e44ad) */
+  --primary-light: #4caf50;   /* Medium Green (was Light Purple #9b59b6) */
+  --primary-dark: #1b5e20;    /* Dark Green (was Dark Purple #6c3483) */
+  --secondary: #2ecc71;       /* Green (unchanged) */
+  --secondary-dark: #27ae60;  /* Dark Green (unchanged) */
+  --accent: #f39c12;          /* Orange (unchanged) */
+  --accent-dark: #e67e22;     /* Dark Orange (unchanged) */
+  --danger: #e74c3c;          /* Red (unchanged) */
+  --danger-dark: #c0392b;     /* Dark Red (unchanged) */
+  --background: #f5f7fa;      /* Light Gray (unchanged) */
+  --card: #ffffff;            /* White (unchanged) */
+  --text: #2c3e50;            /* Dark Blue Gray (unchanged) */
+  --text-light: #7f8c8d;      /* Gray (unchanged) */
+  --border: #ecf0f1;          /* Very Light Gray (unchanged) */
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+}
+
+/* New Layout Structure */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--background);
+}
+
+.main-content {
+  padding: 25px;
+  background: var(--card);
+  border-radius: 0;
+  box-shadow: 0 0 20px var(--shadow);
+  margin: 15px;
+  overflow-x: auto;
+}
+
+.sidebar {
+  width: 400px;
+  padding: 25px;
+  background: var(--card);
+  box-shadow: 0 0 20px var(--shadow);
+  margin: 15px 15px 15px 0;
+  border-radius: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header and search with new styling */
+.header {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  align-items: center;
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  background-color: var(--card);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px var(--shadow);
+}
+
+.search-box {
+  flex: 1;
+  position: relative;
+}
+
+/* Completely removed all focus styling */
+.search-box input {
+  width: 100%;
+  padding: 12px 15px 12px 40px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: var(--card);
+  color: var(--text);
+}
+
+/* Completely removed all focus effects */
+.search-box input:focus {
+  outline: none !important;
+  border-color: var(--border) !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+}
+
+.search-box::before {
+  content: "🔍";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  pointer-events: none;
+}
+
+/* Tables with new styling */
+.product-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 25px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+.product-table th,
+.product-table td {
+  padding: 15px;
+  text-align: left;
+}
+
+.product-table th {
+  background: var(--primary);
+  color: white;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.product-table td {
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  background-color: var(--card);
+}
+
+.product-table tr:last-child td {
+  border-bottom: none;
+}
+
+.product-table tr:hover td {
+  background-color: rgba(46, 125, 50, 0.05); /* Changed from purple to green */
+}
+
+.product-table input[type="text"],
+.product-table input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: var(--card);
+  transition: all 0.3s ease;
+}
+
+.product-table input[type="text"]:focus,
+.product-table input[type="number"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2); /* Changed from purple to green */
+}
+
+.amount {
+  text-align: right;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Buttons with new styling */
+.tab-button {
+  padding: 10px 18px;
+  border: none;
+  background: var(--primary-light);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.tab-button:hover {
+  background-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
+.remove-btn {
+  padding: 8px 14px;
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:hover {
+  background-color: var(--danger-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
+.remove-btn:active {
+  transform: translateY(0);
+}
+
+.add-customer-btn {
+  width: 36px;
+  height: 36px;
+  background-color: var(--secondary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+.add-customer-btn:hover {
+  background-color: var(--secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px var(--shadow);
+}
+
+.pay-button {
+  width: 100%;
+  padding: 18px;
+  background: var(--secondary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px var(--shadow);
+  margin-top: auto;
+}
+
+.pay-button:hover {
+  background: var(--secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px var(--shadow);
+}
+
+.pay-button:active {
+  transform: translateY(0);
+}
+
+/* Customer info with new styling */
+.customer-info {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--primary-light);
+  color: white;
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+.customer-info h2 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: white;
+  font-weight: 600;
+}
+
+.customer-note {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+/* Totals section with new styling */
+.totals {
+  margin-bottom: 30px;
+  background-color: var(--card);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.total-row.final {
+  font-weight: 600;
+  font-size: 1.2em;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  color: var(--primary);
+}
+
+.total-row input[type="text"] {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  text-align: right;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.total-row input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2); /* Changed from purple to green */
+}
+
+/* Payment methods with new styling */
+.payment-methods {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.payment-method {
+  padding: 15px 10px;
+  text-align: center;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  background-color: var(--card);
+}
+
+.payment-method:hover {
+  background-color: rgba(46, 125, 50, 0.05); /* Changed from purple to green */
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+}
+
+.payment-method.selected {
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: rgba(46, 125, 50, 0.1); /* Changed from purple to green */
+  font-weight: 600;
+}
+
+.quick-amounts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.amount-button {
+  padding: 14px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.amount-button:hover {
+  background-color: rgba(46, 125, 50, 0.05); /* Changed from purple to green */
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+}
+
+/* Popups with new styling */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.popup-content {
+  background-color: var(--card);
+  margin: 8% auto;
+  padding: 30px;
+  border-radius: 15px;
+  width: 450px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.popup-content h3 {
+  margin-bottom: 25px;
+  color: var(--primary);
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.close-popup {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: color 0.3s;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-popup:hover {
+  color: var(--danger);
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Form elements with new styling */
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background-color: var(--background);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2); /* Changed from purple to green */
+  background-color: var(--card);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.form-actions button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  min-width: 120px;
+}
+
+.form-actions button:first-child {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.form-actions button:first-child:hover {
+  background-color: var(--secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
+.form-actions button:last-child {
+  background-color: var(--danger);
+  color: white;
+}
+
+.form-actions button:last-child:hover {
+  background-color: var(--danger-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
+/* Order confirmation popup with new styling */
+.popup-content[style*="width: 600px"] {
+  width: 650px !important;
+  max-width: 90vw;
+}
+
+.confirmation-section {
+  margin-bottom: 25px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+}
+
+.confirmation-section h4 {
+  margin-bottom: 15px;
+  color: var(--primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.confirmation-section h4::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 18px;
+  background-color: var(--primary);
+  margin-right: 10px;
+  border-radius: 2px;
+}
+
+.confirm-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px var(--shadow);
+}
+
+.confirm-table th,
+.confirm-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.confirm-table th {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.confirm-table td {
+  border-bottom: 1px solid var(--border);
+  background-color: var(--card);
+}
+
+.confirm-table tr:last-child td {
+  border-bottom: none;
+}
+
+#customerSummary p,
+#paymentSummary p {
+  margin: 10px 0;
+  line-height: 1.6;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+#customerSummary p:last-child,
+#paymentSummary p:last-child {
+  border-bottom: none;
+}
+
+#customerSummary p strong,
+#paymentSummary p strong {
+  min-width: 140px;
+  color: var(--text);
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.confirm-button {
+  padding: 14px 30px;
+  background-color: var(--secondary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  min-width: 180px;
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+.confirm-button:hover {
+  background-color: var(--secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px var(--shadow);
+}
+
+.cancel-button {
+  padding: 14px 30px;
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  min-width: 180px;
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+.cancel-button:hover {
+  background-color: var(--danger-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px var(--shadow);
+}
+
+/* Notification with new styling */
+.notification {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  padding: 18px 30px;
+  background-color: var(--secondary);
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0;
+  transform: translateY(15px);
+  z-index: 1100;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Home button with new styling */
+.home-button-fixed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  text-decoration: none;
+  
+  /* Fixed positioning */
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1000;
+}
+
+.home-button-fixed:hover {
+  background-color: var(--accent-dark);
+  transform: translateY(-3px) rotate(5deg);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.25);
+}
+
+.home-button-fixed:active {
+  transform: translateY(0) rotate(0);
+}
+
+.home-button-fixed svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+  
+  .sidebar {
+    width: auto;
+    margin: 0 15px 15px 15px;
+    order: 1;
+  }
+  
+  .main-content {
+    margin: 15px 15px 0 15px;
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .payment-methods {
+    grid-template-columns: 1fr;
+  }
+  
+  .popup-content {
+    width: 90% !important;
+    margin: 10% auto;
+    padding: 20px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+  
+  .confirmation-actions {
+    flex-direction: column;
+  }
+  
+  .confirm-button, .cancel-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content, .sidebar {
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  .header {
+    padding: 12px;
+  }
+  
+  .product-table th, 
+  .product-table td {
+    padding: 10px 8px;
+    font-size: 0.9rem;
+  }
+  
+  .home-button-fixed {
+    width: 50px;
+    height: 50px;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+/* Additional rule to completely override any focus styles for search inputs */
+input[type="text"], 
+input[type="search"] {
+  -webkit-appearance: none;
+}
+
+.search-box input:focus,
+.search-box input:active,
+.search-box input:-webkit-autofill,
+.search-box input:-webkit-autofill:hover,
+.search-box input:-webkit-autofill:focus {
+  outline: none !important;
+  border-color: var(--border) !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* This is the specific CSS to remove all green borders from search boxes */
+
+/* Reset all search box styling */
+.search-box input {
+  width: 100%;
+  padding: 12px 15px 12px 40px;
+  border: 2px solid #ecf0f1 !important; /* Fixed light gray border */
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #2c3e50;
+  transition: none !important; /* Disable all transitions */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Completely disable all focus effects */
+.search-box input:focus,
+.search-box input:active,
+.search-box input:hover,
+.search-box input:-webkit-autofill,
+.search-box input:-webkit-autofill:hover,
+.search-box input:-webkit-autofill:focus {
+  outline: none !important;
+  border-color: #ecf0f1 !important; /* Keep the same border color */
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Override any browser default styling */
+input[type="text"], 
+input[type="search"] {
+  outline: none !important;
+}
+
+/* Additional override for WebKit browsers */
+input:focus {
+  outline-color: transparent !important;
+  outline-style: none !important;
+}
+
+/* This is the specific CSS to remove all green borders from search boxes */
+
+/* Reset all search box styling */
+.search-box input {
+  width: 100%;
+  padding: 12px 15px 12px 40px;
+  border: 2px solid #ecf0f1 !important; /* Fixed light gray border */
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #2c3e50;
+  transition: none !important; /* Disable all transitions */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Completely disable all focus effects */
+.search-box input:focus,
+.search-box input:active,
+.search-box input:hover,
+.search-box input:-webkit-autofill,
+.search-box input:-webkit-autofill:hover,
+.search-box input:-webkit-autofill:focus {
+  outline: none !important;
+  border-color: #ecf0f1 !important; /* Keep the same border color */
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Override any browser default styling */
+input[type="text"], 
+input[type="search"] {
+  outline: none !important;
+}
+
+/* Additional override for WebKit browsers */
+input:focus {
+  outline-color: transparent !important;
+  outline-style: none !important;
+}

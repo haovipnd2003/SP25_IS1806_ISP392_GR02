@@ -701,13 +701,13 @@
         <script src="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/scripts.js"></script>
         <script src="${pageContext.request.contextPath}/js/custom.js"></script>
-        <script src="${pageContext.request.contextPath}/js/demo.js"></script>
+        <!--<script src="${pageContext.request.contextPath}/js/demo.js"></script>-->
 
 
         <script src="${pageContext.request.contextPath}/modules/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/popper.js"></script>
         <script src="${pageContext.request.contextPath}/modules/tooltip.js"></script>
-        <script src="${pageContext.request.contextPath}/modules/bootstrap/js/bootstrap.min.js"></script>
+        <!--<script src="${pageContext.request.contextPath}/modules/bootstrap/js/bootstrap.min.js"></script>-->
         <script src="${pageContext.request.contextPath}/modules/nicescroll/jquery.nicescroll.min.js"></script>
         <script src="${pageContext.request.contextPath}/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sa-functions.js"></script>

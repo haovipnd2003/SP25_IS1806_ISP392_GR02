@@ -24,7 +24,7 @@ public class DebtorDAO extends DBContext {
     public boolean insertDebtor(Debtor debtor) {
         boolean success = false;
         try {
-            String query = "insert into customer(name, phone, email, address) values(?,?,?,?)";
+            String query = "insert into customer(name, phone, email, address, isactive) values(?,?,?,?,1)";
             
             PreparedStatement stm = connection.prepareStatement(query);
             stm.setString(1, debtor.getName());
@@ -150,6 +150,12 @@ public class DebtorDAO extends DBContext {
             query.append (keyword);
             query.append ("%'");
             query.append (" or phone like '%");
+            query.append (keyword);
+            query.append ("%'");
+            query.append (" or email like '%");
+            query.append (keyword);
+            query.append ("%'");
+            query.append (" or address like '%");
             query.append (keyword);
             query.append ("%'");
         }

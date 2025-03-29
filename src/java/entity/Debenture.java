@@ -66,5 +66,13 @@ public class Debenture {
     private double amount;
     private int debtorId;
     private Date createdDate;
-    
+    private String debtorName;
+
+    public String getDebtorName() {
+        return debtorName;
+    }
+
+    public void setDebtorName(String debtorName) {
+        this.debtorName = debtorName;
+    }
 }

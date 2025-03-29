@@ -247,15 +247,15 @@
         </style>
         <div id="logreg-forms">
             <form class="form-signin" action="${pageContext.request.contextPath}/login" method="post">
-                <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Sign in</h1>
+                <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Đăng nhập</h1>
                 <p class="text-danger">${mess}</p>
                 <p class="text-danger">${mess1}</p>
                 <p style="color: green">${mess2}</p>
                 <p style="color: green">${success}</p>
                 <p style="color: green">${successMessage}</p>
-                <input name="name"  type="text" id="inputEmail" class="form-control" placeholder="Username" value="${name}" autofocus="">
+                <input name="name"  type="text" id="inputEmail" class="form-control" placeholder="Tên tài khoản" value="${name}" autofocus="">
                 <div class="input-group mb-3">
-                    <input name="password"  type="password" id="inputPassword" class="form-control" placeholder="Password" value="${password}" >
+                    <input name="password"  type="password" id="inputPassword" class="form-control" placeholder="Mật khẩu" value="${password}" >
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary eye-button" type="button" id="toggleNewPassword">
                             <i class="fa fa-eye fa-eye-slash" aria-hidden="true"></i>
@@ -267,14 +267,14 @@
                 <div class="form-group form-check">
                     <!--                    <input name="remember" value="1" type="checkbox" class="form-check-input" id="exampleCheck1">-->
 
-                    <a href="view/page/forgotPassword.jsp " >Forgot password?</a>
+                    <a href="view/page/forgotPassword.jsp " >Quên mật khẩu?</a>
                 </div>
 
-                <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+                <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
 
                 <hr>
                 <div class="text-center">
-                    Do not have an account? <a href="view/page/signup.jsp" class="ml-1">Register here</a>
+                    Bạn chưa có tài khoản? <a href="view/page/signup.jsp" class="ml-1">Đăng ký ở đây</a>
                 </div>
             </form>
             <br>

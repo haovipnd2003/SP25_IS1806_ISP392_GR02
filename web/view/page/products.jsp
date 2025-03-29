@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -94,20 +94,36 @@
                 <!-- MAIN-SIDEBAR-JSP-INCLUDE -->
                 <jsp:include page="/view/common/main-sidebar.jsp"></jsp:include>
                     <!-- MAIN-SIDEBAR-JSP-INCLUDE -->
-
-                    <!-- Main Content -->
-                    <div class="main-content" style="margin-left: 250px; padding: 20px;">
-                        <button id="sidebarToggle" class="btn btn-secondary mb-3">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                        <section class="section">
-                            <div class="section-header">
-                                <h1>Product List</h1>
+                    <div style="position: absolute; top: 15px; right: 20px; z-index: 1000;">
+                    <c:if test="${sessionScope.acc != null}">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> ${sessionScope.acc.name}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a href="${pageContext.request.contextPath}/profile" class="dropdown-item">
+                                    <i class="ion ion-android-person"></i> Hồ sơ
+                                </a>
+                                <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
+                                    <i class="ion ion-log-out"></i> Đăng xuất
+                                </a>
                             </div>
+                        </div>
+                    </c:if>
+                </div>
+                <!-- Main Content -->
+                <div class="main-content" style="margin-left: 250px; padding: 20px;">
+                    <button id="sidebarToggle" class="btn btn-secondary mb-3">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <section class="section">
+                        <div class="section-header">
+                            <h1>Danh Sách Sản Phẩm</h1>
+                        </div>
                         <c:if test="${roletype == 2}">
                             <div class="text-right mb-3">
                                 <a href="products?action=add" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-plus"></i> Add Product
+                                    <i class="fas fa-plus"></i> Thêm Sản Phẩm
                                 </a>
                             </div>
                         </c:if>
@@ -117,7 +133,7 @@
                                 <form action="products" method="get" class="form-inline">
                                     <input type="hidden" name="action" value="search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" name="keyword" placeholder="Search products..." value="${param.keyword}">
+                                        <input type="text" class="form-control" name="keyword" placeholder="Tìm kiếm sản phẩm..." value="${param.keyword}">
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-search"></i>
@@ -130,25 +146,23 @@
                                 <form action="products" method="get" class="form-inline">
                                     <input type="hidden" name="action" value="filter">
                                     <div class="form-group mr-2">
-                                        <label for="isActive" class="mr-2">Active Status:</label>
+                                        <label for="isActive" class="mr-2">Trạng Thái:</label>
                                         <select name="isActive" id="isActive" class="form-control">
-                                            <option value="default">All Statuses</option>
-                                            <option value="true">Active</option>
-                                            <option value="false">Inactive</option>
+                                            <option value="default" ${isActiveParam == null || isActiveParam == 'default' ? 'selected' : ''}>Tất Cả</option>
+                                            <option value="true" ${isActiveParam == 'true' ? 'selected' : ''}>Đang Hoạt Động</option>
+                                            <option value="false" ${isActiveParam == 'false' ? 'selected' : ''}>Không Hoạt Động</option>
                                         </select>
                                     </div>
                                     <div class="form-group mr-2">
-                                        <label for="zoneId" class="mr-2">Zone:</label>
+                                        <label for="zoneId" class="mr-2">Khu Vực:</label>
                                         <select name="zoneId" id="zoneId" class="form-control">
-                                            <option value="default">All Zones</option>
+                                            <option value="default" ${selectedZoneId == null ? 'selected' : ''}>Tất Cả</option>
                                             <c:forEach var="zone" items="${zones}">
-                                                <option value="${zone.id}" ${param.zoneId == zone.id ? 'selected' : ''}>
-                                                    ${zone.name}
-                                                </option>
+                                                <option value="${zone.id}" ${selectedZoneId == zone.id ? 'selected' : ''}>${zone.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                    <button type="submit" class="btn btn-primary">Lọc</button>
                                 </form>
                             </div>
                         </div>
@@ -157,15 +171,16 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Image</th>
-                                    <th>Description</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Zone</th>
-                                    <th>Active</th>
+                                    <th>Tên</th>
+                                    <th>Hình Ảnh</th>
+                                    <th>Mô Tả</th>
+                                    <th>Giá</th>
+                                    <th>Số Lượng</th>
+                                    <th>Đóng Gói(kg)</th>
+                                    <th>Khu Vực</th>
+                                    <th>Hoạt Động</th>
                                         <c:if test="${roletype == 2}">
-                                        <th>Action</th>
+                                        <th>Thao Tác</th>
                                         </c:if>
                                 </tr>
                             </thead>
@@ -190,24 +205,29 @@
                                                     ${formattedPrice.replace(',', '.')}<span>đ</span>
                                                 </td>
                                                 <td>${product.quantity}</td>
+                                                <td>${product.packaging}</td>
                                                 <td>
-                                                    <c:forEach var="zone" items="${zones}">
-                                                        <c:if test="${zone.id == product.zoneId}">
-                                                            ${zone.name}
-                                                        </c:if>
-                                                    </c:forEach>
+                                                    <c:if test="${not empty product.zoneIds}">
+                                                        <c:forEach var="zoneId" items="${product.zoneIds}" varStatus="status">
+                                                            <c:forEach var="zone" items="${zones}">
+                                                                <c:if test="${zone.id == zoneId}">
+                                                                    ${zone.name}<c:if test="${!status.last}">, </c:if>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:forEach>
+                                                    </c:if>
                                                 </td>
-                                                <td style="color: ${product.active ? 'green' : 'red'}">${product.active ? 'Yes' : 'No'}</td>
+                                                <td style="color: ${product.active ? 'green' : 'red'}">${product.active ? 'Đang hoạt động' : 'Không hoạt động'}</td>
                                                 <c:if test="${roletype == '2'}">
                                                     <td>
-                                                        <a href="products?action=edit&id=${product.id}" class="btn btn-primary">Update</a>
+                                                        <a href="products?action=edit&id=${product.id}" class="btn btn-primary">Cập Nhật</a>
                                                     </td>
                                                 </c:if>
                                             </tr>
                                         </c:forEach>
                                     </c:when>
                                     <c:otherwise>
-                                        <tr><td colspan="9" class="text-center">No products found.</td></tr>
+                                        <tr><td colspan="10" class="text-center">Không tìm thấy sản phẩm nào.</td></tr>
                                     </c:otherwise>
 
                                 </c:choose>
@@ -218,7 +238,7 @@
                             <ul class="pagination justify-content-center">
                                 <c:if test="${currentPage > 1}">
                                     <li class="page-item">
-                                        <a class="page-link" href="products?page=${currentPage - 1}" aria-label="Previous">
+                                        <a class="page-link" href="products?page=${currentPage - 1}${filterMode ? '&action=filter&isActive='.concat(isActiveParam).concat('&zoneId=').concat(selectedZoneId != null ? selectedZoneId : 'default') : ''}" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
@@ -226,13 +246,13 @@
 
                                 <c:forEach begin="1" end="${totalPages}" var="i">
                                     <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                        <a class="page-link" href="products?page=${i}">${i}</a>
+                                        <a class="page-link" href="products?page=${i}${filterMode ? '&action=filter&isActive='.concat(isActiveParam).concat('&zoneId=').concat(selectedZoneId != null ? selectedZoneId : 'default') : ''}">${i}</a>
                                     </li>
                                 </c:forEach>
 
                                 <c:if test="${currentPage < totalPages}">
                                     <li class="page-item">
-                                        <a class="page-link" href="products?page=${currentPage + 1}" aria-label="Next">
+                                        <a class="page-link" href="products?page=${currentPage + 1}${filterMode ? '&action=filter&isActive='.concat(isActiveParam).concat('&zoneId=').concat(selectedZoneId != null ? selectedZoneId : 'default') : ''}" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
@@ -265,7 +285,7 @@
         <script>
             function deleteProduct(event) {
                 event.preventDefault(); // Prevent the form from submitting immediately
-                if (confirm('Are you sure you want to delete this product?')) {
+                if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
                     event.target.submit(); // Submit the form if user confirms
                 }
                 return false; // Prevent form submission if user cancels
@@ -290,33 +310,18 @@
                 var toastType = "${sessionScope.toastType}";
                 if (toastMessage) {
                     iziToast.show({
-                        title: toastType === 'success' ? 'Success' : 'Error',
+                        title: toastType === 'success' ? 'Thành Công' : 'Lỗi',
                         message: toastMessage,
                         position: 'topRight',
                         color: toastType === 'success' ? 'green' : 'red',
-                        timeout: 5000,
-                        onClosing: function () {
-                            fetch('${pageContext.request.contextPath}/remove-toast', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded',
-                                },
-                            }).then(response => {
-                                if (!response.ok) {
-                                    console.error('Failed to remove toast attributes');
-                                }
-                            }).catch(error => {
-                                console.error('Error:', error);
-                            });
-                        }
+                        timeout: 5000
                     });
-                    // Xóa thông báo khỏi session sau khi hiển thị
-                    fetch('${pageContext.request.contextPath}/remove-toast', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                    });
+
+                    // Clear toast messages from session immediately after showing
+            <% 
+                        session.removeAttribute("toastMessage");
+                        session.removeAttribute("toastType");
+            %>
                 }
             });
         </script>

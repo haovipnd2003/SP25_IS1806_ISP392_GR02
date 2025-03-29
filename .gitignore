@@ -25,3 +25,8 @@ replay_pid*
 /dist/
 /build/
 /nbproject/private/
+/nbproject/
+nbproject/private/private.xml
+nbproject/private/private.xml
+nbproject/private/private.xml
+nbproject/project.xml

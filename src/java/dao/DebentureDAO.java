@@ -9,7 +9,6 @@ import entity.Debenture;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +60,7 @@ public class DebentureDAO extends DBContext{
     
     public List<Debenture> viewAllDebenturesByDebtorId(int debtorId, int offset, int noOfRecords) 
     { 
-        String query = "select SQL_CALC_FOUND_ROWS * from debt where customerid = ? order by createdAt desc limit " + offset + ", " + noOfRecords; 
+        String query = "select SQL_CALC_FOUND_ROWS d.*, c.name from debt d inner join customer c on c.id = d.customerid where d.customerid = ? order by d.createdAt desc limit " + offset + ", " + noOfRecords; 
         List<Debenture> list = new ArrayList<Debenture>(); 
         Debenture debenture = null; 
         try { 
@@ -76,6 +75,7 @@ public class DebentureDAO extends DBContext{
                 debenture.setAmount(rs.getDouble(4));
                 debenture.setNote(rs.getString(5)); 
                 debenture.setCreatedDate(rs.getDate(8)); 
+                debenture.setDebtorName(rs.getString(12));
                 list.add(debenture); 
             } 
   

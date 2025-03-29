@@ -4,7 +4,7 @@
     Author     : Admin
 --%>
 
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html>
     <head>
@@ -13,7 +13,7 @@
         <meta http-equiv="Expires" content="0" />
         <meta charset='utf-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <title>Reset Password</title>
+        <title>Đặt lại mật khẩu</title>
         <link
             href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css'
             rel='stylesheet'>
@@ -52,7 +52,7 @@
                             <!-- Main Heading -->
                             <div class="row justify-content-center align-items-center pt-3">
                                 <h1>
-                                    <strong>Reset Password</strong>
+                                    <strong>Đặt lại mật khẩu</strong>
                                 </h1>
                             </div>
                             <div class="pt-3 pb-3">
@@ -68,7 +68,7 @@ response.setDateHeader("Expires", 0); // Proxies
                                     <div class="form-group row justify-content-center px-3">
                                         <div class="col-9 px-0">
                                             <div class="input-group mb-3">
-                                                <input type="password" id="newPassword" name="newpassword" placeholder="New Password"
+                                                <input type="password" id="newPassword" name="newpassword" placeholder="Mật khẩu mới"
                                                        class="form-control border-info placeicon" value="${newpassword}" >
                                                 <div class="input-group-append">
                                                     <button class="btn btn-outline-secondary eye-button" type="button" id="toggleNewPassword">
@@ -77,7 +77,7 @@ response.setDateHeader("Expires", 0); // Proxies
                                                 </div>
                                             </div>
                                             <div class="input-group mb-3">
-                                                <input type="password" id="confirmPassword" name="confirm-password" placeholder="Confirm Password"
+                                                <input type="password" id="confirmPassword" name="confirm-password" placeholder="Xác nhận mật khẩu"
                                                        class="form-control border-info placeicon" value="${confirmpassword}" >
                                                 <div class="input-group-append">
                                                     <button class="btn btn-outline-secondary eye-button" type="button" id="toggleConfirmPassword">
@@ -92,7 +92,7 @@ response.setDateHeader("Expires", 0); // Proxies
                                     <!-- Log in Button -->
                                     <div class="form-group row justify-content-center">
                                         <div class="col-9 px-0">
-                                            <input type="submit" id="resetForm" value="Reset"
+                                            <input type="submit" id="resetForm" value="Đặt lại"
                                                    class="btn btn-block btn-info">
                                         </div>
                                     </div>
@@ -127,10 +127,10 @@ response.setDateHeader("Expires", 0); // Proxies
                         passwordStrength.style.color = strength.color;
 
                         if (newPassword.value === confirmPassword.value) {
-                            passwordMatch.textContent = 'Passwords match';
+                            passwordMatch.textContent = 'Mật khẩu trùng khớp';
                             passwordMatch.style.color = 'green';
                         } else {
-                            passwordMatch.textContent = 'Passwords do not match';
+                            passwordMatch.textContent = 'Mật khẩu không khớp';
                             passwordMatch.style.color = 'red';
                         }
                     }
@@ -143,7 +143,7 @@ response.setDateHeader("Expires", 0); // Proxies
                         const strength = getPasswordStrength(newPassword.value);
                         if (newPassword.value !== confirmPassword.value || strength.color === 'red') {
                             event.preventDefault();
-                            alert('Password validation failed. Please check the requirements.');
+                            alert('Xác thực mật khẩu không thành công. Vui lòng kiểm tra các yêu cầu.');
                         }
                     });
 
@@ -170,10 +170,10 @@ response.setDateHeader("Expires", 0); // Proxies
                         let color = '';
 
                         if (password.length >= 6) {
-                            message = 'Valid password';
+                            message = 'Mật khẩu hợp lệ';
                             color = 'green';
                         } else {
-                            message = 'Password must have at least 6 characters!';
+                            message = 'Mật khẩu phải có ít nhất 6 ký tự!';
                             color = 'red';
                         }
                         return {message, color};

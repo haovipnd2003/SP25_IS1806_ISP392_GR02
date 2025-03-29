@@ -5,336 +5,15 @@
     <head>
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
-        <title>Quản lý hóa đơn</title>
+        <title>Hóa đơn bán</title>
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/ionicons/css/ionicons.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/modules/toastr/build/toastr.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-
-        <style>
-            /* Reduced base font size */
-            html, body {
-                font-size: 14px; /* Reduced from 16px to 14px */
-            }
-
-            /* Modern Card Styling */
-            .card {
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-                border: none;
-                margin-bottom: 24px;
-            }
-
-            .card-header {
-                background-color: #fff;
-                border-bottom: 1px solid #f1f1f1;
-                padding: 18px 22px; /* Slightly reduced padding */
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-
-            .card-header h2 {
-                margin: 0;
-                font-size: 1.6rem; /* Reduced from 1.8rem */
-                font-weight: 600;
-                color: #333;
-            }
-
-            .card-body {
-                padding: 20px; /* Reduced from 24px */
-            }
-
-            /* Table Styling */
-            .table {
-                width: 100%;
-                margin-bottom: 0;
-                font-size: 0.95rem; /* Reduced from 1.05rem */
-            }
-
-            /* More specific selector for thead background */
-            .table thead {
-                background-color: #95c9f0bd !important;
-            }
-
-            .table thead tr {
-                background-color: #95c9f0bd !important;
-            }
-
-            .table thead th {
-                background-color: #95c9f0bd !important;
-                font-weight: 600;
-                color: #2c5282;
-                border-top: none;
-                padding: 14px 10px; /* Reduced from 16px 12px */
-                white-space: nowrap;
-            }
-
-            .table td {
-                padding: 12px 10px; /* Reduced from 16px 12px */
-                vertical-align: middle;
-            }
-
-            .table-hover tbody tr:hover {
-                background-color: #f8f9fa;
-                transition: background-color 0.2s ease;
-            }
-
-            .table-striped tbody tr:nth-of-type(odd) {
-                background-color: #fcfcfc;
-            }
-
-            /* Filter Inputs */
-            .filter-input {
-                margin-top: 6px; /* Reduced from 8px */
-                font-size: 13px; /* Reduced from 14px */
-            }
-
-            .form-control-sm {
-                border-radius: 4px;
-                border: 1px solid #e2e8f0;
-                padding: 5px 8px; /* Reduced from 6px 10px */
-                font-size: 12px; /* Reduced from 14px */
-                background-color: #f9fafc;
-            }
-
-            .form-control-sm:focus {
-                background-color: #fff;
-                border-color: #4299e1;
-                box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
-            }
-
-            /* Range inputs on same row */
-            .range-inputs {
-                display: flex;
-                gap: 6px; /* Reduced from 8px */
-            }
-
-            .range-inputs input {
-                flex: 1;
-            }
-
-            /* Action Buttons */
-            .btn-action {
-                padding: 5px 8px; /* Reduced from 6px 10px */
-                border-radius: 4px;
-                transition: all 0.2s;
-                font-size: 13px; /* Reduced from 14px */
-            }
-
-            .btn-info {
-                background-color: #4299e1;
-                border-color: #4299e1;
-            }
-
-            .btn-info:hover {
-                background-color: #3182ce;
-                border-color: #3182ce;
-            }
-
-            /* Total Row */
-            .total-row {
-                font-weight: 600;
-                background-color: #f8fafc !important;
-                border-top: 2px solid #e2e8f0;
-                font-size: 1rem; /* Reduced from 1.1rem */
-            }
-
-            .total-row td {
-                color: #2d3748;
-            }
-
-            /* Pagination */
-            .pagination-container {
-                display: flex;
-                justify-content: center;
-                margin-top: 20px; /* Reduced from 24px */
-            }
-
-            .pagination {
-                display: flex;
-                padding-left: 0;
-                list-style: none;
-                border-radius: 0.25rem;
-                font-size: 0.95rem; /* Reduced from 1.05rem */
-            }
-
-            .page-item:first-child .page-link {
-                border-top-left-radius: 4px;
-                border-bottom-left-radius: 4px;
-            }
-
-            .page-item:last-child .page-link {
-                border-top-right-radius: 4px;
-                border-bottom-right-radius: 4px;
-            }
-
-            .page-link {
-                position: relative;
-                display: block;
-                padding: 0.45rem 0.7rem; /* Reduced from 0.5rem 0.75rem */
-                margin-left: -1px;
-                line-height: 1.25;
-                color: #4299e1;
-                background-color: #fff;
-                border: 1px solid #e2e8f0;
-                transition: all 0.2s;
-            }
-
-            .page-link:hover {
-                z-index: 2;
-                color: #2b6cb0;
-                text-decoration: none;
-                background-color: #f7fafc;
-                border-color: #e2e8f0;
-            }
-
-            .page-item.active .page-link {
-                z-index: 3;
-                color: #fff;
-                background-color: #4299e1;
-                border-color: #4299e1;
-            }
-
-            .page-item.disabled .page-link {
-                color: #a0aec0;
-                pointer-events: none;
-                cursor: not-allowed;
-                background-color: #fff;
-                border-color: #e2e8f0;
-            }
-
-            /* Money formatting */
-            .money {
-                font-family: 'Roboto Mono', monospace;
-                text-align: right;
-            }
-
-            /* Section titles */
-            h4 {
-                font-size: 1.25rem; /* Reduced from 1.4rem */
-                font-weight: 600;
-                color: #2d3748;
-            }
-
-            /* Responsive adjustments */
-            @media (max-width: 768px) {
-                .card-header {
-                    flex-direction: column;
-                    align-items: flex-start;
-                }
-
-                .table-responsive {
-                    border: 0;
-                }
-
-                .range-inputs {
-                    flex-direction: column;
-                }
-            }
-
-            .btn-search {
-                background-color: #4299e1; /* Changed to requested blue color */
-                color: white;
-                border: none;
-                border-radius: 4px; /* Added slight rounding */
-                width: 40px;
-                height: 40px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .btn-search:hover {
-                background-color: #3182ce; /* Darker blue on hover */
-            }
-
-            /*POP-UP*/
-            /* Modal styling */
-            .modal-content {
-                border-radius: 8px;
-                border: none;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            }
-
-            .modal-header {
-                border-bottom: 1px solid #f1f1f1;
-                background-color: #f8fafc;
-                border-top-left-radius: 8px;
-                border-top-right-radius: 8px;
-                padding: 15px 20px;
-            }
-
-            .modal-title {
-                font-weight: 600;
-                color: #2c5282;
-                font-size: 1.25rem;
-            }
-
-            .modal-body {
-                padding: 20px;
-            }
-
-            .modal-footer {
-                border-top: 1px solid #f1f1f1;
-                padding: 15px 20px;
-            }
-
-            .invoice-info {
-                background-color: #f8fafc;
-                padding: 15px;
-                border-radius: 6px;
-                margin-bottom: 20px;
-            }
-
-            .invoice-info p {
-                margin-bottom: 8px;
-            }
-
-            /* Make sure the modal appears on top of everything */
-            .modal {
-                z-index: 1050;
-            }
-
-            /* Center the modal vertically */
-            @media (min-width: 576px) {
-                .modal-dialog {
-                    margin: 1.75rem auto;
-                }
-            }
-
-            /* Make modal larger on bigger screens */
-            @media (min-width: 992px) {
-                .modal-lg {
-                    max-width: 800px;
-                }
-            }
-
-            /* Animation for modal */
-            .modal.fade .modal-dialog {
-                transition: transform 0.3s ease-out;
-                transform: translate(0, -25px);
-            }
-
-            .modal.show .modal-dialog {
-                transform: translate(0, 0);
-            }
-
-            /* Print button styling */
-            #printInvoiceBtn {
-                background-color: #4299e1;
-                border-color: #4299e1;
-            }
-
-            #printInvoiceBtn:hover {
-                background-color: #3182ce;
-                border-color: #3182ce;
-            }
-        </style>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/invoiceStatistic.css">
+       
     </head>
 
     <body>
@@ -489,7 +168,6 @@
         </div>
 
         <!-- Add this modal HTML structure at the end of your body tag, before the closing </body> -->
-        <!-- Add this modal HTML structure at the end of your body tag, before the closing </body> -->
         <div class="modal fade" id="invoiceDetailModal" tabindex="-1" role="dialog" aria-labelledby="invoiceDetailModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -505,13 +183,13 @@
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th>Name</th>
-                                    <th>Product Packaging</th>
-                                    <th>Quantity</th>
-                                    <th>Total Mass</th>
-                                    <th>Price of 1 Kg</th>
-                                    <th>Discount(đ)</th>
-                                    <th>Amount Money</th>
+                                    <th>Tên</th>
+                                    <th>Quy Cách</th>
+                                    <th>Số Lượng</th>
+                                    <th>Tổng Khối Lượng</th>
+                                    <th>Giá 1 Cân</th>
+                                    <th>Giảm Giá(đ)</th>
+                                    <th>Giá Thành</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -539,6 +217,35 @@
 </html>
 
 <script>
+    // Wait for the document to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the close button in the modal
+    const closeButton = document.querySelector('#invoiceDetailModal .close');
+    
+    // Add click event listener to the close button
+    if (closeButton) {
+        closeButton.addEventListener('click', function() {
+            // Use Bootstrap's modal method to hide the modal
+            $('#invoiceDetailModal').modal('hide');
+        });
+    }
+    
+    // Alternative: You can also close the modal when clicking outside of it
+    // This is usually enabled by default in Bootstrap, but we can ensure it works
+    $('#invoiceDetailModal').on('click', function(event) {
+        if (event.target === this) {
+            $(this).modal('hide');
+        }
+    });
+    
+    // You can also add keyboard support to close with the Escape key
+    $(document).on('keydown', function(event) {
+        if (event.key === 'Escape' && $('#invoiceDetailModal').hasClass('show')) {
+            $('#invoiceDetailModal').modal('hide');
+        }
+    });
+});
+    
     // Hàm định dạng số tiền khi nhập
     function formatCurrency(input) {
         var cursorPos = input.selectionStart;
@@ -632,8 +339,6 @@
 
         // Hiển thị modal trước khi dữ liệu được tải
         $('#invoiceDetailModal').modal('show');
-
-        // Xóa dữ liệu cũ trong bảng chi tiết
         $('#invoiceDetailModal tbody').html('<tr><td colspan="8" class="text-center">Đang tải dữ liệu...</td></tr>');
 
         // Gửi AJAX request đến servlet để lấy dữ liệu hóa đơn

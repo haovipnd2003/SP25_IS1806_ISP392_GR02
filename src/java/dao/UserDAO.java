@@ -4,6 +4,8 @@
  */
 package dao;
 
+import Enums.ActivityStatus;
+import Enums.UserRole;
 import context.DBContext;
 import entity.User;
 import java.sql.Connection;
@@ -11,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -52,6 +56,7 @@ public class UserDAO extends DBContext {
             System.out.println("update: " + e.getMessage());
         }
     }
+    
     public User Relogin(String id) {
 
         try {
@@ -116,5 +121,46 @@ public class UserDAO extends DBContext {
         } catch (Exception e) {
             System.out.println("update: " + e.getMessage());
         }
+    }
+    
+    public User getUserById(int id) {
+        User user = null;
+        try {
+            String query = "select id, name from user where id = ?";
+            stm = cnn.prepareStatement(query);
+            stm.setInt(1, id);
+            
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                user = new User();
+                user.setId(rs.getString(1)); 
+                user.setName(rs.getString(2)); 
+            }
+        } catch (Exception e) {
+            System.out.println("update: " + e.getMessage());
+        }
+        return user;
+    }
+    
+    public List<User> getEmployee() {
+        List<User> res = new ArrayList<>();
+        try {
+            String query = "select id, name from user where roletype = ? and isactive = ?";
+            stm = cnn.prepareStatement(query);
+            stm.setInt(1, UserRole.EMPLOYEE.getValue());
+            stm.setInt(2, ActivityStatus.WORKING.getValue());
+            
+            rs = stm.executeQuery();
+            User user = null;
+            while (rs.next()) {
+                user = new User();
+                user.setId(rs.getString(1)); 
+                user.setName(rs.getString(2)); 
+                res.add(user); 
+            }
+        } catch (Exception e) {
+            System.out.println("update: " + e.getMessage());
+        }
+        return res;
     }
 }

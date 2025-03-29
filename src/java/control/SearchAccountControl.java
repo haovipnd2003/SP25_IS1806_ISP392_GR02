@@ -75,14 +75,38 @@ public class SearchAccountControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("application/json;charset=UTF-8");
-
+//        response.setContentType("application/json;charset=UTF-8");
+//
+//        String keyword = request.getParameter("keyword");
+//        DAO dao = new DAO();
+//        List<User> users = dao.searchUsers(keyword);
+//
+//        request.setAttribute("accounts", users);
+//        request.setAttribute("keywordS", keyword);
+//        request.getRequestDispatcher("view/admin/manageAccount.jsp").forward(request, response);
+          response.setContentType("text/html;charset=UTF-8");
         String keyword = request.getParameter("keyword");
         DAO dao = new DAO();
-        List<User> users = dao.searchUsers(keyword);
-
+        
+        // Adding pagination support for search results
+        String pageParam = request.getParameter("page");
+        int recordsPerPage = 5;
+        int currentPage = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
+        
+        // Count total matching accounts for pagination
+        int totalAccounts = dao.countSearchAccounts(keyword);
+        int totalPages = (int) Math.ceil((double) totalAccounts / recordsPerPage);
+        
+        // Get paginated search results
+        List<User> users = dao.searchUsersPaginated(keyword, (currentPage - 1) * recordsPerPage, recordsPerPage);
+        
+        // Set attributes for the JSP page
         request.setAttribute("accounts", users);
         request.setAttribute("keywordS", keyword);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("isSearching", true);
+        
         request.getRequestDispatcher("view/admin/manageAccount.jsp").forward(request, response);
 
     }

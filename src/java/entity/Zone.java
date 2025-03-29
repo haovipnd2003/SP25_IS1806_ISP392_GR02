@@ -4,23 +4,54 @@
  */
 package entity;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author FPTSHOP
  */
 public class Zone {
 
-    private String id;
+    private int id;
     private String name;
     private boolean isActive;
+    private int productCount;
+    private String description;
+    private String createBy;
+    private Timestamp createdAt;
+    private Timestamp updateAt;
+    private String deleteBy;
+    private Timestamp deleteAt;
 
     public Zone() {
     }
 
-    public Zone(String id, String name, boolean isActive) {
+    public Zone(int id, String name, boolean isActive) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
+    }
+
+    public Zone(int id, String name, boolean isActive, int productCount) {
+        this.id = id;
+        this.name = name;
+        this.isActive = isActive;
+        this.productCount = productCount;
+    }
+
+    public Zone(int id, String name, boolean isActive, String description) {
+        this.id = id;
+        this.name = name;
+        this.isActive = isActive;
+        this.description = description;
+    }
+
+    public Zone(int id, String name, boolean isActive, int productCount, String description) {
+        this.id = id;
+        this.name = name;
+        this.isActive = isActive;
+        this.productCount = productCount;
+        this.description = description;
     }
 
     public String getName() {
@@ -31,11 +62,11 @@ public class Zone {
         this.name = name;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -47,4 +78,59 @@ public class Zone {
         this.isActive = isActive;
     }
 
+    public int getProductCount() {
+        return productCount;
+    }
+
+    public void setProductCount(int productCount) {
+        this.productCount = productCount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Timestamp updateAt) {
+        this.updateAt = updateAt;
+    }
+
+    public String getDeleteBy() {
+        return deleteBy;
+    }
+
+    public void setDeleteBy(String deleteBy) {
+        this.deleteBy = deleteBy;
+    }
+
+    public Timestamp getDeleteAt() {
+        return deleteAt;
+    }
+
+    public void setDeleteAt(Timestamp deleteAt) {
+        this.deleteAt = deleteAt;
+    }
 }

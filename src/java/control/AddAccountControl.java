@@ -92,38 +92,38 @@ public class AddAccountControl extends HttpServlet {
         String roletype = request.getParameter("roletype");
 
         if (name.isEmpty() || pass.isEmpty()) {
-            response.getWriter().write("{\"status\":\"error\", \"message\":\"Username and password cannot be blank!\"}");
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Tài khoản và mật khẩu không được để trống!\"}");
             return;
         }
         
         if (fullname.isEmpty()) {
-            response.getWriter().write("{\"status\":\"error\", \"message\":\"Name cannot be blank!\"}");
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Tên không được để trống!\"}");
             return;
         }
         
         if (!isValidEmail(email)) {
-            response.getWriter().write("{\"status\":\"error\", \"message\":\"Invalid email format!\"}");
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Định dạng email không hợp lệ!\"}");
             return;
         }
 
         if (name.contains(" ")) {
-            response.getWriter().write("{\"status\":\"error\", \"message\":\"Username cannot contain spaces!\"}");
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Tên người dùng không được chứa khoảng trắng!\"}");
             return;
         }
 
         if (!validPass(pass)) {
-            response.getWriter().write("{\"status\":\"error\", \"message\":\"Password must be at least 6 characters long!\"}");
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Mật khẩu phải dài ít nhất 6 ký tự!\"}");
             return;
         }
 
         ArrayList<User> list = dao.getAccount();
         for (User u : list) {
             if (email.equals(u.getEmail())) {
-                response.getWriter().write("{\"status\":\"error\", \"message\":\"Email already exists!\"}");
+                response.getWriter().write("{\"status\":\"error\", \"message\":\"Email đã tồn tại!\"}");
                 return;
             }
             if (name.equals(u.getName())) {
-                response.getWriter().write("{\"status\":\"error\", \"message\":\"Username already exists!\"}");
+                response.getWriter().write("{\"status\":\"error\", \"message\":\"Tên người dùng đã tồn tại!\"}");
                 return;
             }
         }
@@ -132,7 +132,7 @@ public class AddAccountControl extends HttpServlet {
         User newUser = new User(name, pass, email, phone, address, roletype,fullname);
         dao.addUser(newUser);
 
-        response.getWriter().write("{\"status\":\"success\", \"message\":\"Account has been created successfully!\"}");
+        response.getWriter().write("{\"status\":\"success\", \"message\":\"Tài khoản đã được tạo thành công!\"}");
     }
 
     // Kiểm tra mật khẩu có ít nhất 6 ký tự

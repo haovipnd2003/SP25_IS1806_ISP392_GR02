@@ -51,6 +51,10 @@ public class DBContext {
         }
     }
 
+    public Connection getConnection() {
+        return new DBContext().connection;
+    }
+
     public static void main(String[] args) {
         DAO d = new DAO();
         ShiftDao shiftDAO = new ShiftDao();
